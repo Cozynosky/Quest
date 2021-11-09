@@ -141,32 +141,32 @@
           <div class="col-md-4 ftco-animate">
             <div class="media d-block text-center block-6 services">
               <div class="icon d-flex justify-content-center align-items-center mb-5">
-              	<span class="flaticon-choices"></span>
+              	<span><img src="{{ url_for('static', filename='images/board-game.png') }}" width="60"/></span>
               </div>
               <div class="media-body">
-                <h3 class="heading">Easy to Order</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+                <h3 class="heading">Niezapomniane chwile</h3>
+                <p>Przyjdz do nas ze znajomymi lub dołącz do któregoś z eventów aby przeżyć niezapomniane chwile.</p>
               </div>
             </div>      
           </div>
           <div class="col-md-4 ftco-animate">
             <div class="media d-block text-center block-6 services">
               <div class="icon d-flex justify-content-center align-items-center mb-5">
-              	<span class="flaticon-delivery-truck"></span>
+              	<span><img src="{{ url_for('static', filename='images/open-book.png') }}" width="60"/></span>
               </div>
               <div class="media-body">
-                <h3 class="heading">Fastest Delivery</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+                <h3 class="heading">Najciekawsze tytuły</h3>
+                <p>Poznaj nowe lub wróć wspomnieniami do najlepszych tytułów czekających na naszych półkach.</p>
               </div>
             </div>      
           </div>
           <div class="col-md-4 ftco-animate">
             <div class="media d-block text-center block-6 services">
               <div class="icon d-flex justify-content-center align-items-center mb-5">
-              	<span class="flaticon-coffee-bean"></span></div>
+              	<span><img src="{{ url_for('static', filename='images/coffee-icon.png') }}" width="60"/></span></div>
               <div class="media-body">
-                <h3 class="heading">Quality Coffee</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+                <h3 class="heading">Pyszna Kawa</h3>
+                <p>Smak i aromatyczny zapach naszej kawy jest nie do podrobienia. Przyjdź do nas i uracz nimi swoje zmysły.</p>
               </div>
             </div>    
           </div>
@@ -179,32 +179,32 @@
     		<div class="row align-items-center">
     			<div class="col-md-6 pr-md-5">
     				<div class="heading-section text-md-right ftco-animate">
-	          	<span class="subheading">Discover</span>
-	            <h2 class="mb-4">Our Menu</h2>
-	            <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-	            <p><a href="#" class="btn btn-primary btn-outline-primary px-4 py-3">View Full Menu</a></p>
+	          	<span class="subheading">Skosztuj</span>
+	            <h2 class="mb-4">Naszego Menu</h2>
+	            <p class="mb-4">Nasz lokal troszczy się nie tylko o twoje doznania kulturowe lecz także kulinarne. Czeka na ciebie bogata oferta gorących napojów, które bez wątpienia cię rozgrzeją. Nie brakuje też u nas pysznych orzeźwiających napojów na lato</p>
+	            <p><a href="{{ url_for('menu') }}" class="btn btn-primary btn-outline-primary px-4 py-3">Zobacz pełne menu</a></p>
 	          </div>
     			</div>
     			<div class="col-md-6">
     				<div class="row">
     					<div class="col-md-6">
     						<div class="menu-entry">
-		    					<a href="#" class="img" style="background-image: url(images/menu-1.jpg);"></a>
+		    					<a href="{{ url_for('menu') }}" class="img" style="background-image: url({{ url_for('static', filename='images/menu-1.jpg') }});"></a>
 		    				</div>
     					</div>
     					<div class="col-md-6">
     						<div class="menu-entry mt-lg-4">
-		    					<a href="#" class="img" style="background-image: url(images/menu-2.jpg);"></a>
+		    					<a href="{{ url_for('menu') }}" class="img" style="background-image: url({{ url_for('static', filename='images/menu-2.jpg') }});"></a>
 		    				</div>
     					</div>
     					<div class="col-md-6">
     						<div class="menu-entry">
-		    					<a href="#" class="img" style="background-image: url(images/menu-3.jpg);"></a>
+		    					<a href="{{ url_for('menu') }}" class="img" style="background-image: url({{ url_for('static', filename='images/menu-3.jpg') }});"></a>
 		    				</div>
     					</div>
     					<div class="col-md-6">
     						<div class="menu-entry mt-lg-4">
-		    					<a href="#" class="img" style="background-image: url(images/menu-4.jpg);"></a>
+		    					<a href="{{ url_for('menu') }}" class="img" style="background-image: url({{ url_for('static', filename='images/menu-4.jpg') }});"></a>
 		    				</div>
     					</div>
     				</div>
@@ -213,301 +213,14 @@
     	</div>
     </section>
 
-    <section class="ftco-counter ftco-bg-dark img" id="section-counter" style="background-image: url(images/bg_2.jpg);" data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-      <div class="container">
-        <div class="row justify-content-center">
-        	<div class="col-md-10">
-        		<div class="row">
-		          <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
-		            <div class="block-18 text-center">
-		              <div class="text">
-		              	<div class="icon"><span class="flaticon-coffee-cup"></span></div>
-		              	<strong class="number" data-number="100">0</strong>
-		              	<span>Coffee Branches</span>
-		              </div>
-		            </div>
-		          </div>
-		          <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
-		            <div class="block-18 text-center">
-		              <div class="text">
-		              	<div class="icon"><span class="flaticon-coffee-cup"></span></div>
-		              	<strong class="number" data-number="85">0</strong>
-		              	<span>Number of Awards</span>
-		              </div>
-		            </div>
-		          </div>
-		          <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
-		            <div class="block-18 text-center">
-		              <div class="text">
-		              	<div class="icon"><span class="flaticon-coffee-cup"></span></div>
-		              	<strong class="number" data-number="10567">0</strong>
-		              	<span>Happy Customer</span>
-		              </div>
-		            </div>
-		          </div>
-		          <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
-		            <div class="block-18 text-center">
-		              <div class="text">
-		              	<div class="icon"><span class="flaticon-coffee-cup"></span></div>
-		              	<strong class="number" data-number="900">0</strong>
-		              	<span>Staff</span>
-		              </div>
-		            </div>
-		          </div>
-		        </div>
-		      </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ftco-section">
-    	<div class="container">
-    		<div class="row justify-content-center mb-5 pb-3">
-          <div class="col-md-7 heading-section ftco-animate text-center">
-          	<span class="subheading">Discover</span>
-            <h2 class="mb-4">Best Coffee Sellers</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-          </div>
-        </div>
-        <div class="row">
-        	<div class="col-md-3">
-        		<div class="menu-entry">
-    					<a href="#" class="img" style="background-image: url(images/menu-1.jpg);"></a>
-    					<div class="text text-center pt-4">
-    						<h3><a href="#">Coffee Capuccino</a></h3>
-    						<p>A small river named Duden flows by their place and supplies</p>
-    						<p class="price"><span>$5.90</span></p>
-    						<p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
-    					</div>
-    				</div>
-        	</div>
-        	<div class="col-md-3">
-        		<div class="menu-entry">
-    					<a href="#" class="img" style="background-image: url(images/menu-2.jpg);"></a>
-    					<div class="text text-center pt-4">
-    						<h3><a href="#">Coffee Capuccino</a></h3>
-    						<p>A small river named Duden flows by their place and supplies</p>
-    						<p class="price"><span>$5.90</span></p>
-    						<p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
-    					</div>
-    				</div>
-        	</div>
-        	<div class="col-md-3">
-        		<div class="menu-entry">
-    					<a href="#" class="img" style="background-image: url(images/menu-3.jpg);"></a>
-    					<div class="text text-center pt-4">
-    						<h3><a href="#">Coffee Capuccino</a></h3>
-    						<p>A small river named Duden flows by their place and supplies</p>
-    						<p class="price"><span>$5.90</span></p>
-    						<p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
-    					</div>
-    				</div>
-        	</div>
-        	<div class="col-md-3">
-        		<div class="menu-entry">
-    					<a href="#" class="img" style="background-image: url(images/menu-4.jpg);"></a>
-    					<div class="text text-center pt-4">
-    						<h3><a href="#">Coffee Capuccino</a></h3>
-    						<p>A small river named Duden flows by their place and supplies</p>
-    						<p class="price"><span>$5.90</span></p>
-    						<p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
-    					</div>
-    				</div>
-        	</div>
-        </div>
-    	</div>
-    </section>
-
-    <section class="ftco-gallery">
-    	<div class="container-wrap">
-    		<div class="row no-gutters">
-					<div class="col-md-3 ftco-animate">
-						<a href="gallery.html" class="gallery img d-flex align-items-center" style="background-image: url(images/gallery-1.jpg);">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-search"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-3 ftco-animate">
-						<a href="gallery.html" class="gallery img d-flex align-items-center" style="background-image: url(images/gallery-2.jpg);">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-search"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-3 ftco-animate">
-						<a href="gallery.html" class="gallery img d-flex align-items-center" style="background-image: url(images/gallery-3.jpg);">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-search"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-3 ftco-animate">
-						<a href="gallery.html" class="gallery img d-flex align-items-center" style="background-image: url(images/gallery-4.jpg);">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-search"></span>
-    					</div>
-						</a>
-					</div>
-        </div>
-    	</div>
-    </section>
-
-		<section class="ftco-menu">
-    	<div class="container">
-    		<div class="row justify-content-center mb-5">
-          <div class="col-md-7 heading-section text-center ftco-animate">
-          	<span class="subheading">Discover</span>
-            <h2 class="mb-4">Our Products</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-          </div>
-        </div>
-    		<div class="row d-md-flex">
-	    		<div class="col-lg-12 ftco-animate p-md-5">
-		    		<div class="row">
-		          <div class="col-md-12 nav-link-wrap mb-5">
-		            <div class="nav ftco-animate nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-		              <a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Main Dish</a>
-
-		              <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Drinks</a>
-
-		              <a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Desserts</a>
-		            </div>
-		          </div>
-		          <div class="col-md-12 d-flex align-items-center">
-		            
-		            <div class="tab-content ftco-animate" id="v-pills-tabContent">
-
-		              <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
-		              	<div class="row">
-		              		<div class="col-md-4 text-center">
-		              			<div class="menu-wrap">
-		              				<a href="#" class="menu-img img mb-4" style="background-image: url(images/dish-1.jpg);"></a>
-		              				<div class="text">
-		              					<h3><a href="#">Grilled Beef</a></h3>
-		              					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-		              					<p class="price"><span>$2.90</span></p>
-		              					<p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-		              				</div>
-		              			</div>
-		              		</div>
-		              		<div class="col-md-4 text-center">
-		              			<div class="menu-wrap">
-		              				<a href="#" class="menu-img img mb-4" style="background-image: url(images/dish-2.jpg);"></a>
-		              				<div class="text">
-		              					<h3><a href="#">Grilled Beef</a></h3>
-		              					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-		              					<p class="price"><span>$2.90</span></p>
-		              					<p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-		              				</div>
-		              			</div>
-		              		</div>
-		              		<div class="col-md-4 text-center">
-		              			<div class="menu-wrap">
-		              				<a href="#" class="menu-img img mb-4" style="background-image: url(images/dish-3.jpg);"></a>
-		              				<div class="text">
-		              					<h3><a href="#">Grilled Beef</a></h3>
-		              					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-		              					<p class="price"><span>$2.90</span></p>
-		              					<p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-		              				</div>
-		              			</div>
-		              		</div>
-		              	</div>
-		              </div>
-
-		              <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
-		                <div class="row">
-		              		<div class="col-md-4 text-center">
-		              			<div class="menu-wrap">
-		              				<a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-1.jpg);"></a>
-		              				<div class="text">
-		              					<h3><a href="#">Lemonade Juice</a></h3>
-		              					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-		              					<p class="price"><span>$2.90</span></p>
-		              					<p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-		              				</div>
-		              			</div>
-		              		</div>
-		              		<div class="col-md-4 text-center">
-		              			<div class="menu-wrap">
-		              				<a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-2.jpg);"></a>
-		              				<div class="text">
-		              					<h3><a href="#">Pineapple Juice</a></h3>
-		              					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-		              					<p class="price"><span>$2.90</span></p>
-		              					<p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-		              				</div>
-		              			</div>
-		              		</div>
-		              		<div class="col-md-4 text-center">
-		              			<div class="menu-wrap">
-		              				<a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-3.jpg);"></a>
-		              				<div class="text">
-		              					<h3><a href="#">Soda Drinks</a></h3>
-		              					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-		              					<p class="price"><span>$2.90</span></p>
-		              					<p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-		              				</div>
-		              			</div>
-		              		</div>
-		              	</div>
-		              </div>
-
-		              <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
-		                <div class="row">
-		              		<div class="col-md-4 text-center">
-		              			<div class="menu-wrap">
-		              				<a href="#" class="menu-img img mb-4" style="background-image: url(images/dessert-1.jpg);"></a>
-		              				<div class="text">
-		              					<h3><a href="#">Hot Cake Honey</a></h3>
-		              					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-		              					<p class="price"><span>$2.90</span></p>
-		              					<p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-		              				</div>
-		              			</div>
-		              		</div>
-		              		<div class="col-md-4 text-center">
-		              			<div class="menu-wrap">
-		              				<a href="#" class="menu-img img mb-4" style="background-image: url(images/dessert-2.jpg);"></a>
-		              				<div class="text">
-		              					<h3><a href="#">Hot Cake Honey</a></h3>
-		              					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-		              					<p class="price"><span>$2.90</span></p>
-		              					<p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-		              				</div>
-		              			</div>
-		              		</div>
-		              		<div class="col-md-4 text-center">
-		              			<div class="menu-wrap">
-		              				<a href="#" class="menu-img img mb-4" style="background-image: url(images/dessert-3.jpg);"></a>
-		              				<div class="text">
-		              					<h3><a href="#">Hot Cake Honey</a></h3>
-		              					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-		              					<p class="price"><span>$2.90</span></p>
-		              					<p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-		              				</div>
-		              			</div>
-		              		</div>
-		              	</div>
-		              </div>
-		            </div>
-		          </div>
-		        </div>
-		      </div>
-		    </div>
-    	</div>
-    </section>
-
-    <section class="ftco-section img" id="ftco-testimony" style="background-image: url(images/bg_1.jpg);"  data-stellar-background-ratio="0.5">
+    <section class="ftco-section img" id="ftco-testimony" style="background-image: url({{ url_for('static', filename='images/gallery-2.jpg') }});"  data-stellar-background-ratio="0.5">
     	<div class="overlay"></div>
 	    <div class="container">
 	      <div class="row justify-content-center mb-5">
 	        <div class="col-md-7 heading-section text-center ftco-animate">
-	        	<span class="subheading">Testimony</span>
-	          <h2 class="mb-4">Customers Says</h2>
-	          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+	        	<span class="subheading">Posłuchaj</span>
+	          <h2 class="mb-4">Opinii klientów</h2>
+	          <p>Zdanie naszych klientów przedkładamy ponad wszystko.</p>
 	        </div>
 	      </div>
 	    </div>
@@ -516,65 +229,66 @@
 	        <div class="col-lg align-self-sm-end ftco-animate">
 	          <div class="testimony">
 	             <blockquote>
-	                <p>&ldquo;Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small.&rdquo;</p>
+	                <p>&ldquo;Bogata kolekcja książek, smaczna kawa i świetna obsługa - czynniki, które motywują mnie do wstania każdego dnia..&rdquo;</p>
 	              </blockquote>
 	              <div class="author d-flex mt-4">
 	                <div class="image mr-3 align-self-center">
-	                  <img src="images/person_1.jpg" alt="">
+	                  <img src="{{ url_for('static', filename='images/customer-2.png') }}" alt="">
 	                </div>
-	                <div class="name align-self-center">Louise Kelly <span class="position">Illustrator Designer</span></div>
-	              </div>
-	          </div>
-	        </div>
-	        <div class="col-lg align-self-sm-end">
-	          <div class="testimony overlay">
-	             <blockquote>
-	                <p>&ldquo;Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.&rdquo;</p>
-	              </blockquote>
-	              <div class="author d-flex mt-4">
-	                <div class="image mr-3 align-self-center">
-	                  <img src="images/person_2.jpg" alt="">
-	                </div>
-	                <div class="name align-self-center">Louise Kelly <span class="position">Illustrator Designer</span></div>
+	                <div class="name align-self-center">Eryk Kozieł<span class="position">Mówca motywacyjny</span></div>
 	              </div>
 	          </div>
 	        </div>
 	        <div class="col-lg align-self-sm-end ftco-animate">
 	          <div class="testimony">
 	             <blockquote>
-	                <p>&ldquo;Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small  line of blind text by the name. &rdquo;</p>
+	                <p>&ldquo;Chadzam tam z rodziną niemal każdego wieczoru i gramy w gry planszowe. Jeszcze nie było dnia, w którym nie popłakaliśmy się ze śmiechu! Kupa radości! Polecam to miejsce z całego serduszka! &rdquo;</p>
 	              </blockquote>
 	              <div class="author d-flex mt-4">
 	                <div class="image mr-3 align-self-center">
-	                  <img src="images/person_3.jpg" alt="">
+	                  <img src="{{ url_for('static', filename='images/customer-4.jpg') }}" alt="">
 	                </div>
-	                <div class="name align-self-center">Louise Kelly <span class="position">Illustrator Designer</span></div>
+	                <div class="name align-self-center">Karol Krawczyk<span class="position">Głowa rodziny</span></div>
 	              </div>
 	          </div>
 	        </div>
 	        <div class="col-lg align-self-sm-end">
 	          <div class="testimony overlay">
 	             <blockquote>
-	                <p>&ldquo;Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however.&rdquo;</p>
+	                <p>&ldquo;Interesujący sposób połączenia kawiarni i księgarni oraz biblioteki. Mogę wypożyczyć ciekawą książkę i czytać ją przy dobrej kawie.&rdquo;</p>
 	              </blockquote>
 	              <div class="author d-flex mt-4">
 	                <div class="image mr-3 align-self-center">
-	                  <img src="images/person_2.jpg" alt="">
+	                  <img src="{{ url_for('static', filename='images/customer-5.png') }}" alt="">
 	                </div>
-	                <div class="name align-self-center">Louise Kelly <span class="position">Illustrator Designer</span></div>
+	                <div class="name align-self-center">Grzesiek Pociecha<span class="position">Cool guy</span></div>
+	              </div>
+	          </div>
+	        </div>
+			  <div class="col-lg align-self-sm-end">
+	          <div class="testimony overlay">
+	             <blockquote>
+	                <p>&ldquo;Księgarnio-Kawiarnia Quest to nie tylko budynek. To jest w pewnym sensie przeżycie jest.
+Kiedy pierwszy raz postawiłem stopę w tym lokalu, wiedziałem że jest to miejsce, w którym pragnę spędzić resztę życia.&rdquo;</p>
+	              </blockquote>
+	              <div class="author d-flex mt-4">
+	                <div class="image mr-3 align-self-center">
+	                  <img src="{{ url_for('static', filename='images/customer-1.png') }}" alt="">
+	                </div>
+	                <div class="name align-self-center">Eric Goat<span class="position">Hipster</span></div>
 	              </div>
 	          </div>
 	        </div>
 	        <div class="col-lg align-self-sm-end ftco-animate">
 	          <div class="testimony">
 	            <blockquote>
-	              <p>&ldquo;Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small  line of blind text by the name. &rdquo;</p>
+	              <p>&ldquo;Przytulna i spokojna kurde kawiarnia, czyli kurde idealne kurde miejsce kurde do czytania książek kurde.&rdquo;</p>
 	            </blockquote>
 	            <div class="author d-flex mt-4">
 	              <div class="image mr-3 align-self-center">
-	                <img src="images/person_3.jpg" alt="">
+	                <img src="{{ url_for('static', filename='images/customer-3.jpg') }}" alt="">
 	              </div>
-	              <div class="name align-self-center">Louise Kelly <span class="position">Illustrator Designer</span></div>
+	              <div class="name align-self-center">Ferdynand Kiepski<span class="position">Bezrobotny</span></div>
 	            </div>
 	          </div>
 	        </div>
