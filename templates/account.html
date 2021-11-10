@@ -5,9 +5,9 @@
     <div class="container">
         <div class="row p-5"  >
             <div class="col-md-6">
-                <form method="POST">
+                <h3 class="text-center">Masz konto? Zaloguj się!</h3>
+                <form method="POST" class="contact-form">
                     {{ form.csrf_token }}
-                    <h3 class="text-center">Masz konto? Zaloguj się!</h3>
                     <div class="form-group">
                         {{ form.email.label(class_="control-label") }}
                         {{form.email(class_ = "form-control", placeholder="Twój e-mail")}}
