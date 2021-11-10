@@ -1,11 +1,31 @@
 from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap
+from flask_sqlalchemy import SQLAlchemy
 from forms import *
+from flask_login import login_user, LoginManager, current_user, logout_user, login_required
+import tables
+import os
 
 # setup app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "kawiarnia_ksiegarnia_quest"
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "default_secret_key")
 Bootstrap(app)
+
+# Połączenie z bazą danych
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL",  "sqlite:///quest.db")
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# menadzer zalogowanych uzytkownikow
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+# wrappery
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.query(tables.User).get(user_id)
+
 
 # obsluga strony glownej
 @app.route("/", methods=["GET", "POST"])
@@ -50,9 +70,35 @@ def library():
 # obsluga zakladki konto
 @app.route("/konto", methods=["GET", "POST"])
 def account():
-    login_form = Login()
+    if current_user.is_authenticated:
+        return redirect(url_for('logged_in'))
+    else:
+        login_form = Login()
+        if login_form.validate_on_submit():
+            entered_email = login_form.email.data
+            entered_password = login_form.password.data
+            selected_user = db.session.query(tables.User).filter_by(email=entered_email).first()
+            if selected_user is None:
+                return redirect(url_for("account"))
+            elif selected_user.password == entered_password:
+                login_user(selected_user)
+                return redirect(url_for("account"))
+            else:
+                return redirect(url_for("login"))
+        return render_template("account.html", form=login_form)
 
-    return render_template("account.html", form=login_form)
+
+@login_required
+@app.route("/zalogowany_uzytkownik")
+def logged_in():
+    return render_template("logged_in.html")
+
+
+@login_required
+@app.route("/wylogowanie")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 
 # obsluga zakladki wydarzenia
