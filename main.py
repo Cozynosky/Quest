@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap
 from forms import *
 
@@ -21,9 +21,12 @@ def menu():
 
 
 # obsluga zakladki kontakt
-@app.route("/kontakt")
+@app.route("/kontakt", methods=["GET", "POST"])
 def contact():
-    return render_template("contact.html")
+    contact_form = Contact()
+    if contact_form.validate_on_submit():
+        return redirect(url_for('contact'))
+    return render_template("contact.html", form=contact_form)
 
 
 # obsluga zakladki koszyk

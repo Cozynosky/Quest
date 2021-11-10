@@ -16,3 +16,11 @@ class Login(FlaskForm):
     email = StringField("E-mail", validators=[DataRequired()])
     password = PasswordField("Hasło", validators=[DataRequired()])
     login_button = SubmitField("login")
+
+
+class Contact(FlaskForm):
+    name = StringField("Imię", validators=[DataRequired()])
+    email = StringField("E-mail", validators=[DataRequired()])
+    subject = StringField("Temat", validators=[DataRequired()])
+    message = TextAreaField("Wiadomość", validators=[DataRequired()])
+    submit_button = SubmitField("Wyślij wiadomość")
