@@ -13,6 +13,6 @@ class BookTable(FlaskForm):
 
 
 class Login(FlaskForm):
-    email = StringField("email", validators=[DataRequired()])
-    password = PasswordField("password", validators=[DataRequired()])
+    email = StringField("E-mail", validators=[DataRequired()])
+    password = PasswordField("Hasło", validators=[DataRequired()])
     login_button = SubmitField("login")
