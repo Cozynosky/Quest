@@ -1,8 +1,8 @@
 from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy_utils import database_exists
 from forms import *
-from sqlalchemy_utils.functions import database_exists
 from flask_login import login_user, LoginManager, current_user, logout_user, login_required, UserMixin
 import os
 
@@ -15,7 +15,7 @@ Bootstrap(app)
 uri = os.environ.get("DATABASE_URL",  "sqlite:///quest.db")
 if uri and uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
-# Połączenie z bazą danych
+
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -33,8 +33,12 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(250), nullable=False)
 
 
-if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
-    db.create_all()
+db.create_all()
+
+if uri == "sqlite:///quest.db":
+    if not database_exists(uri):
+        db.create_all()
+
 
 if db.session.query(User).filter_by(email="admin").first() is None:
     db.session.add(User(email="admin", password="admin"))
