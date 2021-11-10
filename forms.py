@@ -1,15 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, PasswordField, StringField,TextAreaField
+from wtforms import SubmitField, PasswordField, StringField, TextAreaField, DateField, DateTimeField
 from wtforms.validators import DataRequired
 
 
 class BookTable(FlaskForm):
-    name = StringField("name", validators=[DataRequired()])
-    last_name = StringField("last name", validators=[DataRequired()])
-    phone = StringField("phone", validators=[DataRequired()])
-    date = StringField("date", validators=[DataRequired()])
-    time = StringField("time", validators=[DataRequired()])
-    message = TextAreaField("message", validators=[DataRequired()])
+    name = StringField("Imię", validators=[DataRequired()])
+    last_name = StringField("Nazwisko", validators=[DataRequired()])
+    phone = StringField("Telefon", validators=[DataRequired()])
+    date = DateField("Data", validators=[DataRequired()], format="%d-%m-%Y")
+    time = DateTimeField("Godzina", validators=[DataRequired()], format="%H:%M")
+    message = TextAreaField("Wiadomość", validators=[DataRequired()])
+    book_button = SubmitField("Zarezerwuj stolik")
 
 
 class Login(FlaskForm):

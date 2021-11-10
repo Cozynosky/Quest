@@ -80,38 +80,33 @@
 	    		</div>
 	    		<div class="book p-4">
 	    			<h3>Zarezerwuj stolik</h3>
-	    			<form action="#" class="appointment-form">
+	    			<form method="POST" class="appointment-form">
+						{{ form.csrf_token }}
 	    				<div class="d-md-flex">
 		    				<div class="form-group">
-		    					<input type="text" class="form-control" placeholder="Imię">
+                                {{ form.name(class_ = "form-control", placeholder="Imię")}}
 		    				</div>
 		    				<div class="form-group ml-md-4">
-		    					<input type="text" class="form-control" placeholder="Nazwisko">
+                                {{ form.last_name(class_ = "form-control", placeholder="Nazwisko")}}
 		    				</div>
 	    				</div>
 	    				<div class="d-md-flex">
 		    				<div class="form-group">
-		    					<div class="input-wrap">
-		            		<div class="icon"><span class="ion-md-calendar"></span></div>
-		            		<input type="text" class="form-control appointment_date" placeholder="Data">
-	            		</div>
+                                {{ form.date(class_ = "form-control")}}
 		    				</div>
 		    				<div class="form-group ml-md-4">
-		    					<div class="input-wrap">
-		            		<div class="icon"><span class="ion-ios-clock"></span></div>
-		            		<input type="text" class="form-control appointment_time" placeholder="Godzina">
-	            		</div>
+                                {{ form.time(class_ = "form-control appointment_time", placeholder="Godzina rezerwacji")}}
 		    				</div>
 		    				<div class="form-group ml-md-4">
-		    					<input type="text" class="form-control" placeholder="Telefon">
+                                {{ form.phone(class_ = "form-control", placeholder="Numer telefonu")}}
 		    				</div>
 	    				</div>
 	    				<div class="d-md-flex">
 	    					<div class="form-group">
-		              <textarea name="" id="" cols="30" rows="2" class="form-control" placeholder="Wiadomość"></textarea>
+                                {{ form.message(class_ = "form-control", placeholder="Twoja wiadomość")}}
 		            </div>
 		            <div class="form-group ml-md-4">
-		              <input type="submit" value="Zarezerwuj" class="btn btn-white py-3 px-4">
+						        {{ form.book_button(class_ = "btn btn-white py-3 px-4")}}
 		            </div>
 	    				</div>
 	    			</form>
