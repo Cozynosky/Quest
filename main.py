@@ -1,14 +1,17 @@
 from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
+from forms import *
 
 # setup app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "kawiarnia_ksiegarnia_quest"
-
+Bootstrap(app)
 
 # obsluga strony glownej
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def home():
-    return render_template("index.html")
+    book_table_form = BookTable()
+    return render_template("index.html", form=book_table_form)
 
 
 # obsluga zakladki menu
@@ -42,9 +45,11 @@ def library():
 
 
 # obsluga zakladki konto
-@app.route("/konto")
+@app.route("/konto", methods=["GET", "POST"])
 def account():
-    return render_template("account.html")
+    login_form = Login()
+
+    return render_template("account.html", form=login_form)
 
 
 # obsluga zakladki wydarzenia

@@ -1,3 +1,66 @@
+{% import "bootstrap/wtf.html" as wtf %}
 {% extends "base.html" %}
 {% block content %}
+<section class="ftco-section">
+    <div class="container">
+        <div class="row p-5"  >
+            <div class="col-md-6">
+                <form method="POST" action="/" novalidate>
+                    {{ form.csrf_token }}
+                    <h3 class="text-center">Masz konto? Zaloguj się!</h3>
+                    <div class="form-group">
+                        {{form.email(class_ = "form-control", placeholder="E-mail")}}
+                    </div>
+                    <div class="form-group">
+                        {{form.password(class_ = "form-control", placeholder="Hasło")}}
+                    </div>
+                    <div class="form-group text-center">
+                        {{form.login_button(class_ = "btn btn-white py-3 px-4", value="Zaloguj")}}
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 text-center">
+                <h3>Nie masz konta?</h3>
+                <div class="row mb-5">
+                    <div class="col">
+                        Zarejestruj się już teraz i korzystaj z wszystkich funkcjonalności naszej strony! :)
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-md-4">
+                        <div class="media d-block text-center block-6 services">
+                            <div class=" d-flex justify-content-center align-items-center">
+                                <i class="fas fa-history fa-5x mb-3"></i>
+                            </div>
+                            <div class="media-body" style="color: white;">
+                                <h3 class="heading" style="color: white;">Historia zakupów</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="media d-block text-center block-6 services">
+                            <div class=" d-flex justify-content-center align-items-center">
+                                <i class="fas fa-calendar-alt fa-5x mb-3"></i>
+                            </div>
+                            <div class="media-body" style="color: white;">
+                                <h3 class="heading" style="color: white;">Zapis do eventów</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="media d-block text-center block-6 services">
+                            <div class=" d-flex justify-content-center align-items-center">
+                                <i class="fas fa-book fa-5x mb-3"></i>
+                            </div>
+                            <div class="media-body" style="color: white;">
+                                <h3 class="heading" style="color: white;">Rezerwacja książek</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="btn btn-white py-3 px-4" role="button">Zarejestruj się!</a>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
