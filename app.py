@@ -32,8 +32,8 @@ login_manager.init_app(app)
 # ------------------------------TABELE BAZY DANYCH --------------------------------------
 class User(UserMixin, db.Model):
     __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(250), nullable=False)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    email = db.Column(db.String(250), nullable=False, unique=True)
     password = db.Column(db.String(250), nullable=False)
     first_name = db.Column(db.String(250), nullable=False, server_default="Nie podano")
     last_name = db.Column(db.String(250), nullable=False, server_default="Nie podano")
@@ -86,33 +86,51 @@ def library():
     return render_template("library.html")
 
 
-# obsluga zakladki konto
-@app.route("/konto", methods=["GET", "POST"])
-def account():
-    if current_user.is_authenticated:
-        return redirect(url_for('logged_in'))
-    else:
-        login_form = Login()
-        if login_form.validate_on_submit():
-            entered_email = login_form.email.data
-            entered_password = login_form.password.data
-            selected_user = db.session.query(User).filter_by(email=entered_email).first()
-            if selected_user is None:
-                return redirect(url_for("account"))
-            elif selected_user.password == entered_password:
-                login_user(selected_user)
-                return redirect(url_for("account"))
-            else:
-                return redirect(url_for("login"))
-        return render_template("account.html", form=login_form)
+@app.route("/rejestracja", methods=["GET", "POST"])
+def registration():
+    register_form = Register()
+    if register_form.validate_on_submit():
+        entered_email = register_form.email.data
+        entered_password = register_form.password.data
+        entered_first_name = register_form.first_name.data
+        entered_last_name = register_form.last_name.data
+        user = db.session.query(User).filter_by(email=entered_email).first()
+        if user is None:
+            new_user = User(email=entered_email, password=entered_password, first_name=entered_first_name, last_name=entered_last_name)
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('login'))
+    return render_template("registration.html", form=register_form)
 
 
+# obsluga zakladki logowania
+@app.route("/logowanie", methods=["GET", "POST"])
+def login():
+    login_form = Login()
+    if login_form.validate_on_submit():
+        entered_email = login_form.email.data
+        entered_password = login_form.password.data
+        selected_user = db.session.query(User).filter_by(email=entered_email).first()
+        if selected_user is None:
+            return redirect(url_for("login"))
+        elif selected_user.password == entered_password:
+            login_user(selected_user)
+            return redirect(url_for("account"))
+        else:
+            return redirect(url_for("login"))
+    return render_template("login.html", form=login_form)
+
+
+# obsługa konta
 @login_required
-@app.route("/zalogowany_uzytkownik")
-def logged_in():
-    return render_template("logged_in.html")
+@app.route("/konto")
+def account():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    return render_template("account.html")
 
 
+# droga dla wylogwania
 @login_required
 @app.route("/wylogowanie")
 def logout():
@@ -128,4 +146,3 @@ def events():
 
 if __name__ == "__main__":
     app.run(debug=True)
-

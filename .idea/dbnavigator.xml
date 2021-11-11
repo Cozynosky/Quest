@@ -46,7 +46,11 @@ select * from users;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" object-ref="schemas/public/tables/users" />
+      <object connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" object-ref="consoles/baza zdalna" />
+      <object connection-id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9" object-ref="consoles/Connection" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9" />
@@ -192,7 +196,7 @@ select * from users;]]></console>
           <deprecated-pwd value="YWU0ZmEyOTllMTdkOWM3ODcyN2VkY2IxM2Q5ZjNlMjY4NjhhZDdiMDk2N2QxNjc4YjNmMmIzNjkxYTZmZWFlMQ==" />
         </database>
         <properties>
-          <auto-commit value="true" />
+          <auto-commit value="false" />
         </properties>
         <ssh-settings>
           <active value="false" />
