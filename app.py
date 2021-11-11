@@ -50,6 +50,8 @@ def load_user(user_id):
 @app.route("/", methods=["GET", "POST"])
 def home():
     book_table_form = BookTable()
+    if book_table_form.validate_on_submit():
+        return redirect(url_for('home'))
     return render_template("index.html", form=book_table_form)
 
 
@@ -87,19 +89,18 @@ def library():
 
 
 @app.route("/rejestracja", methods=["GET", "POST"])
-def registration():
+def register():
     register_form = Register()
     if register_form.validate_on_submit():
         entered_email = register_form.email.data
         entered_password = register_form.password.data
         entered_first_name = register_form.first_name.data
         entered_last_name = register_form.last_name.data
-        user = db.session.query(User).filter_by(email=entered_email).first()
-        if user is None:
-            new_user = User(email=entered_email, password=entered_password, first_name=entered_first_name, last_name=entered_last_name)
-            db.session.add(new_user)
-            db.session.commit()
-            return redirect(url_for('login'))
+
+        new_user = User(email=entered_email, password=entered_password, first_name=entered_first_name, last_name=entered_last_name)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('login'))
     return render_template("registration.html", form=register_form)
 
 
@@ -109,15 +110,9 @@ def login():
     login_form = Login()
     if login_form.validate_on_submit():
         entered_email = login_form.email.data
-        entered_password = login_form.password.data
         selected_user = db.session.query(User).filter_by(email=entered_email).first()
-        if selected_user is None:
-            return redirect(url_for("login"))
-        elif selected_user.password == entered_password:
-            login_user(selected_user)
-            return redirect(url_for("account"))
-        else:
-            return redirect(url_for("login"))
+        login_user(selected_user)
+        return redirect(url_for("account"))
     return render_template("login.html", form=login_form)
 
 
