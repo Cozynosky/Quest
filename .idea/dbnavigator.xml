@@ -26,13 +26,15 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9">
-        <schema name="main" object-types="table, view" />
+        <schema name="main" object-types="table, view, column" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9">
-      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from users]]></console>
+      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from users;
+insert into users (email,password) values ("test@test", "test");
+select * from users;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -112,7 +114,7 @@
           <session-management value="true" />
           <ddl-file-binding value="true" />
           <database-logging value="false" />
-          <connect-automatically value="true" />
+          <connect-automatically value="false" />
           <restore-workspace value="true" />
           <restore-workspace-deep value="true" />
           <environment-type value="default" />
