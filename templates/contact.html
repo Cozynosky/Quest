@@ -25,43 +25,31 @@
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-6 ftco-animate">
-                <form method="POST" class="contact-form p-4" novalidate style="background-color:#120f0f">
+                <form class="contact-form" method="POST">
                     {{ form.csrf_token }}
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form.name.label(class_="control-label") }}
                                 {{ form.name(class_ = "form-control", placeholder="Twoje imię")}}
-                                {% for error in form.name.errors: %}
-                                <p style="color:red">{{error}}</p>
-                                {% endfor %}
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form.email.label(class_="control-label") }}
                                 {{ form.email(class_ = "form-control", placeholder="Twój email")}}
-                                {% for error in form.email.errors: %}
-                                <p style="color:red">{{error}}</p>
-                                {% endfor %}
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         {{ form.subject.label(class_="control-label") }}
                         {{ form.subject(class_ = "form-control", placeholder="Temat wiadomości")}}
-                        {% for error in form.subject.errors: %}
-                        <p style="color:red">{{error}}</p>
-                        {% endfor %}
                     </div>
                     <div class="form-group">
                         {{ form.message.label(class_="control-label") }}
                         {{ form.message(class_ = "form-control", placeholder="Twoja wiadomość", cols="30", rows="7")}}
-                        {% for error in form.message.errors: %}
-                        <p style="color:red">{{error}}</p>
-                        {% endfor %}
                     </div>
-                    <div class="form-group text-center">
+                    <div class="form-group">
                         {{form.submit_button(class_ = "btn btn-primary py-3 px-5", value="Wyślij wiadomość")}}
                     </div>
                 </form>

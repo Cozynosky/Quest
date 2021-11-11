@@ -6,7 +6,7 @@
         <div class="row p-5">
             <div class="col-md-6">
                 <h3 class="text-center">Masz konto? Zaloguj się!</h3>
-                <form method="POST" class="contact-form p-4 rounded" novalidate style="background-color:#120f0f">
+                <form method="POST" class="contact-form" novalidate>
                     {{ form.csrf_token }}
                     <div class="form-group">
                         {{ form.email.label(class_="control-label") }}
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{url_for('register')}}" class="btn btn-primary py-3 px-4" role="button">Zarejestruj
+                <a href="{{url_for('registration')}}" class="btn btn-primary py-3 px-4" role="button">Zarejestruj
                     się!</a>
             </div>
         </div>
