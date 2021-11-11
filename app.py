@@ -22,7 +22,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 # zarzadzanie migracjami tabeli
 migrate = Migrate(app, db)
-
+db.init_app(app)
 
 # menadzer zalogowanych uzytkownikow
 login_manager = LoginManager()
