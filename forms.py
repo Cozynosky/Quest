@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, PasswordField, StringField, TextAreaField, DateField, DateTimeField
 from wtforms.validators import DataRequired, Email, EqualTo, InputRequired, ValidationError
-from database import db, User
+from app import db, User
 
 
 class BookTable(FlaskForm):
