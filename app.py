@@ -127,7 +127,8 @@ def events():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
     if db.session.query(User).filter_by(email="admin").first() is None:
         db.session.add(User(email="admin", password=os.environ.get("ADMIN_PASSWORD", "admin")))
         db.session.commit()
+    app.run(debug=True)
+
