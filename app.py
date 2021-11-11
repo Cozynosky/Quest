@@ -22,7 +22,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 # zarzadzanie migracjami tabeli
 migrate = Migrate(app, db)
-db.init_app(app)
+
 
 # menadzer zalogowanych uzytkownikow
 login_manager = LoginManager()
@@ -127,8 +127,5 @@ def events():
 
 
 if __name__ == "__main__":
-    if db.session.query(User).filter_by(email="admin").first() is None:
-        db.session.add(User(email="admin", password=os.environ.get("ADMIN_PASSWORD", "admin")))
-        db.session.commit()
     app.run(debug=True)
 
