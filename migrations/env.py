@@ -1,5 +1,5 @@
 from __future__ import with_statement
-import os
+
 import logging
 from logging.config import fileConfig
 
@@ -20,12 +20,10 @@ logger = logging.getLogger('alembic.env')
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-uri = os.environ.get("DATABASE_URL",  "sqlite:///quest.db")
-if uri and uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://", 1)
 config.set_main_option(
-    'sqlalchemy.url',uri
-    )
+    'sqlalchemy.url',
+    str(current_app.extensions['migrate'].db.get_engine().url).replace(
+        '%', '%%'))
 target_metadata = current_app.extensions['migrate'].db.metadata
 
 # other values from the config, defined by the needs of env.py,
