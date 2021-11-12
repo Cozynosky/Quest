@@ -50,13 +50,13 @@ def load_user(user_id):
 @app.route("/", methods=["GET", "POST"])
 def home():
     book_table_form = BookTable()
-    return render_template("index.html", form=book_table_form)
+    return render_template("home/home.html", form=book_table_form)
 
 
 # obsluga zakladki menu
 @app.route("/menu")
 def menu():
-    return render_template("menu.html")
+    return render_template("menu/menu.html")
 
 
 # obsluga zakladki kontakt
@@ -65,25 +65,25 @@ def contact():
     contact_form = Contact()
     if contact_form.validate_on_submit():
         return redirect(url_for('contact'))
-    return render_template("contact.html", form=contact_form)
+    return render_template("contact/contact.html", form=contact_form)
 
 
 # obsluga zakladki koszyk
 @app.route("/koszyk")
 def cart():
-    return render_template("cart.html")
+    return render_template("cart/cart.html")
 
 
 # obsluga zakladki ksiegarnia
 @app.route("/ksiegarnia")
 def bookshop():
-    return render_template("bookshop.html")
+    return render_template("bookshop/bookshop.html")
 
 
 # obsluga zakladki biblioteki
 @app.route("/biblioteka")
 def library():
-    return render_template("library.html")
+    return render_template("library/library.html")
 
 
 @app.route("/rejestracja", methods=["GET", "POST"])
@@ -100,7 +100,7 @@ def registration():
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('login'))
-    return render_template("registration.html", form=register_form)
+    return render_template("account/registration.html", form=register_form)
 
 
 # obsluga zakladki logowania
@@ -118,7 +118,7 @@ def login():
             return redirect(url_for("account"))
         else:
             return redirect(url_for("login"))
-    return render_template("login.html", form=login_form)
+    return render_template("account/login.html", form=login_form)
 
 
 # obsługa konta
@@ -127,7 +127,7 @@ def login():
 def account():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
-    return render_template("account.html")
+    return render_template("account/account.html")
 
 
 # droga dla wylogwania
@@ -141,7 +141,7 @@ def logout():
 # obsluga zakladki wydarzenia
 @app.route("/wydarzenia")
 def events():
-    return render_template("events.html")
+    return render_template("events/events.html")
 
 
 if __name__ == "__main__":
