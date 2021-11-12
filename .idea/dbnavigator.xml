@@ -24,16 +24,7 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9">
-        <schema name="main" object-types="table, view, column" />
-      </connection>
-      <connection connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52">
-        <schema name="information_schema" object-types="table, view, function" />
-        <schema name="pg_catalog" object-types="table, view, function" />
-        <schema name="public" object-types="table, view, sequence, function, constraint, index, column, dataset trigger" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9">
@@ -46,11 +37,7 @@ select * from users;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" object-ref="schemas/public/tables/users" />
-      <object connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" object-ref="consoles/baza zdalna" />
-      <object connection-id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9" object-ref="consoles/Connection" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9" />
@@ -63,6 +50,11 @@ select * from users;]]></console>
       </filter>
     </filter-actions>
     <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.alembic_version" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9" dataset="main.users" active-filter-id="c7de804f-cca7-48a3-8554-2794cfdc6e9b">
+      <filter id="c7de804f-cca7-48a3-8554-2794cfdc6e9b" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="id" operator="=" value="" active="true" />
+      </filter>
+    </filter-actions>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
