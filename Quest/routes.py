@@ -1,51 +1,18 @@
-from flask import Flask, render_template, redirect, url_for
-from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from forms import *
-from flask_login import login_user, LoginManager, current_user, logout_user, login_required, UserMixin
-import os
-
-# setup app
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "default_secret_key")
-Bootstrap(app)
-
-# Rozwiązanie problemu dla nowszych wersji SQLAlchemy dzialajacych z heroku
-uri = os.environ.get("DATABASE_URL",  "sqlite:///quest.db")
-if uri and uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://", 1)
-
-# polaczenie bazy danych
-app.config['SQLALCHEMY_DATABASE_URI'] = uri
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-# zarzadzanie migracjami tabeli
-migrate = Migrate(app, db)
+from Quest import app, db, login_manager
+from Quest.forms import BookTable, Contact, Login, Register
+from Quest.tables import User
+from flask import render_template, redirect, url_for
+from flask_login import login_user, current_user, logout_user, login_required
 
 
-# menadzer zalogowanych uzytkownikow
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-
-# ------------------------------TABELE BAZY DANYCH --------------------------------------
-class User(UserMixin, db.Model):
-    __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(250), nullable=False)
-    password = db.Column(db.String(250), nullable=False)
-    first_name = db.Column(db.String(250), nullable=False, server_default="Nie podano")
-    last_name = db.Column(db.String(250), nullable=False, server_default="Nie podano")
-# ---------------------------------------------------------------------------------------
-
-
-# wrappery
+# ---------------- Inne wrappery -----------------
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.query(User).get(user_id)
+# -------------------------------------------------
 
 
+# ------------ sciezki na serwerze ------------
 # obsluga strony glownej
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -142,7 +109,3 @@ def logout():
 @app.route("/wydarzenia")
 def events():
     return render_template("events/events.html")
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
