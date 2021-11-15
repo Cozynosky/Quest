@@ -25,27 +25,25 @@
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
     <loaded-nodes>
-      <connection connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52">
-        <schema name="public" object-types="table, view, sequence, function, constraint, index, column, dataset trigger" />
+      <connection connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552">
+        <schema name="main" object-types="table, view, constraint, index, column, dataset trigger" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9">
-      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from users;
-insert into users (email,password) values ("test@test", "test");
-select * from users;]]></console>
-    </connection>
     <connection id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52">
-      <console name="baza zdalna" type="STANDARD" schema="information_schema" session="Main"><![CDATA[insert into "public".users (email, password) values ("admin","admin")]]></console>
+      <console name="baza zdalna" type="STANDARD" schema="information_schema" session="Main" />
+    </connection>
+    <connection id="cb3fc53e-37ce-4187-9ba9-7436beb4b552">
+      <console name="baza lokalna" type="STANDARD" schema="main" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9" />
     <connection id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" />
+    <connection id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.users" active-filter-id="EMPTY_FILTER">
@@ -54,11 +52,9 @@ select * from users;]]></console>
       </filter>
     </filter-actions>
     <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.alembic_version" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9" dataset="main.users" active-filter-id="c7de804f-cca7-48a3-8554-2794cfdc6e9b">
-      <filter id="c7de804f-cca7-48a3-8554-2794cfdc6e9b" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
-        <condition column="id" operator="=" value="" active="true" />
-      </filter>
-    </filter-actions>
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.users" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.menu" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.alembic_version" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -86,26 +82,23 @@ select * from users;]]></console>
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="12d2f64c-36b3-45db-8b2d-f8e2c8c739c9" active="true">
+      <connection id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" active="true">
         <database>
-          <name value="Connection" />
+          <name value="baza zdalna" />
           <description value="" />
-          <database-type value="SQLITE" />
+          <database-type value="POSTGRES" />
           <config-type value="BASIC" />
-          <database-version value="3.3" />
+          <database-version value="13.4" />
           <driver-source value="BUILTIN" />
           <driver-library value="" />
           <driver value="" />
-          <url-type value="FILE" />
-          <host value="" />
-          <port value="" />
-          <database value="" />
-          <files>
-            <file path="D:\Projekty\Quest\quest.db" schema="main" />
-          </files>
-          <type value="NONE" />
-          <user value="" />
-          <deprecated-pwd value="" />
+          <url-type value="DATABASE" />
+          <host value="ec2-54-195-76-73.eu-west-1.compute.amazonaws.com" />
+          <port value="5432" />
+          <database value="d752tte9qgocta" />
+          <type value="USER_PASSWORD" />
+          <user value="xangeutsldvizt" />
+          <deprecated-pwd value="YWU0ZmEyOTllMTdkOWM3ODcyN2VkY2IxM2Q5ZjNlMjY4NjhhZDdiMDk2N2QxNjc4YjNmMmIzNjkxYTZmZWFlMQ==" />
         </database>
         <properties>
           <auto-commit value="false" />
@@ -173,26 +166,29 @@ select * from users;]]></console>
           <object-name-filters />
         </object-filters>
       </connection>
-      <connection id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" active="true">
+      <connection id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" active="true">
         <database>
-          <name value="baza zdalna" />
+          <name value="baza lokalna" />
           <description value="" />
-          <database-type value="POSTGRES" />
+          <database-type value="SQLITE" />
           <config-type value="BASIC" />
-          <database-version value="13.4" />
+          <database-version value="3.3" />
           <driver-source value="BUILTIN" />
           <driver-library value="" />
           <driver value="" />
-          <url-type value="DATABASE" />
-          <host value="ec2-54-195-76-73.eu-west-1.compute.amazonaws.com" />
-          <port value="5432" />
-          <database value="d752tte9qgocta" />
-          <type value="USER_PASSWORD" />
-          <user value="xangeutsldvizt" />
-          <deprecated-pwd value="YWU0ZmEyOTllMTdkOWM3ODcyN2VkY2IxM2Q5ZjNlMjY4NjhhZDdiMDk2N2QxNjc4YjNmMmIzNjkxYTZmZWFlMQ==" />
+          <url-type value="FILE" />
+          <host value="" />
+          <port value="" />
+          <database value="" />
+          <files>
+            <file path="D:\Projekty\Quest\Quest\quest.db" schema="main" />
+          </files>
+          <type value="NONE" />
+          <user value="" />
+          <deprecated-pwd value="" />
         </database>
         <properties>
-          <auto-commit value="false" />
+          <auto-commit value="true" />
         </properties>
         <ssh-settings>
           <active value="false" />

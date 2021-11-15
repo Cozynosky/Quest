@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, PasswordField, StringField, TextAreaField, DateField, DateTimeField
+from wtforms import SubmitField, PasswordField, StringField, TextAreaField, DateField, DateTimeField, SelectField, DecimalField
 from wtforms.validators import DataRequired, Email, EqualTo, InputRequired, ValidationError
 from Quest import db
 from Quest.tables import User
@@ -13,6 +13,15 @@ class BookTable(FlaskForm):
     time = DateTimeField("Godzina", validators=[DataRequired(message="To pole jest wymagane!")], format="%H:%M")
     message = TextAreaField("Wiadomość", validators=[DataRequired(message="To pole jest wymagane!")])
     book_button = SubmitField("Zarezerwuj stolik")
+
+
+class MenuPosition(FlaskForm):
+    category = SelectField("Kategoria", choices=[("hot_drinks", "Ciepłe napoje"), ("cold_drinks", "Zimne napoje"), ("desserts", "Desery"), ("special_offers", "Oferty specjalne")])
+    name = StringField("Nazwa", validators=[DataRequired(message="To pole jest wymagane!")])
+    description = StringField("Opis")
+    price = DecimalField("Cena", places=2, validators=[DataRequired(message="To pole jest wymagane!")])
+    img_url = StringField("Link do zdjęcia")
+    submit_button = SubmitField("Zatwierdź pozycję")
 
 
 class Login(FlaskForm):
@@ -41,7 +50,6 @@ class Register(FlaskForm):
     def validate_email(self, field):
         if db.session.query(User).filter_by(email=field.data).first():
             raise ValidationError('Istnieje użytkownik zarejestrowany na podany email!')
-
 
 
 class Contact(FlaskForm):

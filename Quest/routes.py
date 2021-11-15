@@ -1,6 +1,6 @@
 from Quest import app, db, login_manager
-from Quest.forms import BookTable, Contact, Login, Register
-from Quest.tables import User
+from Quest.forms import BookTable, Contact, Login, Register, MenuPosition
+from Quest.tables import User, Menu
 from flask import render_template, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -23,7 +23,29 @@ def home():
 # obsluga zakladki menu
 @app.route("/menu")
 def menu():
-    return render_template("menu/menu.html")
+    hot_drinks = db.session.query(Menu).filter_by(category="hot_drinks").all()
+    cold_drinks = db.session.query(Menu).filter_by(category="cold_drinks").all()
+    desserts = db.session.query(Menu).filter_by(category="desserts").all()
+    special_offers = db.session.query(Menu).filter_by(category="special_offers").all()
+    return render_template("menu/menu.html", hot_drinks=hot_drinks, cold_drinks=cold_drinks, desserts=desserts, special_offers=special_offers)
+
+
+@app.route("/menu/nowa_pozycja", methods=["GET", "POST"])
+def new_menu_item():
+    new_menu_position_form = MenuPosition()
+    if new_menu_position_form.validate_on_submit():
+        entered_category = new_menu_position_form.category.data
+        entered_name = new_menu_position_form.name.data
+        entered_description = new_menu_position_form.description.data
+        entered_price = new_menu_position_form.price.data
+        entered_img_url = new_menu_position_form.img_url.data
+
+        new_position = Menu(category=entered_category, name=entered_name, description=entered_description, price=entered_price, image_url=entered_img_url)
+        db.session.add(new_position)
+        db.session.commit()
+
+        return redirect(url_for('menu'))
+    return render_template("menu/new_menu_item.html", form=new_menu_position_form)
 
 
 # obsluga zakladki kontakt
@@ -65,6 +87,7 @@ def registration():
         new_user = User(email=entered_email, password=entered_password, first_name=entered_first_name, last_name=entered_last_name)
         db.session.add(new_user)
         db.session.commit()
+
         return redirect(url_for('login'))
     return render_template("account/registration.html", form=register_form)
 
@@ -83,7 +106,6 @@ def login():
 
 
 # obsługa konta
-@login_required
 @app.route("/konto")
 def account():
     if not current_user.is_authenticated:
@@ -92,8 +114,8 @@ def account():
 
 
 # droga dla wylogwania
-@login_required
 @app.route("/wylogowanie")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('home'))
