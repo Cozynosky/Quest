@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, PasswordField, StringField, TextAreaField, DateField, DateTimeField
-from wtforms.validators import DataRequired, Email, EqualTo, InputRequired
+from wtforms.validators import DataRequired, Email, EqualTo, InputRequired, ValidationError
+from Quest import db
+from Quest.tables import User
 
 
 class BookTable(FlaskForm):
@@ -18,6 +20,15 @@ class Login(FlaskForm):
     password = PasswordField("Hasło", validators=[InputRequired(message="To pole jest wymagane!")])
     login_button = SubmitField("login")
 
+    def validate_email(self, field):
+        if db.session.query(User).filter_by(email=field.data).first() is None:
+            raise ValidationError('Nie istnieje konto o podanym adresie email')
+
+    def validate_password(self, field):
+        user = db.session.query(User).filter_by(email=self.email.data).first()
+        if user and field.data != user.password:
+            raise ValidationError('Podano błędne hasło!')
+
 
 class Register(FlaskForm):
     email = StringField("E-mail", validators=[DataRequired(message="To pole jest wymagane!"), Email(message="To nie jest poprawny adres email!")])
@@ -26,6 +37,11 @@ class Register(FlaskForm):
     first_name = StringField("Imię", validators=[DataRequired(message="To pole jest wymagane!")])
     last_name = StringField("Nazwisko", validators=[DataRequired(message="To pole jest wymagane!")])
     register_button = SubmitField("register")
+
+    def validate_email(self, field):
+        if db.session.query(User).filter_by(email=field.data).first():
+            raise ValidationError('Istnieje użytkownik zarejestrowany na podany email!')
+
 
 
 class Contact(FlaskForm):
