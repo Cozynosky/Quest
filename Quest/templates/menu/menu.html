@@ -1,111 +1,132 @@
 {% extends "base.html" %}
 {% block content %}
-    <section class="home-slider owl-carousel">
-      <div class="slider-item" style="background-image: url({{ url_for('static', filename='images/menu.jpg') }});">
-      	<div class="overlay"></div>
+<section class="home-slider owl-carousel">
+    <div class="slider-item" style="background-image: url({{ url_for('static', filename='images/menu.jpg') }});">
+        <div class="overlay"></div>
         <div class="container">
-          <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
+            <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
-            <div class="col-md-7 col-sm-12 text-center ftco-animate">
-            	<span class="subheading">Oto nasze</span>
-              <h1 class="mb-4">Przepyszne menu</h1>
+                <div class="col-md-7 col-sm-12 text-center ftco-animate">
+                    <span class="subheading">Oto nasze</span>
+                    <h1 class="mb-4">Przepyszne menu</h1>
+                </div>
+
             </div>
-
-          </div>
         </div>
-      </div>
-	</section>
+    </div>
+</section>
 
 
-    <section class="ftco-section">
-    	<div class="container">
-			{% if current_user.is_authenticated and current_user.account_type == "Admin" %}
-			<a href="{{url_for('new_menu_item')}}" class="btn btn-success mb-4" role="button" aria-disabled="true">Dodaj do menu</a>
-			{% endif %}
+<section class="ftco-section">
+    <div class="container">
+        {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+        <a href="{{url_for('new_menu_item')}}" class="btn btn-success mb-4" role="button" aria-disabled="true">Dodaj do
+            menu</a>
+        {% endif %}
         <div class="row">
-			{% if hot_drinks %}
-        	<div class="col-md-6 mb-5 pb-3">
-        		<h3 class="mb-5 heading-pricing ftco-animate">Ciepłe napoje</h3>
-				{% for hot_drink in hot_drinks %}
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url({{hot_drink.image_url}});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>{{hot_drink.name}}</span></h3>
-	        				<span class="price">{{hot_drink.price}} zł</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>{{hot_drink.description}}</p>
-							{% if current_user.is_authenticated and current_user.account_type == "Admin" %}
-							<a href="{{url_for('edit_menu_item', item_id=hot_drink.id)}}" class="btn btn-warning" role="button" aria-disabled="true"><i class="fas fa-pen"></i></a>
-							<a href="{{url_for('delete_menu_item', item_id=hot_drink.id)}}" class="btn btn-danger" role="button" aria-disabled="true"><i class="fas fa-trash-alt"></i></a>
-							{% endif %}
-	        			</div>
-        			</div>
-        		</div>
-				{% endfor %}
-        	</div>
-			{% endif %}
-			{% if cold_drinks %}
-        	<div class="col-md-6 mb-5 pb-3">
-        		<h3 class="mb-5 heading-pricing ftco-animate">Napoje zimne</h3>
-				{% for cold_drink in cold_drinks %}
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url({{cold_drink.image_url}});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>{{cold_drink.name}}</span></h3>
-	        				<span class="price">{{cold_drink.price}} zł</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>{{cold_drink.description}}</p>
-	        			</div>
-	        		</div>
-        		</div>
-				{% endfor %}
-        	</div>
-			{% endif %}
-			{% if desserts %}
-        	<div class="col-md-6">
-        		<h3 class="mb-5 heading-pricing ftco-animate">Desery</h3>
-				{% for dessert in desserts %}
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url({{dessert.image_url}});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>{{dessert.name}}</span></h3>
-	        				<span class="price">{{dessert.price}} zł</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>{{dessert.description}}</p>
-	        			</div>
-        			</div>
-        		</div>
-				{% endfor %}
-        	</div>
-			{% endif %}
-			{% if desserts %}
-        	<div class="col-md-6">
-        		<h3 class="mb-5 heading-pricing ftco-animate">Drinks</h3>
-				{% for special_offer in special_offers %}
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url({{special_offer.image_url}});"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>{{special_offer.name}}</span></h3>
-	        				<span class="price">{{special_offer.price}} zł</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>{{special_offer.description}}</p>
-	        			</div>
-	        		</div>
-        		</div>
-				{% endfor %}
-        	</div>
-			{% endif %}
+            {% if hot_drinks %}
+            <div class="col-md-6 mb-5 pb-3">
+                <h3 class="mb-5 heading-pricing ftco-animate">Ciepłe napoje</h3>
+                {% for hot_drink in hot_drinks %}
+                <div class="pricing-entry d-flex ftco-animate">
+                    <div class="img" style="background-image: url({{hot_drink.image_url}});"></div>
+                    <div class="desc pl-3">
+                        <div class="d-flex text align-items-center">
+                            <h3><span>{{hot_drink.name}}</span></h3>
+                            <span class="price">{{hot_drink.price}} zł</span>
+                        </div>
+                        <div class="d-block">
+                            <p>{{hot_drink.description}}</p>
+                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            <a href="{{url_for('edit_menu_item', item_id=hot_drink.id)}}" class="btn btn-warning"
+                               role="button" aria-disabled="true"><i class="fas fa-pen"></i></a>
+                            <a href="{{url_for('delete_menu_item', item_id=hot_drink.id)}}" class="btn btn-danger"
+                               role="button" aria-disabled="true"><i class="fas fa-trash-alt"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if cold_drinks %}
+            <div class="col-md-6 mb-5 pb-3">
+                <h3 class="mb-5 heading-pricing ftco-animate">Napoje zimne</h3>
+                {% for cold_drink in cold_drinks %}
+                <div class="pricing-entry d-flex ftco-animate">
+                    <div class="img" style="background-image: url({{cold_drink.image_url}});"></div>
+                    <div class="desc pl-3">
+                        <div class="d-flex text align-items-center">
+                            <h3><span>{{cold_drink.name}}</span></h3>
+                            <span class="price">{{cold_drink.price}} zł</span>
+                        </div>
+                        <div class="d-block">
+                            <p>{{cold_drink.description}}</p>
+                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            <a href="{{url_for('edit_menu_item', item_id=hot_drink.id)}}" class="btn btn-warning"
+                               role="button" aria-disabled="true"><i class="fas fa-pen"></i></a>
+                            <a href="{{url_for('delete_menu_item', item_id=hot_drink.id)}}" class="btn btn-danger"
+                               role="button" aria-disabled="true"><i class="fas fa-trash-alt"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if desserts %}
+            <div class="col-md-6">
+                <h3 class="mb-5 heading-pricing ftco-animate">Desery</h3>
+                {% for dessert in desserts %}
+                <div class="pricing-entry d-flex ftco-animate">
+                    <div class="img" style="background-image: url({{dessert.image_url}});"></div>
+                    <div class="desc pl-3">
+                        <div class="d-flex text align-items-center">
+                            <h3><span>{{dessert.name}}</span></h3>
+                            <span class="price">{{dessert.price}} zł</span>
+                        </div>
+                        <div class="d-block">
+                            <p>{{dessert.description}}</p>
+                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            <a href="{{url_for('edit_menu_item', item_id=hot_drink.id)}}" class="btn btn-warning"
+                               role="button" aria-disabled="true"><i class="fas fa-pen"></i></a>
+                            <a href="{{url_for('delete_menu_item', item_id=hot_drink.id)}}" class="btn btn-danger"
+                               role="button" aria-disabled="true"><i class="fas fa-trash-alt"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if desserts %}
+            <div class="col-md-6">
+                <h3 class="mb-5 heading-pricing ftco-animate">Drinks</h3>
+                {% for special_offer in special_offers %}
+                <div class="pricing-entry d-flex ftco-animate">
+                    <div class="img" style="background-image: url({{special_offer.image_url}});"></div>
+                    <div class="desc pl-3">
+                        <div class="d-flex text align-items-center">
+                            <h3><span>{{special_offer.name}}</span></h3>
+                            <span class="price">{{special_offer.price}} zł</span>
+                        </div>
+                        <div class="d-block">
+                            <p>{{special_offer.description}}</p>
+                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            <a href="{{url_for('edit_menu_item', item_id=hot_drink.id)}}" class="btn btn-warning"
+                               role="button" aria-disabled="true"><i class="fas fa-pen"></i></a>
+                            <a href="{{url_for('delete_menu_item', item_id=hot_drink.id)}}" class="btn btn-danger"
+                               role="button" aria-disabled="true"><i class="fas fa-trash-alt"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
-    	</div>
-    </section>
+    </div>
+</section>
 
 
 {% endblock %}
