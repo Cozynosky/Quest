@@ -20,7 +20,7 @@ class MenuPosition(FlaskForm):
     name = StringField("Nazwa", validators=[DataRequired(message="To pole jest wymagane!")])
     description = StringField("Opis")
     price = DecimalField("Cena", places=2, validators=[DataRequired(message="To pole jest wymagane!")])
-    img_url = StringField("Link do zdjęcia")
+    image_url = StringField("Link do zdjęcia")
     submit_button = SubmitField("Zatwierdź pozycję")
 
 

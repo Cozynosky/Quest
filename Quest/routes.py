@@ -3,12 +3,27 @@ from Quest.forms import BookTable, Contact, Login, Register, MenuPosition
 from Quest.tables import User, Menu
 from flask import render_template, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
+from functools import wraps
+from werkzeug.exceptions import abort
 
 
-# ---------------- Inne wrappery -----------------
+# ---------------- flask login -----------------
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.query(User).get(user_id)
+
+
+def admin_only(f):
+    @wraps(f)
+    def decorated_fun(*args, **kwargs):
+        if current_user.account_type == "Admin":
+            return f(*args, **kwargs)
+        else:
+            return abort(403)
+
+    return decorated_fun
+
+
 # -------------------------------------------------
 
 
@@ -27,10 +42,12 @@ def menu():
     cold_drinks = db.session.query(Menu).filter_by(category="cold_drinks").all()
     desserts = db.session.query(Menu).filter_by(category="desserts").all()
     special_offers = db.session.query(Menu).filter_by(category="special_offers").all()
-    return render_template("menu/menu.html", hot_drinks=hot_drinks, cold_drinks=cold_drinks, desserts=desserts, special_offers=special_offers)
+    return render_template("menu/menu.html", hot_drinks=hot_drinks, cold_drinks=cold_drinks, desserts=desserts,
+                           special_offers=special_offers)
 
 
 @app.route("/menu/nowa_pozycja", methods=["GET", "POST"])
+@admin_only
 def new_menu_item():
     new_menu_position_form = MenuPosition()
     if new_menu_position_form.validate_on_submit():
@@ -38,14 +55,46 @@ def new_menu_item():
         entered_name = new_menu_position_form.name.data
         entered_description = new_menu_position_form.description.data
         entered_price = new_menu_position_form.price.data
-        entered_img_url = new_menu_position_form.img_url.data
+        entered_img_url = new_menu_position_form.image_url.data
 
-        new_position = Menu(category=entered_category, name=entered_name, description=entered_description, price=entered_price, image_url=entered_img_url)
+        new_position = Menu(category=entered_category, name=entered_name, description=entered_description,
+                            price=entered_price, image_url=entered_img_url)
         db.session.add(new_position)
         db.session.commit()
 
         return redirect(url_for('menu'))
     return render_template("menu/new_menu_item.html", form=new_menu_position_form)
+
+
+@app.route("/menu/usuniecie_pozycji/<int:item_id>")
+@admin_only
+def delete_menu_item(item_id):
+    item_to_delete = Menu.query.get(item_id)
+    db.session.delete(item_to_delete)
+    db.session.commit()
+    return redirect(url_for('menu'))
+
+
+@app.route("/menu/edycja_pozycji/<int:item_id>", methods=["GET", "POST"])
+@admin_only
+def edit_menu_item(item_id):
+    item_to_edit = Menu.query.get(item_id)
+    edit_form = MenuPosition(
+        name=item_to_edit.name,
+        category=item_to_edit.category,
+        price=item_to_edit.price,
+        imgage_url=item_to_edit.image_url,
+        description=item_to_edit.description
+    )
+    if edit_form.validate_on_submit():
+        item_to_edit.name = edit_form.name
+        item_to_edit.category = edit_form.category
+        item_to_edit.price = edit_form.price
+        item_to_edit.image_url = edit_form.image_url
+        item_to_edit.description = edit_form.description
+        db.session.commit()
+        return redirect(url_for('menu'))
+    return render_template("menu/edit_menu_item.html", form=edit_form)
 
 
 # obsluga zakladki kontakt
@@ -84,7 +133,8 @@ def registration():
         entered_first_name = register_form.first_name.data
         entered_last_name = register_form.last_name.data
 
-        new_user = User(email=entered_email, password=entered_password, first_name=entered_first_name, last_name=entered_last_name)
+        new_user = User(email=entered_email, password=entered_password, first_name=entered_first_name,
+                        last_name=entered_last_name)
         db.session.add(new_user)
         db.session.commit()
 

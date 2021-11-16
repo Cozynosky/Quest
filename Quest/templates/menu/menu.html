@@ -19,6 +19,9 @@
 
     <section class="ftco-section">
     	<div class="container">
+			{% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+			<a href="{{url_for('new_menu_item')}}" class="btn btn-success mb-4" role="button" aria-disabled="true">Dodaj do menu</a>
+			{% endif %}
         <div class="row">
 			{% if hot_drinks %}
         	<div class="col-md-6 mb-5 pb-3">
@@ -33,6 +36,10 @@
 	        			</div>
 	        			<div class="d-block">
 	        				<p>{{hot_drink.description}}</p>
+							{% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+							<a href="{{url_for('edit_menu_item', item_id=hot_drink.id)}}" class="btn btn-warning" role="button" aria-disabled="true"><i class="fas fa-pen"></i></a>
+							<a href="{{url_for('delete_menu_item', item_id=hot_drink.id)}}" class="btn btn-danger" role="button" aria-disabled="true"><i class="fas fa-trash-alt"></i></a>
+							{% endif %}
 	        			</div>
         			</div>
         		</div>
@@ -42,52 +49,58 @@
 			{% if cold_drinks %}
         	<div class="col-md-6 mb-5 pb-3">
         		<h3 class="mb-5 heading-pricing ftco-animate">Napoje zimne</h3>
+				{% for cold_drink in cold_drinks %}
         		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(images/dish-5.jpg);"></div>
+        			<div class="img" style="background-image: url({{cold_drink.image_url}});"></div>
         			<div class="desc pl-3">
 	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Sok świeży - pomarańczowy</span></h3>
-	        				<span class="price">12 zł</span>
+	        				<h3><span>{{cold_drink.name}}</span></h3>
+	        				<span class="price">{{cold_drink.price}} zł</span>
 	        			</div>
 	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
+	        				<p>{{cold_drink.description}}</p>
 	        			</div>
 	        		</div>
         		</div>
+				{% endfor %}
         	</div>
 			{% endif %}
 			{% if desserts %}
         	<div class="col-md-6">
         		<h3 class="mb-5 heading-pricing ftco-animate">Desery</h3>
+				{% for dessert in desserts %}
         		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(images/dessert-1.jpg);"></div>
+        			<div class="img" style="background-image: url({{dessert.image_url}});"></div>
         			<div class="desc pl-3">
 	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Cornish - Mackerel</span></h3>
-	        				<span class="price">$20.00</span>
+	        				<h3><span>{{dessert.name}}</span></h3>
+	        				<span class="price">{{dessert.price}} zł</span>
 	        			</div>
 	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
+	        				<p>{{dessert.description}}</p>
 	        			</div>
         			</div>
         		</div>
+				{% endfor %}
         	</div>
 			{% endif %}
 			{% if desserts %}
         	<div class="col-md-6">
         		<h3 class="mb-5 heading-pricing ftco-animate">Drinks</h3>
+				{% for special_offer in special_offers %}
         		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(images/drink-5.jpg);"></div>
+        			<div class="img" style="background-image: url({{special_offer.image_url}});"></div>
         			<div class="desc pl-3">
 	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Sea Trout</span></h3>
-	        				<span class="price">$49.91</span>
+	        				<h3><span>{{special_offer.name}}</span></h3>
+	        				<span class="price">{{special_offer.price}} zł</span>
 	        			</div>
 	        			<div class="d-block">
-	        				<p>A small river named Duden flows by their place and supplies</p>
+	        				<p>{{special_offer.description}}</p>
 	        			</div>
 	        		</div>
         		</div>
+				{% endfor %}
         	</div>
 			{% endif %}
         </div>
