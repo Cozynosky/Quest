@@ -83,15 +83,15 @@ def edit_menu_item(item_id):
         name=item_to_edit.name,
         category=item_to_edit.category,
         price=item_to_edit.price,
-        imgage_url=item_to_edit.image_url,
+        image_url=item_to_edit.image_url,
         description=item_to_edit.description
     )
     if edit_form.validate_on_submit():
-        item_to_edit.name = edit_form.name
-        item_to_edit.category = edit_form.category
-        item_to_edit.price = edit_form.price
-        item_to_edit.image_url = edit_form.image_url
-        item_to_edit.description = edit_form.description
+        item_to_edit.name = edit_form.name.data
+        item_to_edit.category = edit_form.category.data
+        item_to_edit.price = edit_form.price.data
+        item_to_edit.image_url = edit_form.image_url.data
+        item_to_edit.description = edit_form.description.data
         db.session.commit()
         return redirect(url_for('menu'))
     return render_template("menu/edit_menu_item.html", form=edit_form)

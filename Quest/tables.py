@@ -19,6 +19,6 @@ class Menu(db.Model):
     category = db.Column(db.String(50), nullable=False)
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(250), nullable=True, server_default="Brak opisu")
+    image_url = db.Column(db.String(2000), nullable=True, server_default="Brak adresu zdjęcia")
     price = db.Column(db.Numeric(10, 2), nullable=False)
-    image_url = db.Column(db.String(250), nullable=True, server_default="Brak zdjęcia")
 # ---------------------------------------------------------------------------------------
