@@ -50,7 +50,7 @@
                 <li class="nav-item {% if request.endpoint=='events' %}active{%endif %}"><a href="{{ url_for('events') }}" class="nav-link">Eventy</a></li>
 	          <li class="nav-item {% if request.endpoint=='account' %}active{%endif %}"><a href="{{ url_for('account') }}" class="nav-link">Konto</a></li>
 	          <li class="nav-item {% if request.endpoint=='contact' %}active{%endif %}"><a href="{{ url_for('contact') }}" class="nav-link">Kontakt</a></li>
-	          <li class="nav-item cart {% if request.endpoint=='cart' %}active{%endif %}"><a href="{{ url_for('cart') }}" class="nav-link"><span class="icon icon-shopping_cart"></span><span class="bag d-flex justify-content-center align-items-center"><small>0</small></span></a></li>
+	          <li class="nav-item cart {% if request.endpoint=='cart' %}active{%endif %}"><a href="{{ url_for('cart') }}" class="nav-link"><span class="icon icon-shopping_cart"></span></a></li>
 	        </ul>
 	      </div>
 		  </div>

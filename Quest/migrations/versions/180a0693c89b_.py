@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 9c36279e86ec
+Revision ID: 180a0693c89b
 Revises: 
-Create Date: 2021-11-23 16:52:15.122615
+Create Date: 2021-11-23 21:51:29.274059
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9c36279e86ec'
+revision = '180a0693c89b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,7 +22,6 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('number_in_stock', sa.Integer(), nullable=False),
     sa.Column('article_type', sa.String(length=250), nullable=False),
-    sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',
@@ -33,6 +32,27 @@ def upgrade():
     sa.Column('last_name', sa.String(length=250), nullable=False),
     sa.Column('email', sa.String(length=250), nullable=False),
     sa.Column('privileges', sa.String(length=250), server_default='User', nullable=False),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('books_for_sale',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
+    sa.Column('discount', sa.Integer(), nullable=True),
+    sa.Column('stock_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['stock_id'], ['stock.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('books_info',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('title', sa.String(length=250), nullable=False),
+    sa.Column('author', sa.String(length=250), nullable=False),
+    sa.Column('publisher', sa.String(length=250), nullable=False),
+    sa.Column('genre', sa.String(length=250), server_default='other', nullable=False),
+    sa.Column('publish_date', sa.Integer(), server_default='2000', nullable=False),
+    sa.Column('description', sa.String(length=500), nullable=True),
+    sa.Column('image_url', sa.String(length=2000), server_default='https://miro.medium.com/max/1400/1*KOAfAOQ9FwAp9i2muTkGWw.png', nullable=True),
+    sa.Column('stock_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['stock_id'], ['stock.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('clients',
@@ -46,7 +66,8 @@ def upgrade():
     sa.Column('category', sa.String(length=50), nullable=False),
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=250), server_default='Brak opisu', nullable=True),
-    sa.Column('image_url', sa.String(length=2000), server_default='Brak adresu zdjęcia', nullable=True),
+    sa.Column('image_url', sa.String(length=2000), server_default='https://miro.medium.com/max/1400/1*KOAfAOQ9FwAp9i2muTkGWw.png', nullable=True),
+    sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.Column('stock_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['stock_id'], ['stock.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -65,6 +86,8 @@ def downgrade():
     op.drop_table('workers')
     op.drop_table('menu')
     op.drop_table('clients')
+    op.drop_table('books_info')
+    op.drop_table('books_for_sale')
     op.drop_table('users')
     op.drop_table('stock')
     # ### end Alembic commands ###
