@@ -44,7 +44,9 @@
 	          <li class="nav-item {% if request.endpoint=='home' %}active{%endif %}"><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
 	          <li class="nav-item {% if request.endpoint=='menu' %}active{%endif %}"><a href="{{ url_for('menu') }}" class="nav-link">Menu</a></li>
 	          <li class="nav-item {% if request.endpoint=='bookshop' %}active{%endif %}"><a href="{{ url_for('bookshop') }}" class="nav-link">Księgarnia</a></li>
+                {% if current_user.is_authenticated %}
                 <li class="nav-item {% if request.endpoint=='library' %}active{%endif %}"><a href="{{ url_for('library') }}" class="nav-link">Biblioteka</a></li>
+                {% endif %}
                 <li class="nav-item {% if request.endpoint=='events' %}active{%endif %}"><a href="{{ url_for('events') }}" class="nav-link">Eventy</a></li>
 	          <li class="nav-item {% if request.endpoint=='account' %}active{%endif %}"><a href="{{ url_for('account') }}" class="nav-link">Konto</a></li>
 	          <li class="nav-item {% if request.endpoint=='contact' %}active{%endif %}"><a href="{{ url_for('contact') }}" class="nav-link">Kontakt</a></li>

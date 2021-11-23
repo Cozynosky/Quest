@@ -1,6 +1,6 @@
 from Quest import app, db, login_manager
 from Quest.forms import BookTable, Contact, Login, Register, MenuPosition
-from Quest.tables import User, Menu
+from Quest.tables import User, Menu, Client, Stock
 from flask import render_template, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 from functools import wraps
@@ -16,7 +16,7 @@ def load_user(user_id):
 def admin_only(f):
     @wraps(f)
     def decorated_fun(*args, **kwargs):
-        if current_user.account_type == "Admin":
+        if current_user.privileges == "Admin":
             return f(*args, **kwargs)
         else:
             return abort(403)
@@ -56,14 +56,16 @@ def new_menu_item():
         entered_description = new_menu_position_form.description.data
         entered_price = new_menu_position_form.price.data
         entered_img_url = new_menu_position_form.image_url.data
+        entered_number_in_stock = new_menu_position_form.number_in_stock.data
 
-        new_position = Menu(category=entered_category, name=entered_name, description=entered_description,
-                            price=entered_price, image_url=entered_img_url)
-        db.session.add(new_position)
+        new_stock = Stock(number_in_stock=entered_number_in_stock, article_type="menu_position", price=entered_price)
+        new_position = Menu(category=entered_category, name=entered_name, description=entered_description, image_url=entered_img_url)
+        new_stock.menu_position = new_position
+        db.session.add(new_stock)
         db.session.commit()
 
         return redirect(url_for('menu'))
-    return render_template("menu/new_menu_item.html", form=new_menu_position_form)
+    return render_template("menu/menu_item.html", form=new_menu_position_form)
 
 
 @app.route("/menu/usuniecie_pozycji/<int:item_id>")
@@ -82,19 +84,20 @@ def edit_menu_item(item_id):
     edit_form = MenuPosition(
         name=item_to_edit.name,
         category=item_to_edit.category,
-        price=item_to_edit.price,
+        price=item_to_edit.stock.price,
         image_url=item_to_edit.image_url,
-        description=item_to_edit.description
+        description=item_to_edit.description,
+        number_in_stock=item_to_edit.stock.number_in_stock
     )
     if edit_form.validate_on_submit():
         item_to_edit.name = edit_form.name.data
         item_to_edit.category = edit_form.category.data
-        item_to_edit.price = edit_form.price.data
+        item_to_edit.stock.price = edit_form.price.data
         item_to_edit.image_url = edit_form.image_url.data
         item_to_edit.description = edit_form.description.data
         db.session.commit()
         return redirect(url_for('menu'))
-    return render_template("menu/edit_menu_item.html", form=edit_form)
+    return render_template("menu/menu_item.html", form=edit_form)
 
 
 # obsluga zakladki kontakt
@@ -128,13 +131,16 @@ def library():
 def registration():
     register_form = Register()
     if register_form.validate_on_submit():
+        entered_login = register_form.login.data
         entered_email = register_form.email.data
         entered_password = register_form.password.data
         entered_first_name = register_form.first_name.data
         entered_last_name = register_form.last_name.data
 
-        new_user = User(email=entered_email, password=entered_password, first_name=entered_first_name,
+        new_user = User(login=entered_login, email=entered_email, password=entered_password, first_name=entered_first_name,
                         last_name=entered_last_name)
+        new_client = Client()
+        new_user.client = new_client
         db.session.add(new_user)
         db.session.commit()
 
@@ -147,8 +153,8 @@ def registration():
 def login():
     login_form = Login()
     if login_form.validate_on_submit():
-        entered_email = login_form.email.data
-        selected_user = db.session.query(User).filter_by(email=entered_email).first()
+        entered_login = login_form.login.data
+        selected_user = db.session.query(User).filter_by(login=entered_login).first()
         login_user(selected_user)
         return redirect(url_for("account"))
 

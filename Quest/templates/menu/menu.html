@@ -19,7 +19,7 @@
 
 <section class="ftco-section">
     <div class="container">
-        {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+        {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
         <a href="{{url_for('new_menu_item')}}" class="btn btn-success mb-4" role="button" aria-disabled="true">Dodaj do
             menu</a>
         {% endif %}
@@ -28,16 +28,17 @@
             <div class="col-md-6 mb-5 pb-3">
                 <h3 class="mb-5 heading-pricing ftco-animate">Ciepłe napoje</h3>
                 {% for hot_drink in hot_drinks %}
+                {% if hot_drink.stock.number_in_stock > 0 %}
                 <div class="pricing-entry d-flex ftco-animate">
                     <div class="img" style="background-image: url({{hot_drink.image_url}});"></div>
                     <div class="desc pl-3">
                         <div class="d-flex text align-items-center">
                             <h3><span>{{hot_drink.name}}</span></h3>
-                            <span class="price">{{hot_drink.price}} zł</span>
+                            <span class="price">{{hot_drink.stock.price}} zł</span>
                         </div>
                         <div class="d-block">
                             <p>{{hot_drink.description}}</p>
-                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
                             <a href="{{url_for('edit_menu_item', item_id=hot_drink.id)}}" class="btn btn-warning"
                                role="button"><i class="fas fa-pen"></i></a>
                             <a href="{{url_for('delete_menu_item', item_id=hot_drink.id)}}" class="btn btn-danger"
@@ -46,6 +47,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 {% endfor %}
             </div>
             {% endif %}
@@ -58,11 +60,11 @@
                     <div class="desc pl-3">
                         <div class="d-flex text align-items-center">
                             <h3><span>{{cold_drink.name}}</span></h3>
-                            <span class="price">{{cold_drink.price}} zł</span>
+                            <span class="price">{{cold_drink.stock.price}} zł</span>
                         </div>
                         <div class="d-block">
                             <p>{{cold_drink.description}}</p>
-                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
                             <a href="{{url_for('edit_menu_item', item_id=cold_drink.id)}}" class="btn btn-warning"
                                role="button"><i class="fas fa-pen"></i></a>
                             <a href="{{url_for('delete_menu_item', item_id=cold_drink.id)}}" class="btn btn-danger"
@@ -83,11 +85,11 @@
                     <div class="desc pl-3">
                         <div class="d-flex text align-items-center">
                             <h3><span>{{dessert.name}}</span></h3>
-                            <span class="price">{{dessert.price}} zł</span>
+                            <span class="price">{{dessert.stock.price}} zł</span>
                         </div>
                         <div class="d-block">
                             <p>{{dessert.description}}</p>
-                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
                             <a href="{{url_for('edit_menu_item', item_id=dessert.id)}}" class="btn btn-warning"
                                role="button"><i class="fas fa-pen"></i></a>
                             <a href="{{url_for('delete_menu_item', item_id=dessert.id)}}" class="btn btn-danger"
@@ -108,11 +110,11 @@
                     <div class="desc pl-3">
                         <div class="d-flex text align-items-center">
                             <h3><span>{{special_offer.name}}</span></h3>
-                            <span class="price">{{special_offer.price}} zł</span>
+                            <span class="price">{{special_offer.stock.price}} zł</span>
                         </div>
                         <div class="d-block">
                             <p>{{special_offer.description}}</p>
-                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
                             <a href="{{url_for('edit_menu_item', item_id=special_offer.id)}}" class="btn btn-warning"
                                role="button"><i class="fas fa-pen"></i></a>
                             <a href="{{url_for('delete_menu_item', item_id=special_offer.id)}}" class="btn btn-danger"
