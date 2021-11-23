@@ -43,10 +43,7 @@
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" object-ref="schemas/public/tables/users" />
-      <object connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" object-ref="schemas/main/tables/users" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" />
@@ -60,7 +57,10 @@
     </filter-actions>
     <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.alembic_version" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.menu" active-filter-id="" />
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.clients" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.users" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.books_for_sale" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.stock" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.menu" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.alembic_version" active-filter-id="" />
   </component>
@@ -96,7 +96,7 @@
           <description value="" />
           <database-type value="POSTGRES" />
           <config-type value="BASIC" />
-          <database-version value="13.4" />
+          <database-version value="13.5" />
           <driver-source value="BUILTIN" />
           <driver-library value="" />
           <driver value="" />

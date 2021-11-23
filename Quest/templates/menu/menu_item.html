@@ -25,7 +25,7 @@
                         </div>
                         <div class="form-group col-md-4">
                             {{ form.price.label(class_="control-label") }}
-                            {{form.price(class_ = "form-control", placeholder="00,00")}}
+                            {{form.price(class_ = "form-control", placeholder="0,00")}}
                             {% for error in form.price.errors: %}
                             <p style="color:red">{{error}}</p>
                             {% endfor %}
@@ -41,10 +41,17 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-8">
                             {{form.description.label(class_="control-label") }}
                             {{form.description(class_ = "form-control", placeholder="Krótki opis pozycji")}}
                             {% for error in form.description.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{form.number_in_stock.label(class_="control-label") }}
+                            {{form.number_in_stock(class_ = "form-control", placeholder="Liczba artykułu")}}
+                            {% for error in form.number_in_stock.errors: %}
                             <p style="color:red">{{error}}</p>
                             {% endfor %}
                         </div>

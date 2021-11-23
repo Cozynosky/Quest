@@ -1,0 +1,98 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+{% block content %}
+<section class="ftco-section contact-section">
+    <div class="container">
+        <div class="row p-5 justify-content-center">
+            <div class="col-md-10 ">
+                <h3 class="text-center mb-5">Formularz pozycji w księgarni</h3>
+                <form method="POST" class="contact-form p-4" novalidate style="background-color:#120f0f"
+                      autocomplete="off">
+                    {{ form.csrf_token }}
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            {{ form.title.label(class_="control-label") }}
+                            {{form.title(class_ = "form-control", placeholder="Tytuł książki")}}
+                            {% for error in form.title.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.author.label(class_="control-label") }}
+                            {{form.author(class_ = "form-control", placeholder="Autor książki")}}
+                            {% for error in form.author.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.publisher.label(class_="control-label") }}
+                            {{form.publisher(class_ = "form-control", placeholder="Wydawca książki")}}
+                            {% for error in form.publisher.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            {{ form.genre.label(class_="control-label") }}
+                            {{form.genre(class_ = "form-control")}}
+                            {% for error in form.genre.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-8">
+                            {{ form.image_url.label(class_="control-label") }}
+                            {{form.image_url(class_ = "form-control", placeholder="Adres url okładki książki")}}
+                            {% for error in form.image_url.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
+                                                <div class="form-group col-md-3">
+                            {{ form.publish_date.label(class_="control-label") }}
+                            {{form.publish_date(class_ = "form-control", placeholder="Data publikacji")}}
+                            {% for error in form.publish_date.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-3">
+                            {{ form.number_in_stock.label(class_="control-label") }}
+                            {{form.number_in_stock(class_ = "form-control",placeholder="Liczba w magazynie")}}
+                            {% for error in form.number_in_stock.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-3">
+                            {{ form.price.label(class_="control-label") }}
+                            {{form.price(class_ = "form-control",placeholder="Cena książki")}}
+                            {% for error in form.price.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-3">
+                            {{ form.discount.label(class_="control-label") }}
+                            {{form.discount(class_ = "form-control", placeholder="0")}}
+                            {% for error in form.discount.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            {{ form.description.label(class_="control-label") }}
+                            {{form.description(class_ = "form-control",placeholder="Opis książki", rows="10")}}
+                            {% for error in form.description.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        {{form.submit_button(class_ = "btn btn-primary py-3 px-4", value="Zatwierdź")}}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

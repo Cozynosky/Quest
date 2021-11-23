@@ -16,10 +16,14 @@
     </div>
 </section>
 
+<div class="d-flex justify-content-center">
+    <p style="background-color:#c49b63; width:75%; height:40px; position: absolute; top: 730px;">
+    </p>
+</div>
 
 <section class="ftco-section">
     <div class="container">
-        {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+        {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
         <a href="{{url_for('new_menu_item')}}" class="btn btn-success mb-4" role="button" aria-disabled="true">Dodaj do
             menu</a>
         {% endif %}
@@ -28,6 +32,7 @@
             <div class="col-md-6 mb-5 pb-3">
                 <h3 class="mb-5 heading-pricing ftco-animate">Ciepłe napoje</h3>
                 {% for hot_drink in hot_drinks %}
+                {% if hot_drink.stock.number_in_stock > 0 %}
                 <div class="pricing-entry d-flex ftco-animate">
                     <div class="img" style="background-image: url({{hot_drink.image_url}});"></div>
                     <div class="desc pl-3">
@@ -37,7 +42,7 @@
                         </div>
                         <div class="d-block">
                             <p>{{hot_drink.description}}</p>
-                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
                             <a href="{{url_for('edit_menu_item', item_id=hot_drink.id)}}" class="btn btn-warning"
                                role="button"><i class="fas fa-pen"></i></a>
                             <a href="{{url_for('delete_menu_item', item_id=hot_drink.id)}}" class="btn btn-danger"
@@ -46,6 +51,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 {% endfor %}
             </div>
             {% endif %}
@@ -62,7 +68,7 @@
                         </div>
                         <div class="d-block">
                             <p>{{cold_drink.description}}</p>
-                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
                             <a href="{{url_for('edit_menu_item', item_id=cold_drink.id)}}" class="btn btn-warning"
                                role="button"><i class="fas fa-pen"></i></a>
                             <a href="{{url_for('delete_menu_item', item_id=cold_drink.id)}}" class="btn btn-danger"
@@ -87,7 +93,7 @@
                         </div>
                         <div class="d-block">
                             <p>{{dessert.description}}</p>
-                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
                             <a href="{{url_for('edit_menu_item', item_id=dessert.id)}}" class="btn btn-warning"
                                role="button"><i class="fas fa-pen"></i></a>
                             <a href="{{url_for('delete_menu_item', item_id=dessert.id)}}" class="btn btn-danger"
@@ -112,7 +118,7 @@
                         </div>
                         <div class="d-block">
                             <p>{{special_offer.description}}</p>
-                            {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+                            {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
                             <a href="{{url_for('edit_menu_item', item_id=special_offer.id)}}" class="btn btn-warning"
                                role="button"><i class="fas fa-pen"></i></a>
                             <a href="{{url_for('delete_menu_item', item_id=special_offer.id)}}" class="btn btn-danger"

@@ -9,9 +9,9 @@
                 <form method="POST" class="contact-form p-4" novalidate style="background-color:#120f0f" autocomplete="off">
                     {{ form.csrf_token }}
                     <div class="form-group">
-                        {{ form.email.label(class_="control-label") }}
-                        {{form.email(class_ = "form-control", placeholder="Twój e-mail")}}
-                        {% for error in form.email.errors: %}
+                        {{ form.login.label(class_="control-label") }}
+                        {{form.login(class_ = "form-control", placeholder="Twój login")}}
+                        {% for error in form.login.errors: %}
                         <p style="color:red">{{error}}</p>
                         {% endfor %}
                     </div>

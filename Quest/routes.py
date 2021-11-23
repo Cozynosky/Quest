@@ -1,6 +1,6 @@
 from Quest import app, db, login_manager
-from Quest.forms import BookTable, Contact, Login, Register, MenuPosition
-from Quest.tables import User, Menu
+from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book
+from Quest.tables import User, Menu, Client, Stock, BookForSale, BookInfo
 from flask import render_template, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 from functools import wraps
@@ -16,7 +16,7 @@ def load_user(user_id):
 def admin_only(f):
     @wraps(f)
     def decorated_fun(*args, **kwargs):
-        if current_user.account_type == "Admin":
+        if current_user.privileges == "Admin":
             return f(*args, **kwargs)
         else:
             return abort(403)
@@ -56,20 +56,24 @@ def new_menu_item():
         entered_description = new_menu_position_form.description.data
         entered_price = new_menu_position_form.price.data
         entered_img_url = new_menu_position_form.image_url.data
+        entered_number_in_stock = new_menu_position_form.number_in_stock.data
 
+        new_stock = Stock(number_in_stock=entered_number_in_stock, article_type="menu_position")
         new_position = Menu(category=entered_category, name=entered_name, description=entered_description,
-                            price=entered_price, image_url=entered_img_url)
-        db.session.add(new_position)
+                            image_url=entered_img_url, price=entered_price)
+        new_stock.menu_position = new_position
+        db.session.add(new_stock)
         db.session.commit()
 
         return redirect(url_for('menu'))
-    return render_template("menu/new_menu_item.html", form=new_menu_position_form)
+    return render_template("menu/menu_item.html", form=new_menu_position_form)
 
 
 @app.route("/menu/usuniecie_pozycji/<int:item_id>")
 @admin_only
 def delete_menu_item(item_id):
     item_to_delete = Menu.query.get(item_id)
+    db.session.delete(item_to_delete.stock)
     db.session.delete(item_to_delete)
     db.session.commit()
     return redirect(url_for('menu'))
@@ -84,7 +88,8 @@ def edit_menu_item(item_id):
         category=item_to_edit.category,
         price=item_to_edit.price,
         image_url=item_to_edit.image_url,
-        description=item_to_edit.description
+        description=item_to_edit.description,
+        number_in_stock=item_to_edit.stock.number_in_stock
     )
     if edit_form.validate_on_submit():
         item_to_edit.name = edit_form.name.data
@@ -92,9 +97,10 @@ def edit_menu_item(item_id):
         item_to_edit.price = edit_form.price.data
         item_to_edit.image_url = edit_form.image_url.data
         item_to_edit.description = edit_form.description.data
+        item_to_edit.stock.number_in_stock = edit_form.number_in_stock
         db.session.commit()
         return redirect(url_for('menu'))
-    return render_template("menu/edit_menu_item.html", form=edit_form)
+    return render_template("menu/menu_item.html", form=edit_form)
 
 
 # obsluga zakladki kontakt
@@ -115,7 +121,46 @@ def cart():
 # obsluga zakladki ksiegarnia
 @app.route("/ksiegarnia")
 def bookshop():
-    return render_template("bookshop/bookshop.html")
+    books_for_sale = db.session.query(BookForSale).all()
+    return render_template("bookshop/bookshop.html", books=books_for_sale)
+
+
+# obsluga zakladki konkretnej ksiazki
+@app.route("/ksiegarnia/ksiazka/<int:book_id>")
+def show_book_for_sell(book_id):
+    return render_template("bookshop/book_single.html")
+
+
+# obsluga dodania nowej pozycji
+@app.route("/ksiegarnia/nowa_pozycja", methods=["GET", "POST"])
+@admin_only
+def new_book_for_sale():
+    new_book_form = Book()
+    if new_book_form.validate_on_submit():
+        entered_number_in_stock = new_book_form.number_in_stock.data
+
+        entered_price = new_book_form.price.data
+        entered_discount = new_book_form.discount.data
+
+        entered_title = new_book_form.title.data
+        entered_author = new_book_form.author.data
+        entered_publisher = new_book_form.publisher.data
+        entered_genre = new_book_form.genre.data
+        entered_description = new_book_form.description.data
+        entered_publish_date = new_book_form.publish_date.data
+        entered_image_url = new_book_form.image_url.data
+
+        new_stock = Stock(number_in_stock=entered_number_in_stock, article_type="book_for_sale")
+        new_book_for_sale = BookForSale(price=entered_price, discount=entered_discount)
+        new_book_info = BookInfo(title=entered_title, author=entered_author, publisher=entered_publisher,
+                                 genre=entered_genre, description=entered_description, publish_date=entered_publish_date, image_url=entered_image_url)
+        new_stock.book_info = new_book_info
+        new_stock.book_for_sale = new_book_for_sale
+        db.session.add(new_stock)
+        db.session.commit()
+
+        return redirect(url_for('bookshop'))
+    return render_template("bookshop/book_item.html", form=new_book_form)
 
 
 # obsluga zakladki biblioteki
@@ -128,13 +173,17 @@ def library():
 def registration():
     register_form = Register()
     if register_form.validate_on_submit():
+        entered_login = register_form.login.data
         entered_email = register_form.email.data
         entered_password = register_form.password.data
         entered_first_name = register_form.first_name.data
         entered_last_name = register_form.last_name.data
 
-        new_user = User(email=entered_email, password=entered_password, first_name=entered_first_name,
+        new_user = User(login=entered_login, email=entered_email, password=entered_password,
+                        first_name=entered_first_name,
                         last_name=entered_last_name)
+        new_client = Client()
+        new_user.client = new_client
         db.session.add(new_user)
         db.session.commit()
 
@@ -147,8 +196,8 @@ def registration():
 def login():
     login_form = Login()
     if login_form.validate_on_submit():
-        entered_email = login_form.email.data
-        selected_user = db.session.query(User).filter_by(email=entered_email).first()
+        entered_login = login_form.login.data
+        selected_user = db.session.query(User).filter_by(login=entered_login).first()
         login_user(selected_user)
         return redirect(url_for("account"))
 
@@ -168,7 +217,7 @@ def account():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
 
 
 # obsluga zakladki wydarzenia

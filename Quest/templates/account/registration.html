@@ -9,6 +9,22 @@
                 <form method="POST" class="contact-form p-4" novalidate style="background-color:#120f0f" autocomplete="off">
                     {{ form.csrf_token }}
                     <div class="row">
+                         <div class="form-group col-md-6">
+                            {{form.login.label(class_="control-label") }}
+                            {{form.login(class_ = "form-control", placeholder="Twój login")}}
+                            {% for error in form.login.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{form.email.label(class_="control-label") }}
+                            {{form.email(class_ = "form-control", placeholder="Twój adres email")}}
+                            {% for error in form.email.errors: %}
+                            <p style="color:red">{{error}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-md-6">
                             {{ form.first_name.label(class_="control-label") }}
                             {{form.first_name(class_ = "form-control", placeholder="Twoje imię")}}
@@ -20,15 +36,6 @@
                             {{ form.last_name.label(class_="control-label") }}
                             {{form.last_name(class_ = "form-control", placeholder="Twoje nazwisko")}}
                             {% for error in form.last_name.errors: %}
-                            <p style="color:red">{{error}}</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            {{form.email.label(class_="control-label") }}
-                            {{form.email(class_ = "form-control", placeholder="Twój adres email")}}
-                            {% for error in form.email.errors: %}
                             <p style="color:red">{{error}}</p>
                             {% endfor %}
                         </div>
