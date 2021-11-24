@@ -41,9 +41,9 @@
                     <tr>
                         <td>Cena:</td>
                         <td style="color:primary; font-size:2rem">
-                            {% if new_price %}
+                            {% if book.stock.book_for_sale.new_price > 0%}
                             <span style="color:red">
-                                {{new_price}}
+                                {{book.stock.book_for_sale.new_price}}
                             </span>
                             <span style="text-decoration: line-through; font-size:1rem">
                             {{book.stock.book_for_sale.price}}

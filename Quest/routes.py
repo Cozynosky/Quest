@@ -129,12 +129,8 @@ def bookshop():
 # obsluga zakladki konkretnej ksiazki
 @app.route("/ksiegarnia/ksiazka/<int:book_id>")
 def show_book_for_sell(book_id):
-    book= BookForSale.query.get(book_id)
-    if book.stock.book_for_sale.discount > 0:
-        new_price = round(book.stock.book_for_sale.price - (Decimal(book.stock.book_for_sale.discount/100) * book.stock.book_for_sale.price), 2)
-    else:
-        new_price = False
-    return render_template("bookshop/book_single.html", book=book, new_price=new_price)
+    book = BookForSale.query.get(book_id)
+    return render_template("bookshop/book_single.html", book=book)
 
 
 # obsluga dodania nowej pozycji
@@ -148,6 +144,11 @@ def new_book_for_sale():
         entered_price = new_book_form.price.data
         entered_discount = new_book_form.discount.data
 
+        if entered_discount > 0:
+            new_price = round(entered_price - (Decimal(entered_discount / 100) * entered_price), 2)
+        else:
+            new_price = False
+
         entered_title = new_book_form.title.data
         entered_author = new_book_form.author.data
         entered_publisher = new_book_form.publisher.data
@@ -157,7 +158,7 @@ def new_book_for_sale():
         entered_image_url = new_book_form.image_url.data
 
         new_stock = Stock(number_in_stock=entered_number_in_stock, article_type="book_for_sale")
-        new_book_for_sale = BookForSale(price=entered_price, discount=entered_discount)
+        new_book_for_sale = BookForSale(price=entered_price, new_price=new_price)
         new_book_info = BookInfo(title=entered_title, author=entered_author, publisher=entered_publisher,
                                  genre=entered_genre, description=entered_description, publish_date=entered_publish_date, image_url=entered_image_url)
         new_stock.book_info = new_book_info
