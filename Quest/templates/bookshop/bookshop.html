@@ -42,6 +42,8 @@
 
                             <a class="nav-link" href="#">Nowości</a>
 
+                            <a class="nav-link" href="#">Wyprzedaż</a>
+
                         </div>
                     </div>
                 </div>
@@ -53,9 +55,19 @@
                             <a href="{{url_for('show_book_for_sell', book_id=book.id)}}" class="menu-img img mb-4"
                                style="background-image: url({{book.stock.book_info.image_url}}); height:470px"></a>
                             <div class="text">
-                                <h3><a href="{{url_for('show_book_for_sell', book_id=book.id)}}">{{book.stock.book_info.title}}</a></h3>
+                                <h3><a href="{{url_for('show_book_for_sell', book_id=book.id)}}">{{book.stock.book_info.title}}</a>
+                                </h3>
                                 <p>{{book.stock.book_info.author}}</p>
-                                <p class="price"><span>{{book.stock.book_for_sale.price}} zł</span></p>
+                                <p class="price">
+                                    {% if book.stock.book_for_sale.new_price > 0%}
+                                    <span style="color:red;">
+                                    {{book.stock.book_for_sale.new_price}}
+                                    </span>
+                                    <span style="text-decoration: line-through; color:grey">{{book.stock.book_for_sale.price}} zł</span>
+                                    {% else %}
+                                    <span>{{book.stock.book_for_sale.price}} zł</span>
+                                    {% endif %}
+                                </p>
                                 <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Dodaj do
                                     koszyka</a></p>
                             </div>

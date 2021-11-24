@@ -49,7 +49,7 @@ class BookForSale(db.Model):
     __tablename__ = "books_for_sale"
     id = db.Column(db.Integer, primary_key=True)
     price = db.Column(db.Numeric(10, 2), nullable=False)
-    discount = db.Column(db.Integer, nullable=True)
+    new_price = db.Column(db.Numeric(10, 2), nullable=True)
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     stock = relationship("Stock", back_populates="book_for_sale")
 
