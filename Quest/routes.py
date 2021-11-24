@@ -5,6 +5,7 @@ from flask import render_template, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 from functools import wraps
 from werkzeug.exceptions import abort
+from decimal import Decimal
 
 
 # ---------------- flask login -----------------
@@ -128,7 +129,12 @@ def bookshop():
 # obsluga zakladki konkretnej ksiazki
 @app.route("/ksiegarnia/ksiazka/<int:book_id>")
 def show_book_for_sell(book_id):
-    return render_template("bookshop/book_single.html")
+    book= BookForSale.query.get(book_id)
+    if book.stock.book_for_sale.discount > 0:
+        new_price = round(book.stock.book_for_sale.price - (Decimal(book.stock.book_for_sale.discount/100) * book.stock.book_for_sale.price), 2)
+    else:
+        new_price = False
+    return render_template("bookshop/book_single.html", book=book, new_price=new_price)
 
 
 # obsluga dodania nowej pozycji
