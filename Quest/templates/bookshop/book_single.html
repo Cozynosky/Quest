@@ -2,7 +2,71 @@
 {% block content %}
 
 <section class="ftco-section contact-section">
-    <div class="container mt-5">
+    <div class="container mt-5" style="background-color:#120f0f; border:1px solid #c49b63">
+        <div class="row p-5 text-center">
+            <div class="col-md-6">
+                <img src="{{book.stock.book_info.image_url}}" style="width:300px; height:475px"/>
+            </div>
+            <div class="col-md-6 text text-left">
+                <h2>{{book.stock.book_info.title}}</h2>
+                <table style="width:70%">
+                    <tr>
+                        <td>Autor:</td>
+                        <td>{{book.stock.book_info.author}}</td>
+                    </tr>
+                    <tr>
+                        <td>Wydawnictwo:</td>
+                        <td>{{book.stock.book_info.publisher}}</td>
+                    </tr>
+                    <tr>
+                        <td>Gatunek:</td>
+                        <td>{{book.stock.book_info.genre}}</td>
+                    </tr>
+                    <tr>
+                        <td>Rok wydania:</td>
+                        <td>{{book.stock.book_info.publish_date}}</td>
+                    </tr>
+                    <tr>
+                        <td></br></td>
+                        <td></br></td>
+                    </tr>
+                    <tr>
+                        <td>Dostępne sztuki:</td>
+                        <td>{{book.stock.number_in_stock}}</td>
+                    </tr>
+                    <tr>
+                        <td></br></td>
+                        <td></br></td>
+                    </tr>
+                    <tr>
+                        <td>Cena:</td>
+                        <td style="color:primary; font-size:2rem">
+                            {% if new_price %}
+                            <span style="color:red">
+                                {{new_price}}
+                            </span>
+                            <span style="text-decoration: line-through; font-size:1rem">
+                            {{book.stock.book_for_sale.price}}
+                            </span>
+                            {% else %}
+                            <span>
+                            {{book.stock.book_for_sale.price}}
+                            </span>
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                </table>
+                <a class="btn btn-primary btn-outline-primary btn-lg mt-3">Dodaj do koszyka</a>
+            </div>
+        </div>
+        <div class="row p-5 text-center">
+            <div class="col-12">
+                <h3>Opis</h3>
+                <p>{{book.stock.book_info.description}}</p>
+            </div>
+
+        </div>
     </div>
 </section>
 
