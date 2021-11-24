@@ -70,6 +70,12 @@
                                 </p>
                                 <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Dodaj do
                                     koszyka</a></p>
+                                                            {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
+                            <a href="{{url_for('edit_book_for_sell', book_id=book.id)}}" class="btn btn-warning"
+                               role="button"><i class="fas fa-pen"></i></a>
+                            <a href="{{url_for('delete_book_for_sell', book_id=book.id)}}" class="btn btn-danger"
+                               role="button"><i class="fas fa-trash-alt"></i></a>
+                            {% endif %}
                             </div>
                         </div>
                     </div>

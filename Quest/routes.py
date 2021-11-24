@@ -133,6 +133,57 @@ def show_book_for_sell(book_id):
     return render_template("bookshop/book_single.html", book=book)
 
 
+@app.route("/ksiegarnia/edycja_pozycji/<int:book_id>", methods=["GET", "POST"])
+@admin_only
+def edit_book_for_sell(book_id):
+    edited_book = BookForSale.query.get(book_id)
+    edit_book_form = Book(
+        number_in_stock=edited_book.stock.number_in_stock,
+        price=edited_book.price,
+        title=edited_book.stock.book_info.title,
+        author=edited_book.stock.book_info.author,
+        publisher=edited_book.stock.book_info.publisher,
+        genre=edited_book.stock.book_info.genre,
+        description=edited_book.stock.book_info.description,
+        publish_date=edited_book.stock.book_info.publish_date,
+        image_url=edited_book.stock.book_info.image_url
+    )
+    if edit_book_form.validate_on_submit():
+        entered_number_in_stock = edit_book_form.number_in_stock.data
+
+        entered_price = edit_book_form.price.data
+        entered_discount = edit_book_form.discount.data
+
+        if entered_discount > 0:
+            new_price = round(entered_price - (Decimal(entered_discount / 100) * entered_price), 2)
+        else:
+            new_price = Decimal(0)
+
+        entered_title = edit_book_form.title.data
+        entered_author = edit_book_form.author.data
+        entered_publisher = edit_book_form.publisher.data
+        entered_genre = edit_book_form.genre.data
+        entered_description = edit_book_form.description.data
+        entered_publish_date = edit_book_form.publish_date.data
+        entered_image_url = edit_book_form.image_url.data
+
+        edited_book.price = entered_price
+        edited_book.new_price = new_price
+        edited_book.stock.number_in_stock = entered_number_in_stock
+        edited_book.stock.book_info.title = entered_title
+        edited_book.stock.book_info.author = entered_author
+        edited_book.stock.book_info.publisher = entered_publisher
+        edited_book.stock.book_info.genre = entered_genre
+        edited_book.stock.book_info.description = entered_description
+        edited_book.stock.book_info.publish_date = entered_publish_date
+        edited_book.stock.book_info.image_url = entered_image_url
+
+        db.session.commit()
+
+        return redirect(url_for('bookshop'))
+    return render_template('bookshop/book_item.html', form=edit_book_form)
+
+
 # obsluga dodania nowej pozycji
 @app.route("/ksiegarnia/nowa_pozycja", methods=["GET", "POST"])
 @admin_only
@@ -168,6 +219,18 @@ def new_book_for_sale():
 
         return redirect(url_for('bookshop'))
     return render_template("bookshop/book_item.html", form=new_book_form)
+
+
+# usuniecie ksiazki z bazy
+@app.route("/ksiegarnia/usuniecie_pozycji/<int:book_id>")
+@admin_only
+def delete_book_for_sell(book_id):
+    book_to_delete = BookForSale.query.get(book_id)
+    db.session.delete(book_to_delete.stock.book_info)
+    db.session.delete(book_to_delete.stock)
+    db.session.delete(book_to_delete)
+    db.session.commit()
+    return redirect(url_for('bookshop'))
 
 
 # obsluga zakladki biblioteki

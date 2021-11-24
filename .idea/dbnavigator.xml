@@ -26,6 +26,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52">
+        <schema name="pg_catalog" object-types="function" />
         <schema name="public" object-types="table, view, sequence, function, constraint, index, column, dataset trigger" />
       </connection>
       <connection connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552">
@@ -55,6 +56,9 @@
       </filter>
     </filter-actions>
     <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.alembic_version" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.books_for_sale" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.stock" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.books_info" active-filter-id="" />
     <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.menu" active-filter-id="" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.clients" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.users" active-filter-id="EMPTY_FILTER" />

@@ -39,7 +39,7 @@ class BookInfo(db.Model):
     publisher = db.Column(db.String(250), nullable=False)
     genre = db.Column(db.String(250), nullable=False, server_default="other")
     publish_date = db.Column(db.Integer, nullable=False, server_default="2000")
-    description = db.Column(db.String(500), nullable=True)
+    description = db.Column(db.String(2000), nullable=True)
     image_url = db.Column(db.String(2000), nullable=True, server_default="https://miro.medium.com/max/1400/1*KOAfAOQ9FwAp9i2muTkGWw.png")
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     stock = relationship("Stock", back_populates="book_info")
