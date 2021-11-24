@@ -5,6 +5,7 @@ from flask import render_template, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 from functools import wraps
 from werkzeug.exceptions import abort
+from werkzeug.security import generate_password_hash
 from decimal import Decimal
 
 
@@ -24,8 +25,16 @@ def admin_only(f):
 
     return decorated_fun
 
-
 # -------------------------------------------------
+
+
+# # ------------- Add admin if not exists -----------------
+# if db.session.query(User).filter_by(login="admin").first() is None:
+#     admin = User(login="admin", password=generate_password_hash("admin"), first_name="admin", last_name="admin", email="admin@admin.admin", privileges="Admin")
+#     db.session.add(admin)
+#     db.session.commit()
+#
+# # ----------------------------------------
 
 
 # ------------ sciezki na serwerze ------------
@@ -245,7 +254,7 @@ def registration():
     if register_form.validate_on_submit():
         entered_login = register_form.login.data
         entered_email = register_form.email.data
-        entered_password = register_form.password.data
+        entered_password = generate_password_hash(register_form.password.data)
         entered_first_name = register_form.first_name.data
         entered_last_name = register_form.last_name.data
 

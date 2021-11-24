@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField, PasswordField, StringField, TextAreaField, DateField, DateTimeField, SelectField, \
     DecimalField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo, InputRequired, ValidationError
+from werkzeug.security import check_password_hash
 from Quest import db
 from Quest.tables import User
 
@@ -61,7 +62,7 @@ class Login(FlaskForm):
 
     def validate_password(self, field):
         user = db.session.query(User).filter_by(login=self.login.data).first()
-        if user and field.data != user.password:
+        if user and not check_password_hash(user.password, field.data):
             raise ValidationError('Podano błędne hasło!')
 
 
