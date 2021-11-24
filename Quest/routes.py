@@ -147,7 +147,7 @@ def new_book_for_sale():
         if entered_discount > 0:
             new_price = round(entered_price - (Decimal(entered_discount / 100) * entered_price), 2)
         else:
-            new_price = False
+            new_price = Decimal(0)
 
         entered_title = new_book_form.title.data
         entered_author = new_book_form.author.data
