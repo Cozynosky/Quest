@@ -50,10 +50,10 @@
 
                 <div class="row d-flex">
                     {% for book in books %}
-                    <div class="col-md-2 text-center">
+                    <div class="col-md-3 text-center">
                         <div class="menu-wrap">
                             <a href="{{url_for('show_book_for_sell', book_id=book.id)}}" class="menu-img img mb-4"
-                               style="background-image: url({{book.stock.book_info.image_url}}); height:250px"></a>
+                               style="background-image: url({{book.stock.book_info.image_url}}); height:350px"></a>
                             <div class="text">
                                 <h3><a href="{{url_for('show_book_for_sell', book_id=book.id)}}">{{book.stock.book_info.title}}</a>
                                 </h3>
@@ -70,12 +70,12 @@
                                 </p>
                                 <p><a href="cart.html" class="btn btn-primary btn-outline-primary">Dodaj do
                                     koszyka</a></p>
-                                                            {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-                            <a href="{{url_for('edit_book_for_sell', book_id=book.id)}}" class="btn btn-warning"
-                               role="button"><i class="fas fa-pen"></i></a>
-                            <a href="{{url_for('delete_book_for_sell', book_id=book.id)}}" class="btn btn-danger"
-                               role="button"><i class="fas fa-trash-alt"></i></a>
-                            {% endif %}
+                                {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
+                                <a href="{{url_for('edit_book_for_sell', book_id=book.id)}}" class="btn btn-warning"
+                                   role="button"><i class="fas fa-pen"></i></a>
+                                <a href="{{url_for('delete_book_for_sell', book_id=book.id)}}" class="btn btn-danger"
+                                   role="button"><i class="fas fa-trash-alt"></i></a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

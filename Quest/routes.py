@@ -1,6 +1,7 @@
 from Quest import app, db, login_manager
 from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book
 from Quest.tables import User, Menu, Client, Stock, BookForSale, BookInfo
+from Quest.books_genres import genres
 from flask import render_template, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
 from functools import wraps
@@ -28,13 +29,13 @@ def admin_only(f):
 # -------------------------------------------------
 
 
-# # ------------- Add admin if not exists -----------------
-# if db.session.query(User).filter_by(login="admin").first() is None:
-#     admin = User(login="admin", password=generate_password_hash("admin"), first_name="admin", last_name="admin", email="admin@admin.admin", privileges="Admin")
-#     db.session.add(admin)
-#     db.session.commit()
-#
-# # ----------------------------------------
+# ------------- Add admin if not exists -----------------
+if db.session.query(User).filter_by(login="admin").first() is None:
+    admin = User(login="admin", password=generate_password_hash("admin"), first_name="admin", last_name="admin", email="admin@admin.admin", privileges="Admin")
+    db.session.add(admin)
+    db.session.commit()
+
+# ----------------------------------------
 
 
 # ------------ sciezki na serwerze ------------
@@ -139,7 +140,7 @@ def bookshop():
 @app.route("/ksiegarnia/ksiazka/<int:book_id>")
 def show_book_for_sell(book_id):
     book = BookForSale.query.get(book_id)
-    return render_template("bookshop/book_single.html", book=book)
+    return render_template("bookshop/book_single.html", book=book, genres=genres)
 
 
 @app.route("/ksiegarnia/edycja_pozycji/<int:book_id>", methods=["GET", "POST"])

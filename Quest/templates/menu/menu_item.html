@@ -6,12 +6,12 @@
         <div class="row p-5 justify-content-center">
             <div class="col-md-8 ">
                 <h3 class="text-center mb-5">Formularz pozycji w menu</h3>
-                <form method="POST" class="contact-form p-4" novalidate style="background-color:#120f0f" autocomplete="off">
+                <form method="POST" class="contact-form p-4" novalidate style="background-color:#120f0f; border-radius: 25px;" autocomplete="off">
                     {{ form.csrf_token }}
                     <div class="row">
                         <div class="form-group col-md-4">
                             {{ form.category.label(class_="control-label") }}
-                            {{form.category(class_ = "form-control")}}
+                            {{form.category(class_ = "form-control", style="option{background-color:'yellow'}")}}
                             {% for error in form.category.errors: %}
                             <p style="color:red">{{error}}</p>
                             {% endfor %}
