@@ -29,12 +29,10 @@ def admin_only(f):
             return abort(403)
 
     return decorated_fun
-
-
 # -------------------------------------------------
 
 
-# ----- konfiguracja sesji ---
+# -------- konfiguracja sesji ---------
 @app.before_first_request
 def session_settings():
     session.clear()
@@ -46,7 +44,7 @@ def session_settings():
                      email="admin@admin.admin", privileges="Admin")
         db.session.add(admin)
         db.session.commit()
-# ----- konfiguracja sesji ---
+# -------- konfiguracja sesji --------
 
 
 # ------------ sciezki na serwerze ------------
