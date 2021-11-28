@@ -40,10 +40,12 @@ def session_settings():
     session.clear()
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=10)
-    admin = User(login="admin", password=generate_password_hash(environ.get('ADMIN_PASSWORD', 'admin')), first_name="admin", last_name="admin",
-                 email="admin@admin.admin", privileges="Admin")
-    db.session.add(admin)
-    db.session.commit()
+    if db.session.query(User).filter_by(login="admin").first() is None:
+        admin = User(login="admin", password=generate_password_hash(environ.get('ADMIN_PASSWORD', 'admin')),
+                     first_name="admin", last_name="admin",
+                     email="admin@admin.admin", privileges="Admin")
+        db.session.add(admin)
+        db.session.commit()
 # ----- konfiguracja sesji ---
 
 
@@ -138,6 +140,8 @@ def cart():
     books_for_borrow = False
     menu_positions = False
     books_for_sell = False
+    subtotal = 0
+    discount = 0
     in_cart = session.get('cart', False)
     if in_cart and len(in_cart) > 0:
         books_for_borrow = []
@@ -147,13 +151,19 @@ def cart():
         for product in all_products:
             if product[0].article_type == 'book_for_sale':
                 books_for_sell.append(product)
+                if product[0].book_for_sale.new_price > 0:
+                    discount = (product[0].book_for_sale.price - product[0].book_for_sale.new_price) * product[1]
+
+                subtotal += product[0].book_for_sale.price * product[1]
             elif product[0].article_type == 'menu_position':
                 menu_positions.append(product)
+                subtotal += product[0].menu_position.price * product[1]
             elif product[0].article_type == 'book_for_borrow':
                 books_for_borrow.append(product)
     else:
         in_cart = False
-    return render_template("cart/cart.html", in_cart=in_cart, books_for_borrow=books_for_borrow, books_for_sell=books_for_sell, menu_positions=menu_positions)
+
+    return render_template("cart/cart.html", in_cart=in_cart, books_for_borrow=books_for_borrow, books_for_sell=books_for_sell, menu_positions=menu_positions, subtotal=subtotal, discount=discount)
 
 
 # dodanie do koszyka
@@ -170,6 +180,30 @@ def add_to_cart(stock_id):
         session['number_in_cart'] += 1
 
     return redirect(request.referrer)
+
+
+# usuwanie z koszyka
+@app.route("/koszyk/usun/<string:stock_id>")
+def delete_from_cart(stock_id):
+    session['number_in_cart'] -= session['cart'][stock_id]
+    session['cart'].pop(stock_id, None)
+    return redirect(url_for('cart'))
+
+
+# zwiekszenie ilosci artykułu
+@app.route("/koszyk/zwieksz/<string:stock_id>")
+def increase_number_in_cart(stock_id):
+    session['number_in_cart'] += 1
+    session['cart'][stock_id] += 1
+    return redirect(url_for('cart'))
+
+
+# zmniejszenie ilosci artykułu
+@app.route("/koszyk/zmniejsz/<string:stock_id>")
+def decrease_number_in_cart(stock_id):
+    session['number_in_cart'] -= 1
+    session['cart'][stock_id] -= 1
+    return redirect(url_for('cart'))
 
 
 # obsluga zakladki ksiegarnia

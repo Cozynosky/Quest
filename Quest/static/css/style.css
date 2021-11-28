@@ -2420,10 +2420,10 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #78d5ef;
+  color: #c49b63;
   background-color: transparent; }
   .btn-link:hover {
-    color: #34c0e7;
+    color: #f2a53d;
     text-decoration: underline;
     background-color: transparent;
     border-color: transparent; }
