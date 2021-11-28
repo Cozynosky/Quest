@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-
 <section class="home-slider owl-carousel">
-
-    <div class="slider-item" style="background-image: url(images/bg_3.jpg);" data-stellar-background-ratio="0.5">
+    <div class="slider-item"
+         style="background-image: url({{ url_for('static', filename='images/cart_background.jpg') }});">
         <div class="overlay"></div>
         <div class="container">
-            <div class="row slider-text justify-content-center align-items-center">
+            <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
 
                 <div class="col-md-7 col-sm-12 text-center ftco-animate">
-                    <h1 class="mb-3 mt-5 bread">Cart</h1>
-                    <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Cart</span></p>
+                    <span class="subheading">Produkty</span>
+                    <h1 class="mb-4">w Twoim koszyku</h1>
                 </div>
 
             </div>
@@ -45,7 +44,9 @@
                         <tbody>
                         {% for book in books_for_sell %}
                         <tr class="text-center">
-                            <td class="product-remove"><a href="#"><span class="icon-close"></span></a></td>
+                            <td class="product-remove"><a
+                                    href="{{url_for('delete_from_cart', stock_id=book[0].id)}}"><span
+                                    class="icon-close"></span></a></td>
 
                             <td class="image-prod">
                                 <div class="img"
@@ -57,17 +58,33 @@
                                 <p>{{book[0].book_info.author}}</p>
                             </td>
 
-                            <td class="price">{{book[0].book_for_sale.price}}zł</td>
+                            <td class="price">
+                                {% if book[0].book_for_sale.new_price > 0 %}
+                                <span style="color:red;">{{book[0].book_for_sale.new_price}}zł</span>
+                                <span style="text-decoration: line-through; color:grey">{{book[0].book_for_sale.price}}zł</span>
+                                {% else %}
+                                {{book[0].book_for_sale.price}}zł
+                                {% endif %}
+                            </td>
 
-                            <td class="quantity">{{book[1]}}</td>
-                            <td class="total">{{book[0].book_for_sale.price * book[1]}}</td>
+                            <td class="quantity">
+                                <a href="{{ url_for('decrease_number_in_cart', stock_id=book[0].id) }}" class="btn-link {% if book[1]==1 %} disabled {% endif %}"><i class="fas fa-minus-square fa-2x"></i></a>
+
+                                <h3 style="display: inline;" class="mx-3">{{book[1]}}</h3>
+                                <a href="{{ url_for('increase_number_in_cart', stock_id=book[0].id) }}" class="btn-link"><i class="fas fa-plus-square fa-2x"></i></a>
+                            </td>
+                            {% if book[0].book_for_sale.new_price > 0 %}
+                            <td class="total">{{book[0].book_for_sale.new_price * book[1]}}zł</td>
+                            {% else %}
+                            <td class="total">{{book[0].book_for_sale.price * book[1]}}zł</td>
+                            {% endif %}
                         </tr><!-- END TR-->
                         {% endfor %}
                         </tbody>
                     </table>
                     {% endif %}
                     {% if menu_positions %}
-                                            <h1 class="mb-4">Kawiarnia</h1>
+                    <h1 class="mb-4">Kawiarnia</h1>
                     <table class="table">
                         <thead class="thead-primary">
                         <tr class="text-center">
@@ -81,7 +98,9 @@
                         </thead>
                         {% for position in menu_positions %}
                         <tr class="text-center">
-                            <td class="product-remove"><a href="#"><span class="icon-close"></span></a></td>
+                            <td class="product-remove"><a
+                                    href="{{url_for('delete_from_cart', stock_id=position[0].id)}}"><span
+                                    class="icon-close"></span></a></td>
 
                             <td class="image-prod">
                                 <div class="img"
@@ -95,7 +114,11 @@
 
                             <td class="price">{{position[0].menu_position.price}}zł</td>
 
-                            <td class="quantity">{{position[1]}}
+                            <td class="quantity">
+                                <a href="{{ url_for('decrease_number_in_cart', stock_id=position[0].id) }}" class="btn-link {% if position[1]==1 %} disabled {% endif %}"><i class="fas fa-minus-square fa-2x"></i></a>
+
+                                <h3 style="display: inline;" class="mx-3">{{position[1]}}</h3>
+                                <a href="{{ url_for('increase_number_in_cart', stock_id=position[0].id) }}" class="btn-link"><i class="fas fa-plus-square fa-2x"></i></a>
                             </td>
 
                             <td class="total">{{position[0].menu_position.price * position[1]}}zł</td>
@@ -114,16 +137,16 @@
                     <h3>Podsumowanie</h3>
                     <p class="d-flex">
                         <span>Należność</span>
-                        <span>zł</span>
+                        <span>{{subtotal}}zł</span>
                     </p>
                     <p class="d-flex">
                         <span>Zniżka</span>
-                        <span>zł</span>
+                        <span>{{discount}}zł</span>
                     </p>
                     <hr>
                     <p class="d-flex total-price">
                         <span>Razem</span>
-                        <span>zł</span>
+                        <span>{{subtotal-discount}}zł</span>
                     </p>
                 </div>
                 <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Złóż zamówienie</a>
