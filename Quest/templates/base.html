@@ -63,8 +63,12 @@
                         href="{{ url_for('account') }}" class="nav-link">Konto</a></li>
                 <li class="nav-item {% if request.endpoint=='contact' %}active{%endif %}"><a
                         href="{{ url_for('contact') }}" class="nav-link">Kontakt</a></li>
-                <li class="nav-item cart {% if request.endpoint=='cart' %}active{%endif %}"><a
-                        href="{{ url_for('cart') }}" class="nav-link"><span class="icon icon-shopping_cart"></span></a>
+                <li class="nav-item cart {% if request.endpoint=='cart' %}active{%endif %}" >
+                    <a href="{{ url_for('cart') }}" class="nav-link"><i class="fas fa-shopping-cart fa-lg"></i>
+                    {% if session.get('number_in_cart', False) %}
+                    <span class="bag d-flex justify-content-center align-items-center"><small>{{session['number_in_cart']}}</small></span>
+                    {% endif %}
+                </a>
                 </li>
             </ul>
         </div>

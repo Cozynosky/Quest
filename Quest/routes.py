@@ -1,13 +1,17 @@
-from Quest import app, db, login_manager
-from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book
-from Quest.tables import User, Menu, Client, Stock, BookForSale, BookInfo
-from Quest.books_genres import genres
-from flask import render_template, redirect, url_for
-from flask_login import login_user, current_user, logout_user, login_required
+from decimal import Decimal
 from functools import wraps
+from datetime import timedelta
+from os import environ
+
+from flask import render_template, redirect, url_for, request, session
+from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.exceptions import abort
 from werkzeug.security import generate_password_hash
-from decimal import Decimal
+
+from Quest import app, db, login_manager
+from Quest.books_genres import genres
+from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book
+from Quest.tables import User, Menu, Client, Stock, BookForSale, BookInfo
 
 
 # ---------------- flask login -----------------
@@ -26,16 +30,26 @@ def admin_only(f):
 
     return decorated_fun
 
+
 # -------------------------------------------------
 
 
 # ------------- Add admin if not exists -----------------
 if db.session.query(User).filter_by(login="admin").first() is None:
-    admin = User(login="admin", password=generate_password_hash("admin"), first_name="admin", last_name="admin", email="admin@admin.admin", privileges="Admin")
+    admin = User(login="admin", password=generate_password_hash(environ.get('ADMIN_PASSWORD', 'admin')), first_name="admin", last_name="admin",
+                 email="admin@admin.admin", privileges="Admin")
     db.session.add(admin)
     db.session.commit()
-
 # ----------------------------------------
+
+
+# ----- konfiguracja sesji ---
+@app.before_first_request
+def session_settings():
+    session.clear()
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=10)
+# ----- konfiguracja sesji ---
 
 
 # ------------ sciezki na serwerze ------------
@@ -126,7 +140,41 @@ def contact():
 # obsluga zakladki koszyk
 @app.route("/koszyk")
 def cart():
-    return render_template("cart/cart.html")
+    books_for_borrow = False
+    menu_positions = False
+    books_for_sell = False
+    in_cart = session.get('cart', False)
+    if in_cart and len(in_cart) > 0:
+        books_for_borrow = []
+        menu_positions = []
+        books_for_sell = []
+        all_products = [[Stock.query.get(stock_id), number_of] for stock_id, number_of in in_cart.items()]
+        for product in all_products:
+            if product[0].article_type == 'book_for_sale':
+                books_for_sell.append(product)
+            elif product[0].article_type == 'menu_position':
+                menu_positions.append(product)
+            elif product[0].article_type == 'book_for_borrow':
+                books_for_borrow.append(product)
+    else:
+        in_cart = False
+    return render_template("cart/cart.html", in_cart=in_cart, books_for_borrow=books_for_borrow, books_for_sell=books_for_sell, menu_positions=menu_positions)
+
+
+# dodanie do koszyka
+@app.route("/koszyk/dodaj/<int:stock_id>")
+def add_to_cart(stock_id):
+    if session.get('cart', False) is False:
+        session['cart'] = {}
+
+    session['cart'][str(stock_id)] = session['cart'].get(str(stock_id), 0) + 1
+
+    if session.get('number_in_cart', False) is False:
+        session['number_in_cart'] = 1
+    else:
+        session['number_in_cart'] += 1
+
+    return redirect(request.referrer)
 
 
 # obsluga zakladki ksiegarnia
@@ -221,7 +269,8 @@ def new_book_for_sale():
         new_stock = Stock(number_in_stock=entered_number_in_stock, article_type="book_for_sale")
         new_book_for_sale = BookForSale(price=entered_price, new_price=new_price)
         new_book_info = BookInfo(title=entered_title, author=entered_author, publisher=entered_publisher,
-                                 genre=entered_genre, description=entered_description, publish_date=entered_publish_date, image_url=entered_image_url)
+                                 genre=entered_genre, description=entered_description,
+                                 publish_date=entered_publish_date, image_url=entered_image_url)
         new_stock.book_info = new_book_info
         new_stock.book_for_sale = new_book_for_sale
         db.session.add(new_stock)
@@ -279,6 +328,7 @@ def login():
         entered_login = login_form.login.data
         selected_user = db.session.query(User).filter_by(login=entered_login).first()
         login_user(selected_user)
+        app.permanent_session_lifetime = timedelta(minutes=20)
         return redirect(url_for("account"))
 
     return render_template("account/login.html", form=login_form)
@@ -297,6 +347,7 @@ def account():
 @login_required
 def logout():
     logout_user()
+    app.permanent_session_lifetime = timedelta(minutes=10)
     return redirect(url_for('login'))
 
 
