@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -8,6 +8,8 @@ import os
 # setup app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "default_secret_key")
+
+redis_url = os.environ.get('REDISTOGO_URL', '127.0.0.1:5000')
 
 # Rozwiązanie problemu dla nowszych wersji SQLAlchemy dzialajacych z heroku
 uri = os.environ.get("DATABASE_URL",  "sqlite:///quest.db")
@@ -19,7 +21,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 Bootstrap(app)
-
 db = SQLAlchemy(app)
 
 # zarzadzanie migracjami tabeli

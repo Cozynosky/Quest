@@ -37,15 +37,16 @@
                     <div class="img" style="background-image: url({{hot_drink.image_url}});"></div>
                     <div class="desc pl-3">
                         <div class="d-flex text align-items-center">
-                            <h3><span>{{hot_drink.name}}</span></h3>
-                            <span class="price">{{hot_drink.price}} zł</span>
+                            <h3><span>{{hot_drink.name}} </span></h3>
+                            <span class="price">{{hot_drink.price}} zł </span>
                         </div>
                         <div class="d-block">
-                            <p>{{hot_drink.description}}</p>
+                            <p>{{hot_drink.description}} </p>
+                            <a href="{{url_for('add_to_cart', stock_id=hot_drink.stock.id)}}" class="btn btn-primary btn-outline-primary mt-2" role="button">Zamów</a>
                             {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-                            <a href="{{url_for('edit_menu_item', item_id=hot_drink.id)}}" class="btn btn-warning"
+                            <a href="{{url_for('edit_menu_item', item_id=hot_drink.id)}}" class="btn btn-warning mt-2"
                                role="button"><i class="fas fa-pen"></i></a>
-                            <a href="{{url_for('delete_menu_item', item_id=hot_drink.id)}}" class="btn btn-danger"
+                            <a href="{{url_for('delete_menu_item', item_id=hot_drink.id)}}" class="btn btn-danger mt-2"
                                role="button"><i class="fas fa-trash-alt"></i></a>
                             {% endif %}
                         </div>

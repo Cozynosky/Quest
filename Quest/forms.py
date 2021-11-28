@@ -3,8 +3,10 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField, PasswordField, StringField, TextAreaField, DateField, DateTimeField, SelectField, \
     DecimalField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo, InputRequired, ValidationError
+from werkzeug.security import check_password_hash
 from Quest import db
 from Quest.tables import User
+from Quest.books_genres import genres
 
 
 class BookTable(FlaskForm):
@@ -27,10 +29,10 @@ class Book(FlaskForm):
     title = StringField("Tytuł", validators=[DataRequired(message="To pole jest wymagane!")])
     author = StringField("Autor", validators=[DataRequired(message="To pole jest wymagane!")])
     publisher = StringField("Wydawnictwo", validators=[DataRequired(message="To pole jest wymagane!")])
-    genre = SelectField("Gatunek", choices=[("other", "Inny"), ("", "")])
+    genre = SelectField("Gatunek", choices=[(key, value) for key, value in genres.items()])
     description = TextAreaField("Opis")
     publish_date = IntegerField("Data publikacji", default=2000)
-    image_url = StringField("Link do zdjęcia", default="https://miro.medium.com/max/1400/1*KOAfAOQ9FwAp9i2muTkGWw.png")
+    image_url = StringField("Link do zdjęcia", default="https://images-na.ssl-images-amazon.com/images/I/612xh4TOfBL.jpg")
     submit_button = SubmitField("Zatwierdź pozycję")
 
     def validate_publish_date(self,field):
@@ -61,7 +63,7 @@ class Login(FlaskForm):
 
     def validate_password(self, field):
         user = db.session.query(User).filter_by(login=self.login.data).first()
-        if user and field.data != user.password:
+        if user and not check_password_hash(user.password, field.data):
             raise ValidationError('Podano błędne hasło!')
 
 
