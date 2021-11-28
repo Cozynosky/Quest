@@ -34,21 +34,16 @@ def admin_only(f):
 # -------------------------------------------------
 
 
-# ------------- Add admin if not exists -----------------
-if db.session.query(User).filter_by(login="admin").first() is None:
-    admin = User(login="admin", password=generate_password_hash(environ.get('ADMIN_PASSWORD', 'admin')), first_name="admin", last_name="admin",
-                 email="admin@admin.admin", privileges="Admin")
-    db.session.add(admin)
-    db.session.commit()
-# ----------------------------------------
-
-
 # ----- konfiguracja sesji ---
 @app.before_first_request
 def session_settings():
     session.clear()
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=10)
+    admin = User(login="admin", password=generate_password_hash(environ.get('ADMIN_PASSWORD', 'admin')), first_name="admin", last_name="admin",
+                 email="admin@admin.admin", privileges="Admin")
+    db.session.add(admin)
+    db.session.commit()
 # ----- konfiguracja sesji ---
 
 
