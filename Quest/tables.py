@@ -22,6 +22,7 @@ class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = relationship("User", back_populates="client")
+    orders = relationship("Order", back_populates="client")
 
 
 class Worker(db.Model):
@@ -29,6 +30,25 @@ class Worker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = relationship("User", back_populates="worker")
+
+
+class Order(db.Model):
+    __tablename__ = "orders"
+    id = db.Column(db.Integer, primary_key=True)
+    date_of_order = db.Column(db.DateTime(), nullable=False)
+    order_items = relationship("OrderItem", back_populates="order")
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.id'))
+    client = relationship("Client", back_populates="orders")
+
+
+class OrderItem(db.Model):
+    __tablename__ = "order_items"
+    id = db.Column(db.Integer, primary_key=True)
+    number_of_item = db.Column(db.Integer, nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'))
+    order = relationship('Order', back_populates="order_items")
+    stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
+    stock = relationship("Stock", back_populates="order_items")
 
 
 class BookInfo(db.Model):
@@ -62,6 +82,7 @@ class Stock(db.Model):
     menu_position = relationship("Menu", uselist=False, back_populates="stock")
     book_info = relationship("BookInfo", uselist=False, back_populates="stock")
     book_for_sale = relationship("BookForSale", uselist=False, back_populates="stock")
+    order_items = relationship("OrderItem", back_populates="stock")
 
 
 class Menu(db.Model):

@@ -1,6 +1,6 @@
 from decimal import Decimal
 from functools import wraps
-from datetime import timedelta
+from datetime import timedelta, datetime
 from os import environ
 
 from flask import render_template, redirect, url_for, request, session
@@ -11,7 +11,7 @@ from werkzeug.security import generate_password_hash
 from Quest import app, db, login_manager
 from Quest.books_genres import genres
 from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book
-from Quest.tables import User, Menu, Client, Stock, BookForSale, BookInfo
+from Quest.tables import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem
 
 
 # ---------------- flask login -----------------
@@ -29,6 +29,8 @@ def admin_only(f):
             return abort(403)
 
     return decorated_fun
+
+
 # -------------------------------------------------
 
 
@@ -42,8 +44,16 @@ def session_settings():
         admin = User(login="admin", password=generate_password_hash(environ.get('ADMIN_PASSWORD', 'admin')),
                      first_name="admin", last_name="admin",
                      email="admin@admin.admin", privileges="Admin")
+        anonymous = User(login="anonymous", password=generate_password_hash("anonymous"),
+                         first_name="anonymous", last_name="anonymous",
+                         email="anonymous@anonymous.anonymous", privileges="User")
+        anonymous_client = Client()
+        anonymous.client = anonymous_client
         db.session.add(admin)
+        db.session.add(anonymous)
         db.session.commit()
+
+
 # -------- konfiguracja sesji --------
 
 
@@ -161,7 +171,9 @@ def cart():
     else:
         in_cart = False
 
-    return render_template("cart/cart.html", in_cart=in_cart, books_for_borrow=books_for_borrow, books_for_sell=books_for_sell, menu_positions=menu_positions, subtotal=subtotal, discount=discount)
+    return render_template("cart/cart.html", in_cart=in_cart, books_for_borrow=books_for_borrow,
+                           books_for_sell=books_for_sell, menu_positions=menu_positions, subtotal=subtotal,
+                           discount=discount)
 
 
 # dodanie do koszyka
@@ -201,6 +213,32 @@ def increase_number_in_cart(stock_id):
 def decrease_number_in_cart(stock_id):
     session['number_in_cart'] -= 1
     session['cart'][stock_id] -= 1
+    return redirect(url_for('cart'))
+
+
+# zmniejszenie ilosci artykułu
+@app.route("/koszyk/zloz_zamowienie")
+def make_order():
+    order_time = datetime.today()
+
+    if current_user.is_authenticated and current_user.privileges == "User":
+        order = Order(date_of_order=order_time, client=current_user.client)
+    else:
+        order = Order(date_of_order=order_time,
+                      client=db.session.query(User).filter_by(login="anonymous").first().client)
+    db.session.add(order)
+
+    for stock_id, number_of in session['cart'].items():
+        stock_item = Stock.query.get(stock_id)
+        if stock_item.article_type == 'book_for_sale' or stock_item.article_type == 'menu_position':
+            new_order_item = OrderItem(number_of_item=number_of, order=order, stock=stock_item)
+            stock_item.number_in_stock -= number_of
+            db.session.add(new_order_item)
+
+    db.session.commit()
+
+    session.pop('cart', None)
+    session.pop('number_in_cart', None)
     return redirect(url_for('cart'))
 
 

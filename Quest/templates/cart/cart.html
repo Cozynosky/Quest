@@ -149,8 +149,12 @@
                         <span>{{subtotal-discount}}zł</span>
                     </p>
                 </div>
-                <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Złóż zamówienie</a>
+                {% if current_user.is_authenticated and current_user.privileges == "User" %}
+                <p class="text-center"><a href="{{url_for('make_order')}}" class="btn btn-primary py-3 px-4">Złóż zamówienie</a>
                 </p>
+                {% else %}
+                <p data-toggle="modal" data-target="#niezalogowano" class="btn btn-primary py-3 px-4">Złóż zamówienie</p>
+                {% endif %}
             </div>
         </div>
         {% else %}
@@ -159,6 +163,32 @@
         </div>
         {% endif %}
     </div>
+
 </section>
 
+<!-- Modal -->
+<div class="modal fade" id="niezalogowano" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLongTitle" style="color:#120f0f">Twoje zamówienie nie będzie śledzone!</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          {% if current_user.is_authenticated %}
+          Zamówienia mogą być śledzone jedynie na <b>koncie klienta</b>!
+          {% else %}
+          Składasz zamówienie bez zalogowania na konto! <br>
+          Dzięki korzystaniu z naszego konta, możesz śledzić swoją historię zamówień oraz wiele więcej :)
+          {% endif %}
+      </div>
+      <div class="modal-footer" style="color:white;">
+        <a href="{% if current_user.is_authenticated %} {{url_for('logout')}} {% else %} {{ url_for('account') }} {% endif %}" class="btn btn-warning" style="border-radius:25px">Zaloguj się</a>
+        <a href="{{url_for('make_order')}}" class="btn btn-success" style="border-radius:25px">Kontyuuj bez logowania</a>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
