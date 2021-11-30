@@ -1,7 +1,76 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% extends "base.html" %}
+{% block head %}
+{{ super() }}
+<style>
+    hr {
+        margin:0;
+    }
+    p {
+        margin:10px 0;
+        text-align: left;
+    }
+    i {
+        color:white;
+        margin-right:10px;
+    }
+</style>
+{% endblock %}
 {% block content %}
 <section class="ftco-section contact-section">
-    <div class="text-center">  <h1>Witaj, {{current_user.first_name}}</h1>  <a href="{{url_for('logout')}}" class="btn btn-primary">Wyloguj sie</a></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 p-4 m-3 text-center" style="background-color:#c49b63; border-radius: 25px;">
+                <img src="https://www.w3schools.com/howto/img_avatar.png" style="width:100px; border-radius: 50px;">
+                <h3 class="my-4">Witaj, {{current_user.first_name}}</h3>
+
+                {% if current_user.privileges == "User" %}
+                <a href="{{url_for('account_data')}}" style="color:white"><p><i class="fas fa-user-circle"></i>Moje dane<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="{{url_for('account_password')}}" style="color:white"><p><i class="fas fa-key"></i>Zmiana hasła<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="{{url_for('account_orders_story')}}" style="color:white"><p><i class="fas fa-history"></i>Historia zakupów<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-calendar-alt"></i>Moje eventy<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-book"></i>Wypożyczone książaki<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-pen"></i>Rezerwacje stolików<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                {% endif %}
+                {% if current_user.privileges == "Worker"%}
+                <a href="#" style="color:white"><p><i class="fas fa-user-plus"></i>Dodaj konto klienta<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-users"></i>Lista klientów<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-user-circle"></i>Zarezerwuj stolik<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-warehouse"></i>Stan magazynu<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                {% endif %}
+                {% if current_user.privileges == "Admin"%}
+                <a href="#" style="color:white"><p><i class="fas fa-user-plus"></i>Dodaj konto pracownika<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-user-plus"></i>Dodaj konto klienta<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-users"></i>Lista użytkowników<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-calendar-plus"></i>Dodaj event<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-calendar-alt"></i>Lista eventów<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-pencil-alt"></i>Zarezerwuj stolik<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                <a href="#" style="color:white"><p><i class="fas fa-warehouse"></i>Stan magazynu<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <hr>
+                {% endif %}
+                <a href="{{url_for('logout')}}" style="color:white"><p><i class="fas fa-sign-out-alt"></i>Wyloguj sie<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+            </div>
+            <div class="col-lg-8 p-5 m-3" style="background-color:Gainsboro; border-radius: 25px;">
+                {% block account_page %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
 </section>
 {% endblock %}

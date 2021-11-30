@@ -64,8 +64,10 @@
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.users" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.books_for_sale" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.stock" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.order_items" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.menu" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.alembic_version" active-filter-id="" />
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.orders" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

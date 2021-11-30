@@ -1,0 +1,32 @@
+{% extends "account/account.html" %}
+{% block head %}
+{{ super() }}
+<style>
+    table tr td{
+        padding-right: 10px;
+        padding-top: 5px;
+    }
+</style>
+{% endblock %}
+{% block account_page %}
+<h3 class="text-center mb-2" style="color:black">Twoje dane</h3><hr>
+<table style="margin:24px;">
+    <tr>
+        <td>Imię:</td>
+        <td>{{ current_user.first_name }}</td>
+    </tr>
+        <tr>
+        <td>Nazwisko:</td>
+        <td>{{ current_user.last_name }}</td>
+    </tr>
+        <tr>
+        <td>Login:</td>
+        <td>{{ current_user.login }}</td>
+    </tr>
+        <tr>
+        <td>E-mail:</td>
+        <td>{{ current_user.email }}</td>
+    </tr>
+</table>
+<div class="text-center"><a href="{{url_for('edit_account_data')}}" class="btn btn-primary" style="border-radius:25px">Zmień dane</a></div>
+{% endblock %}
