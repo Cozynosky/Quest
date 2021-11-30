@@ -1,0 +1,100 @@
+{% extends "account/account.html" %}
+{% block head %}
+{{ super() }}
+<style>
+    .order {
+        border: 1px solid #c49b63;
+        margin-top:5px;
+        padding: 10px;
+    }
+    td, th {
+        padding: 10px;
+         text-align: center;
+         vertical-align: middle;
+    }
+    th {
+        border-bottom: 1px solid #c49b63;
+    }
+    table {
+        width:100%;
+    }
+
+
+
+</style>
+{% endblock %}
+{% block account_page %}
+<h3 class="text-center mb-2" style="color:black">Szczegóły zamówienia</h3>
+<hr>
+{% if books != [] %}
+<h4 class="my-2" style="color:black">Kupione książki</h4>
+<hr>
+<div class="overflow-auto order">
+    <table>
+        <thead>
+        <tr>
+            <th scope="col">Okładka</th>
+            <th scope="col">Tytuł</th>
+            <th scope="col">Ilość</th>
+            <th scope="col">Cena</th>
+            <th scope="col">Razem</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+
+        <tr>
+            <td><img src="{{book.stock.book_info.image_url}}" style="width:150px;"></td>
+            <td><span style="color:black; font-size: 16px">{{book.stock.book_info.title}}</span><br>
+                <span style="color:grey; font-style: italic">{{book.stock.book_info.author}}</span></td>
+            <td><span style="color:black">{{book.number_of_item}}</span></td>
+            <td>
+                {% if book.stock.book_for_sale.new_price > 0 %}
+                <span style="color:red">{{book.stock.book_for_sale.new_price}}zł</span>
+                <span style="color:grey;text-decoration: line-through;">{{book.stock.book_for_sale.price}}zł</span>
+                {% else %}
+                <span style="color:black">{{book.stock.book_for_sale.price}}zł</span>
+                {% endif %}
+            </td>
+            {% if book.stock.book_for_sale.new_price > 0 %}
+            <td>{{book.stock.book_for_sale.new_price * book.number_of_item}}zł</td>
+            {% else %}
+            <td>{{book.stock.book_for_sale.price * book.number_of_item}}zł</td>
+            {% endif %}
+
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% if menu_positions != [] %}
+<h4 class="my-2" style="color:black">Kupione pozycje w Kawiarni</h4>
+<hr>
+<div class="overflow-auto order">
+    <table>
+        <thead>
+        <tr>
+            <th scope="col"> </th>
+            <th scope="col">Nazwa</th>
+            <th scope="col">Ilość</th>
+            <th scope="col">Cena</th>
+            <th scope="col">Razem</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for menu_position in menu_positions %}
+        <tr>
+            <td><img src="{{menu_position.stock.menu_position.image_url}}" style="width:100px;"></td>
+            <td><span style="color:black">{{menu_position.stock.menu_position.name}}</span></td>
+            <td><span style="color:black">{{menu_position.number_of_item}}</span></td>
+            <td><span style="color:black">{{menu_position.stock.menu_position.price}}zł</span></td>
+            <td><span style="color:black">{{menu_position.stock.menu_position.price * menu_position.number_of_item}}zł</span></td>
+        </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

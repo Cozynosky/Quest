@@ -36,6 +36,8 @@ class Order(db.Model):
     __tablename__ = "orders"
     id = db.Column(db.Integer, primary_key=True)
     date_of_order = db.Column(db.DateTime(), nullable=False)
+    total_price = db.Column(db.Numeric(10, 2), nullable=False)
+    total_number_of_items = db.Column(db.Integer, nullable=False)
     order_items = relationship("OrderItem", back_populates="order")
     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'))
     client = relationship("Client", back_populates="orders")

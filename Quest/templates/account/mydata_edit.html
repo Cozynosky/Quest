@@ -1,0 +1,50 @@
+{% extends "account/account.html" %}
+{% block account_page %}
+<h3 class="text-center mb-2" style="color:black">Edytuj dane</h3>
+<hr>
+<form method="POST" class="contact-form p-4" novalidate autocomplete="off">
+    {{ form.csrf_token }}
+    <table>
+        <tbody>
+        <tr>
+            <td>{{ form.first_name.label(class_="control-label") }}</td>
+            <td>{{form.first_name(class_ = "", placeholder="Twoje imię")}}</td>
+            <td>{% for error in form.first_name.errors: %}
+                <p style="color:red">{{error}}</p></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>{{ form.last_name.label(class_="control-label") }}</td>
+            <td>{{form.last_name(class_ = "", placeholder="Twoje nazwisko")}}</td>
+            <td>{% for error in form.last_name.errors: %}
+            <p style="color:red">{{error}}</p>
+            {% endfor %}            </td>
+        </tr>
+        <tr>
+            <td>
+                {{form.login.label(class_="") }}
+            </td>
+            <td>{{form.login(class_ = "", placeholder="Twój login")}}</td>
+            <td> {% for error in form.login.errors: %}
+                <p style="color:red">{{error}}</p>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{form.email.label(class_="control-label") }}
+            </td>
+            <td>{{form.email(class_ = "", placeholder="Twój adres email")}}</td>
+            <td> {% for error in form.email.errors: %}
+                <p style="color:red">{{error}}</p>
+                {% endfor %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="form-group text-center mt-3">
+        {{form.submit_button(class_ = "btn btn-primary", value="Zatwierdź", style="border-radius:25px;")}}
+    </div>
+</form>
+{% endblock %}

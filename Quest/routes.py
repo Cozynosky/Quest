@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash
 
 from Quest import app, db, login_manager
 from Quest.books_genres import genres
-from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book
+from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book, EditAccountData, EditPassword
 from Quest.tables import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem
 
 
@@ -31,6 +31,18 @@ def admin_only(f):
     return decorated_fun
 
 
+def user_only(f):
+    @wraps(f)
+    def decorated_fun(*args, **kwargs):
+        if current_user.privileges == "User":
+            return f(*args, **kwargs)
+        else:
+            return abort(403)
+
+    return decorated_fun
+
+
+
 # -------------------------------------------------
 
 
@@ -40,18 +52,31 @@ def session_settings():
     session.clear()
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=10)
+    # konto administratora
     if db.session.query(User).filter_by(login="admin").first() is None:
         admin = User(login="admin", password=generate_password_hash(environ.get('ADMIN_PASSWORD', 'admin')),
                      first_name="admin", last_name="admin",
                      email="admin@admin.admin", privileges="Admin")
+        db.session.add(admin)
+    # domyslne konto uzytkownika niezalogowanego
+    if db.session.query(User).filter_by(login="anonymous").first() is None:
+
         anonymous = User(login="anonymous", password=generate_password_hash("anonymous"),
                          first_name="anonymous", last_name="anonymous",
                          email="anonymous@anonymous.anonymous", privileges="User")
         anonymous_client = Client()
         anonymous.client = anonymous_client
-        db.session.add(admin)
         db.session.add(anonymous)
-        db.session.commit()
+    # konto uzytkownika klienta testowe
+    if db.session.query(User).filter_by(login="test").first() is None:
+        test = User(login="test", password=generate_password_hash("test"),
+                         first_name="test", last_name="test",
+                         email="test@test.test", privileges="User")
+        test_client = Client()
+        test.client = test_client
+        db.session.add(test)
+
+    db.session.commit()
 
 
 # -------- konfiguracja sesji --------
@@ -222,19 +247,33 @@ def make_order():
     order_time = datetime.today()
 
     if current_user.is_authenticated and current_user.privileges == "User":
-        order = Order(date_of_order=order_time, client=current_user.client)
+        order = Order(date_of_order=order_time, client=current_user.client, total_price=0,total_number_of_items=0)
     else:
-        order = Order(date_of_order=order_time,
+        order = Order(date_of_order=order_time, total_price=0, total_number_of_items=0,
                       client=db.session.query(User).filter_by(login="anonymous").first().client)
     db.session.add(order)
 
+    total_price = 0
+    total_items_number = 0
     for stock_id, number_of in session['cart'].items():
         stock_item = Stock.query.get(stock_id)
         if stock_item.article_type == 'book_for_sale' or stock_item.article_type == 'menu_position':
+
+            if stock_item.article_type == 'book_for_sale':
+                if stock_item.book_for_sale.new_price > 0:
+                    total_price += stock_item.book_for_sale.new_price * number_of
+                else:
+                    total_price += stock_item.book_for_sale.price * number_of
+            else:
+                total_price += stock_item.menu_position.price
+
+            total_items_number += number_of
             new_order_item = OrderItem(number_of_item=number_of, order=order, stock=stock_item)
             stock_item.number_in_stock -= number_of
             db.session.add(new_order_item)
 
+    order.total_price = total_price
+    order.total_number_of_items = total_items_number
     db.session.commit()
 
     session.pop('cart', None)
@@ -404,7 +443,74 @@ def login():
 def account():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
-    return render_template("account/account.html")
+    elif current_user.privileges == "User":
+        return redirect(url_for('account_data'))
+    else:
+        return render_template("account/account.html")
+
+
+# obsługa konta
+@app.route("/konto/moje_dane")
+@login_required
+@user_only
+def account_data():
+    return render_template("account/mydata.html")
+
+
+# obsługa konta
+@app.route("/konto/edytuj_moje_dane", methods=["GET", "POST"])
+@login_required
+@user_only
+def edit_account_data():
+    edit_form = EditAccountData(
+        login=current_user.login,
+        email=current_user.email,
+        first_name=current_user.first_name,
+        last_name=current_user.last_name
+    )
+    if edit_form.validate_on_submit():
+        current_user.login = edit_form.login.data
+        current_user.email = edit_form.email.data
+        current_user.first_name = edit_form.first_name.data
+        current_user.last_name = edit_form.last_name.data
+
+        db.session.commit()
+
+        return redirect(url_for('account_data'))
+    return render_template("account/mydata_edit.html", form=edit_form)
+
+
+# obsługa konta
+@app.route("/konto/moje_haslo", methods=["GET", "POST"])
+@login_required
+@user_only
+def account_password():
+    password_edit_form = EditPassword()
+    if password_edit_form.validate_on_submit():
+        current_user.password = generate_password_hash(password_edit_form.new_password.data)
+        db.session.commit()
+        return redirect(url_for('account_data'))
+    return render_template("account/mypassword.html", form=password_edit_form)
+
+
+# obsługa konta
+@app.route("/konto/moje_zamowienia")
+@login_required
+@user_only
+def account_orders_story():
+    orders = current_user.client.orders
+    return render_template("account/orders_story.html", orders=orders)
+
+
+# obsługa konta
+@app.route("/konto/szczegoly_zamowienia/<int:order_id>")
+@login_required
+@user_only
+def account_order_details(order_id):
+    order = Order.query.get(order_id)
+    books = [item for item in order.order_items if item.stock.article_type == "book_for_sale"]
+    menu_positions = [item for item in order.order_items if item.stock.article_type == "menu_position"]
+    return render_template("account/order_details.html", menu_positions=menu_positions, books=books)
 
 
 # droga dla wylogwania
