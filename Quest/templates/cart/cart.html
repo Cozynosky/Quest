@@ -158,9 +158,19 @@
             </div>
         </div>
         {% else %}
-        <div class="text-center">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+        {% else %}
+                <div class="text-center">
             <h1 class="mb-4">Koszyk jest pusty :(</h1>
         </div>
+        {% endif %}
+        {% endwith %}
         {% endif %}
     </div>
 

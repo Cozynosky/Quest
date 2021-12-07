@@ -3,7 +3,7 @@ from functools import wraps
 from datetime import timedelta, datetime
 from os import environ
 
-from flask import render_template, redirect, url_for, request, session
+from flask import render_template, redirect, url_for, request, session, flash
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.exceptions import abort
 from werkzeug.security import generate_password_hash
@@ -11,7 +11,7 @@ from werkzeug.security import generate_password_hash
 from Quest import app, db, login_manager
 from Quest.books_genres import genres
 from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book, EditAccountData, EditPassword
-from Quest.tables import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem
+from Quest.tables import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem, Worker
 
 
 # ---------------- flask login -----------------
@@ -42,7 +42,15 @@ def user_only(f):
     return decorated_fun
 
 
+def admin_and_user_only(f):
+    @wraps(f)
+    def decorated_fun(*args, **kwargs):
+        if current_user.privileges == "User" or current_user.privileges == "Admin":
+            return f(*args, **kwargs)
+        else:
+            return abort(403)
 
+    return decorated_fun
 # -------------------------------------------------
 
 
@@ -59,19 +67,20 @@ def session_settings():
                      email="admin@admin.admin", privileges="Admin")
         db.session.add(admin)
     # domyslne konto uzytkownika niezalogowanego
-    if db.session.query(User).filter_by(login="anonymous").first() is None:
-
-        anonymous = User(login="anonymous", password=generate_password_hash("anonymous"),
-                         first_name="anonymous", last_name="anonymous",
-                         email="anonymous@anonymous.anonymous", privileges="User")
-        anonymous_client = Client()
-        anonymous.client = anonymous_client
-        db.session.add(anonymous)
+    if db.session.query(User).filter_by(login="default").first() is None:
+        default = User(login="default", password=generate_password_hash("default"),
+                         first_name="default", last_name="default",
+                         email="default@default.default", privileges="User")
+        default_client = Client()
+        default.client = default_client
+        default_worker = Worker()
+        default.worker = default_worker
+        db.session.add(default)
     # konto uzytkownika klienta testowe
-    if db.session.query(User).filter_by(login="test").first() is None:
-        test = User(login="test", password=generate_password_hash("test"),
-                         first_name="test", last_name="test",
-                         email="test@test.test", privileges="User")
+    if db.session.query(User).filter_by(login="client").first() is None:
+        test = User(login="client", password=generate_password_hash("client"),
+                    first_name="client", last_name="client",
+                    email="client@client.client", privileges="User")
         test_client = Client()
         test.client = test_client
         db.session.add(test)
@@ -86,7 +95,15 @@ def session_settings():
 # obsluga strony glownej
 @app.route("/", methods=["GET", "POST"])
 def home():
-    book_table_form = BookTable()
+
+    if current_user.is_authenticated:
+        book_table_form = BookTable(name=current_user.first_name, last_name=current_user.last_name)
+    else:
+        book_table_form = BookTable()
+
+    if book_table_form.validate_on_submit():
+        return redirect(url_for('home'))
+
     return render_template("home/home.html", form=book_table_form)
 
 
@@ -247,7 +264,7 @@ def make_order():
     order_time = datetime.today()
 
     if current_user.is_authenticated and current_user.privileges == "User":
-        order = Order(date_of_order=order_time, client=current_user.client, total_price=0,total_number_of_items=0)
+        order = Order(date_of_order=order_time, client=current_user.client, total_price=0, total_number_of_items=0)
     else:
         order = Order(date_of_order=order_time, total_price=0, total_number_of_items=0,
                       client=db.session.query(User).filter_by(login="anonymous").first().client)
@@ -278,6 +295,8 @@ def make_order():
 
     session.pop('cart', None)
     session.pop('number_in_cart', None)
+    flash("Zamówienie zostało złożone :) Dziękujemy!")
+
     return redirect(url_for('cart'))
 
 
@@ -443,16 +462,13 @@ def login():
 def account():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
-    elif current_user.privileges == "User":
-        return redirect(url_for('account_data'))
     else:
-        return render_template("account/account.html")
+        return redirect(url_for('account_data'))
 
 
 # obsługa konta
 @app.route("/konto/moje_dane")
 @login_required
-@user_only
 def account_data():
     return render_template("account/mydata.html")
 
@@ -460,7 +476,6 @@ def account_data():
 # obsługa konta
 @app.route("/konto/edytuj_moje_dane", methods=["GET", "POST"])
 @login_required
-@user_only
 def edit_account_data():
     edit_form = EditAccountData(
         login=current_user.login,
@@ -483,7 +498,6 @@ def edit_account_data():
 # obsługa konta
 @app.route("/konto/moje_haslo", methods=["GET", "POST"])
 @login_required
-@user_only
 def account_password():
     password_edit_form = EditPassword()
     if password_edit_form.validate_on_submit():
@@ -505,12 +519,61 @@ def account_orders_story():
 # obsługa konta
 @app.route("/konto/szczegoly_zamowienia/<int:order_id>")
 @login_required
-@user_only
 def account_order_details(order_id):
     order = Order.query.get(order_id)
     books = [item for item in order.order_items if item.stock.article_type == "book_for_sale"]
     menu_positions = [item for item in order.order_items if item.stock.article_type == "menu_position"]
     return render_template("account/order_details.html", menu_positions=menu_positions, books=books)
+
+
+@app.route("/konto/nowy_klient", methods=["GET", "POST"])
+@login_required
+@admin_and_user_only
+def create_new_client():
+    register_form = Register()
+    if register_form.validate_on_submit():
+        entered_login = register_form.login.data
+        entered_email = register_form.email.data
+        entered_password = generate_password_hash(register_form.password.data)
+        entered_first_name = register_form.first_name.data
+        entered_last_name = register_form.last_name.data
+
+        new_user = User(login=entered_login, email=entered_email, password=entered_password,
+                        first_name=entered_first_name,
+                        last_name=entered_last_name)
+        new_client = Client()
+        new_user.client = new_client
+        db.session.add(new_user)
+        db.session.commit()
+        flash("Poprawnie utworzono konto klienckie!")
+
+        return redirect(url_for('create_new_client'))
+    return render_template("account/new_user.html", form=register_form, account_type="klienta")
+
+
+@app.route("/konto/nowy_pracownik", methods=["GET", "POST"])
+@login_required
+@admin_only
+def create_new_worker():
+    register_form = Register()
+    if register_form.validate_on_submit():
+        entered_login = register_form.login.data
+        entered_email = register_form.email.data
+        entered_password = generate_password_hash(register_form.password.data)
+        entered_first_name = register_form.first_name.data
+        entered_last_name = register_form.last_name.data
+
+        new_user = User(login=entered_login, email=entered_email, password=entered_password,
+                        first_name=entered_first_name,
+                        last_name=entered_last_name, privileges="Worker")
+        new_worker = Worker()
+        new_user.worker = new_worker
+        db.session.add(new_user)
+        db.session.commit()
+        flash("Poprawnie utworzono konto pracownika!")
+
+        return redirect(url_for('create_new_client'))
+    return render_template("account/new_user.html", form=register_form, account_type="pracownika")
 
 
 # droga dla wylogwania
@@ -525,4 +588,10 @@ def logout():
 # obsluga zakladki wydarzenia
 @app.route("/wydarzenia")
 def events():
+    return render_template("events/events.html")
+
+
+# obsluga zakladki stoliki
+@app.route("/stoliki")
+def tables():
     return render_template("events/events.html")

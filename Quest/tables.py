@@ -23,6 +23,7 @@ class Client(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = relationship("User", back_populates="client")
     orders = relationship("Order", back_populates="client")
+    table_reservations = relationship("TableReservations", back_populates="client")
 
 
 class Worker(db.Model):
@@ -97,4 +98,22 @@ class Menu(db.Model):
     price = db.Column(db.Numeric(10, 2), nullable=False)
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     stock = relationship("Stock", back_populates="menu_position")
+
+
+class Table(db.Model):
+    __tablename__ = "tables"
+    id = db.Column(db.Integer, primary_key=True)
+    number_of_seats = db.Column(db.Integer, nullable=False)
+    reservations = relationship("TableReservations", back_populates="table")
+
+
+class TableReservations(db.Model):
+    __tablename__ = "table_reservations"
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, nullable=False)
+    table_id = db.Column(db.Integer, db.ForeignKey('tables.id'))
+    table = relationship("Table", back_populates="reservations")
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.id'))
+    client = relationship("Client", back_populates="table_reservations")
+
 # ---------------------------------------------------------------------------------------

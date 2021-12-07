@@ -19,6 +19,17 @@
         width:100%;
     }
 
+    .menu_img {
+        min-width:100px;
+        min-height:95px;
+        max-width:100px;
+        max-height:95px;
+        width: auto;
+        height: auto;
+        border-radius: 100%
+    }
+}
+
 
 
 </style>
@@ -75,7 +86,7 @@
     <table>
         <thead>
         <tr>
-            <th scope="col"> </th>
+            <th scope="col"></th>
             <th scope="col">Nazwa</th>
             <th scope="col">Ilość</th>
             <th scope="col">Cena</th>
@@ -85,11 +96,13 @@
         <tbody>
         {% for menu_position in menu_positions %}
         <tr>
-            <td><img src="{{menu_position.stock.menu_position.image_url}}" style="width:100px;"></td>
+            <td><img src="{{menu_position.stock.menu_position.image_url}}" class="menu_img"></td>
             <td><span style="color:black">{{menu_position.stock.menu_position.name}}</span></td>
             <td><span style="color:black">{{menu_position.number_of_item}}</span></td>
             <td><span style="color:black">{{menu_position.stock.menu_position.price}}zł</span></td>
-            <td><span style="color:black">{{menu_position.stock.menu_position.price * menu_position.number_of_item}}zł</span></td>
+            <td><span
+                    style="color:black">{{menu_position.stock.menu_position.price * menu_position.number_of_item}}zł</span>
+            </td>
         </tr>
 
         {% endfor %}
