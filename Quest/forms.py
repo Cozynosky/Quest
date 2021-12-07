@@ -6,7 +6,7 @@ from flask_login import current_user
 from wtforms.validators import DataRequired, Email, EqualTo, InputRequired, ValidationError
 from werkzeug.security import check_password_hash
 from Quest import db
-from Quest.tables import User
+from Quest.tabels import User
 from Quest.books_genres import genres
 
 

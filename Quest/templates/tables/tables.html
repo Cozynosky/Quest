@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="home-slider owl-carousel">
+
+    <div class="slider-item" style="background-image: url({{ url_for('static', filename='images/tables.jpg') }});">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row slider-text justify-content-center align-items-center">
+                <div class="col-md-7 col-sm-12 text-center ftco-animate">
+                    <span class="subheading">Zarezerwuj</span>
+                    <h1 class="mb-4">Stolik dla Ciebie</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="d-flex justify-content-center">
+    <p style="background-color:#c49b63; width:75%; height:40px; position: absolute; top: 730px;">
+    </p>
+</div>
+<section class="ftco-section contact-section">
+    <div class="container">
+
+    </div>
+</section>
+{% endblock %}

@@ -11,7 +11,7 @@ from werkzeug.security import generate_password_hash
 from Quest import app, db, login_manager
 from Quest.books_genres import genres
 from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book, EditAccountData, EditPassword
-from Quest.tables import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem, Worker
+from Quest.tabels import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem, Worker
 
 
 # ---------------- flask login -----------------
@@ -93,18 +93,9 @@ def session_settings():
 
 # ------------ sciezki na serwerze ------------
 # obsluga strony glownej
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def home():
-
-    if current_user.is_authenticated:
-        book_table_form = BookTable(name=current_user.first_name, last_name=current_user.last_name)
-    else:
-        book_table_form = BookTable()
-
-    if book_table_form.validate_on_submit():
-        return redirect(url_for('home'))
-
-    return render_template("home/home.html", form=book_table_form)
+    return render_template("home/home.html")
 
 
 # obsluga zakladki menu
@@ -594,4 +585,12 @@ def events():
 # obsluga zakladki stoliki
 @app.route("/stoliki")
 def tables():
-    return render_template("events/events.html")
+
+    if current_user.is_authenticated:
+        book_table_form = BookTable(name=current_user.first_name, last_name=current_user.last_name)
+    else:
+        book_table_form = BookTable()
+
+    if book_table_form.validate_on_submit():
+        return redirect(url_for('home'))
+    return render_template("tables/tables.html", form=book_table_form)
