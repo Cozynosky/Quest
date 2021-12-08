@@ -23,30 +23,14 @@
     </p>
 </div>
 
-
 <section class="ftco-menu mb-5 pb-5">
-    <div class="container">
+    <div class="container p-4" style="background-color:#120f0f; border-radius: 25px; border: 2px solid #c49b63;">
         {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
         <a href="{{url_for('new_book_for_sale')}}" class="btn btn-success mb-4" role="button" aria-disabled="true">Dodaj
             książkę</a>
         {% endif %}
         <div class="row d-md-flex">
             <div class="col-lg-12 ftco-animate p-md-5">
-                <div class="row">
-                    <div class="col-md-12 nav-link-wrap mb-5">
-                        <div class="nav ftco-animate nav-pills justify-content-center" id="v-pills-tab" role="tablist"
-                             aria-orientation="vertical">
-                            <a class="nav-link active" href="#">Wszystkie</a>
-
-                            <a class="nav-link" href="#">Bestsellery</a>
-
-                            <a class="nav-link" href="#">Nowości</a>
-
-                            <a class="nav-link" href="#">Wyprzedaż</a>
-
-                        </div>
-                    </div>
-                </div>
 
                 <div class="row d-flex">
                     {% for book in books %}
