@@ -10,6 +10,8 @@ border: 0.5px solid #c49b63;
     }
 
 
+
+
 </style>
 {% endblock %}
 {% block content %}
@@ -72,6 +74,16 @@ border: 0.5px solid #c49b63;
             </div>
         </div>
         <div class="row">
+                            {% with messages = get_flashed_messages(category_filter=["error"]) %}
+                {% if messages %}
+                {% for message in messages %}
+            <div class="alert alert-danger text-center" style="margin:0 auto;" role="alert">
+                {{ message}}
+            </div>
+                {% endfor %}
+
+                {% endif %}
+                {% endwith %}
             {% for table, hours in tables %}
             <div class="col-xl-3 col-md-4 mb-4">
                 <div class="p-2 text-center"
@@ -81,14 +93,15 @@ border: 0.5px solid #c49b63;
                             class="fas fa-trash-alt fa-2x" style="position:absolute; right:35px; top:20px;"></i></a>
                     {% endif %}
                     <i style="color:black">{{table.number_of_seats}}</i> <span style="color:black">miejsc(a)</span><br>
-                    <span style="color:black;">Stolik nr:  <span
-                            style="color:black; font-size:3em;font-family: Helvetica, sans-serif;">{{table.id}}</span><br>
+                    <span style="color:black;">Stolik nr: </span> <span
+                        style="color:black; font-size:3em;font-family: Helvetica, sans-serif;">{{table.id}}</span><br>
 
-                    <span style="color:black;">Godziny</span>
+                    <span style="color:black;">Dostępne godziny</span>
                     <div class="row justify-content-center mt-2">
                         {% for hour,table_taken in hours %}
                         <div class=" mb-2 mx-1">
-                            <a class="btn btn-primary{% if table_taken %} disabled {% endif %}" href="{{url_for('book_table',r_hour=hour, table_id=table.id, r_date=date)}}"
+                            <a class="btn btn-primary{% if table_taken %} disabled {% endif %}"
+                               href="{{url_for('book_table',r_hour=hour, table_id=table.id, r_date=date)}}"
                                style="border-radius: 25%;">
                                 {{hour}}
                             </a>

@@ -27,7 +27,7 @@ class NewTable(FlaskForm):
 class FindTable(FlaskForm):
     date = DateField("Data rezerwacji", validators=[DataRequired(message="To pole jest wymagane!")])
     number_of_seats = SelectField("Ilość miejsc", choices=[(0, "Dowolna")] + [(seat, f"{seat}") for seat in range(1, 9)])
-    time = SelectField("Dostępne po godz:", choices=[(0, "Dowolna")] + [(hour, f"{hour}:00") for hour in range(8, 21)])
+    time = SelectField("Godzina:", choices=[(0, "Dowolna")] + [(hour, f"{hour}:00") for hour in range(8, 21)])
     find_table_button = SubmitField("Znajdź stolik")
 
 
