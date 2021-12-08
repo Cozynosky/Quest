@@ -20,14 +20,14 @@ class BookTable(FlaskForm):
 
 
 class NewTable(FlaskForm):
-    number_of_seats = IntegerField("Ilość miejsc", validators=[DataRequired(message="To pole jest wymagane!")])
+    number_of_seats = SelectField("Ilosć miejsc", choices=[(seat, f"{seat}") for seat in range(1, 9)])
     new_table_button = SubmitField("Dodaj stolik")
 
 
 class FindTable(FlaskForm):
-    date = DateField("Data", validators=[DataRequired(message="To pole jest wymagane!")])
-    number_of_seats = SelectField("Ilosć miejsc", choices=[(0, "Dowolna")] + [(seat, f"{seat}") for seat in range(1, 9)])
-    time = SelectField("Godzina", choices=[(0, "Dowolna")] + [(hour, f"{hour}:00") for hour in range(8, 21)])
+    date = DateField("Data rezerwacji", validators=[DataRequired(message="To pole jest wymagane!")])
+    number_of_seats = SelectField("Ilość miejsc", choices=[(0, "Dowolna")] + [(seat, f"{seat}") for seat in range(1, 9)])
+    time = SelectField("Dostępne po godz:", choices=[(0, "Dowolna")] + [(hour, f"{hour}:00") for hour in range(8, 21)])
     find_table_button = SubmitField("Znajdź stolik")
 
 

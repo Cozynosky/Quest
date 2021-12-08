@@ -11,7 +11,7 @@ from werkzeug.security import generate_password_hash
 from Quest import app, db, login_manager
 from Quest.books_genres import genres
 from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book, EditAccountData, EditPassword, NewTable, FindTable
-from Quest.tabels import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem, Worker, Table
+from Quest.tabels import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem, Worker, Table, TableReservations
 
 
 # ---------------- flask login -----------------
@@ -585,8 +585,26 @@ def events():
 # obsluga zakladki stoliki
 @app.route("/stoliki", methods=["GET", "POST"])
 def tables():
+    today = datetime.today()
+    today = datetime(today.year, today.month, today.day, today.hour)
     all_tables = db.session.query(Table).all()
-    find_table_form = FindTable(date=datetime.today())
+    prepared_tables = []
+    for table in all_tables:
+        hours = []
+        if len(table.reservations) == 0:
+            hours = [(hour, False) for hour in range(today.hour+1, 21)]
+        else:
+            for hour in range(today.hour+1, 21):
+                temp_date = datetime(today.year, today.month, today.day, hour)
+                table_taken = False
+                for reservation in table.reservations:
+                    if reservation.date == temp_date:
+                        table_taken = True
+                hours.append((hour, table_taken))
+        prepared_tables.append((table, hours))
+
+
+    find_table_form = FindTable(date=today)
     if find_table_form.validate_on_submit() and find_table_form.find_table_button.data:
         date = find_table_form.date.data
         number_of_seats = find_table_form.number_of_seats.data
@@ -599,7 +617,21 @@ def tables():
         db.session.add(new_table)
         db.session.commit()
         return redirect(url_for('tables'))
-    return render_template("tables/tables.html", find_table_form=find_table_form, new_table_form=new_table_form, tables=all_tables)
+    return render_template("tables/tables.html", find_table_form=find_table_form, new_table_form=new_table_form, tables=prepared_tables, date=f"{today.year}-{today.month}-{today.day}")
+
+
+# opcja usucol-lg-4niecia stolika
+@app.route("/stoliki/usun_<int:table_id>")
+def delete_table(table_id):
+    table_to_delete = Table.query.get(table_id)
+
+    for reservation in table_to_delete.reservations:
+        db.session.delete(reservation)
+
+    db.session.delete(table_to_delete)
+    db.session.commit()
+    return redirect(request.referrer)
+
 
 
 # obsluga zakladki stoliki z wyborem
@@ -622,14 +654,23 @@ def specified_tables(r_date, r_number_of_seats, r_time):
     return render_template("tables/tables.html", find_table_form=find_table_form, new_table_form=new_table_form, tables=all_tables)
 
 
-# opcja usucol-lg-4niecia stolika
-@app.route("/stoliki/usun_<int:table_id>")
-def delete_table(table_id):
-    table_to_delete = Table.query.get(table_id)
 
-    for reservation in table_to_delete.reservations:
-        db.session.delete(reservation)
+@app.route("/stoliki/rezerwuj/<string:r_date>/<int:r_hour>/<int:table_id>")
+def book_table(r_date, r_hour, table_id):
+    date = r_date.split('-')
+    hour = r_hour
+    print(date, r_date)
+    date_obj = datetime(int(date[0]), int(date[1]), int(date[2]), hour)
+    table = Table.query.get(table_id)
+    new_reservation = TableReservations(date=date_obj)
 
-    db.session.delete(table_to_delete)
+    if current_user.is_authenticated:
+        new_reservation.client = current_user
+    else:
+        def_usr = db.session.query(User).filter_by(login="default").first()
+        new_reservation.client = def_usr.client
+
+    new_reservation.table = table
+    db.session.add(new_reservation)
     db.session.commit()
     return redirect(request.referrer)

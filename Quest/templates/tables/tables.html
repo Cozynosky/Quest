@@ -10,9 +10,6 @@ border: 0.5px solid #c49b63;
     }
 
 
-
-
-
 </style>
 {% endblock %}
 {% block content %}
@@ -37,7 +34,7 @@ border: 0.5px solid #c49b63;
 <section class="ftco-menu mb-5 pb-5">
     <div class="container p-4" style="background-color:#120f0f; border-radius: 25px; border: 2px solid #c49b63;">
         <div class="text-center">
-            <h2>Nasze stoliki</h2>
+            <h1>Nasze stoliki</h1>
             <hr>
         </div>
         <div class="row text-center">
@@ -75,16 +72,31 @@ border: 0.5px solid #c49b63;
             </div>
         </div>
         <div class="row">
-            {% for table in tables %}
+            {% for table, hours in tables %}
             <div class="col-xl-3 col-md-4 mb-4">
-                <div class="p-2 text-center" style="border:2px solid #c49b63;; border-radius: 25px; background-color: Gainsboro;">
+                <div class="p-2 text-center"
+                     style="border:2px solid #c49b63;; border-radius: 25px; background-color: Gainsboro;">
                     {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-                    <a href="{{url_for('delete_table', table_id=table.id)}}" class="delete_table"><i class="fas fa-trash-alt fa-2x" style="position:absolute; right:35px; top:20px;"></i></a>
+                    <a class="delete_table" href="{{url_for('delete_table', table_id=table.id)}}"><i
+                            class="fas fa-trash-alt fa-2x" style="position:absolute; right:35px; top:20px;"></i></a>
                     {% endif %}
-                    <span style="color:black; font-size:4em;font-family: Helvetica, sans-serif;">{{table.number_of_seats}}</span>
-                    <span style="color:black">miejsc(a)</span>
-                </div>
+                    <i style="color:black">{{table.number_of_seats}}</i> <span style="color:black">miejsc(a)</span><br>
+                    <span style="color:black;">Stolik nr:  <span
+                            style="color:black; font-size:3em;font-family: Helvetica, sans-serif;">{{table.id}}</span><br>
 
+                    <span style="color:black;">Godziny</span>
+                    <div class="row justify-content-center mt-2">
+                        {% for hour,table_taken in hours %}
+                        <div class=" mb-2 mx-1">
+                            <a class="btn btn-primary{% if table_taken %} disabled {% endif %}" href="{{url_for('book_table',r_hour=hour, table_id=table.id, r_date=date)}}"
+                               style="border-radius: 25%;">
+                                {{hour}}
+                            </a>
+
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
             {% endfor %}
         </div>
