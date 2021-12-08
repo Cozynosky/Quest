@@ -18,9 +18,18 @@
     <p style="background-color:#c49b63; width:75%; height:40px; position: absolute; top: 730px;">
     </p>
 </div>
-<section class="ftco-section contact-section">
     <div class="container">
-
+        {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
+            <form method="POST" class="contact-form p-4" novalidate autocomplete="off" style="margin-top:30px;background-color:#120f0f; border-radius: 25px; border: 2px solid #c49b63">
+                {{ new_table_form.csrf_token }}
+                <div class="row">
+                    <div class="col-md-2">{{ new_table_form.number_of_seats.label(class_="control-label") }}</div>
+                    <div class="col-md-1">{{new_table_form.number_of_seats(placeholder="Liczba miejsc")}}</div>
+                </div>
+            </form>
+        {% endif %}
     </div>
+<section class="ftco-section contact-section" style="margin:0px">
+
 </section>
 {% endblock %}

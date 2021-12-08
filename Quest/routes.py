@@ -10,8 +10,8 @@ from werkzeug.security import generate_password_hash
 
 from Quest import app, db, login_manager
 from Quest.books_genres import genres
-from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book, EditAccountData, EditPassword
-from Quest.tabels import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem, Worker
+from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book, EditAccountData, EditPassword, NewTable
+from Quest.tabels import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem, Worker, Table
 
 
 # ---------------- flask login -----------------
@@ -583,14 +583,23 @@ def events():
 
 
 # obsluga zakladki stoliki
-@app.route("/stoliki")
+@app.route("/stoliki", methods=["GET", "POST"])
 def tables():
 
-    if current_user.is_authenticated:
-        book_table_form = BookTable(name=current_user.first_name, last_name=current_user.last_name)
-    else:
-        book_table_form = BookTable()
+    # if current_user.is_authenticated:
+    #     book_table_form = BookTable(name=current_user.first_name, last_name=current_user.last_name)
+    # else:
+    #     book_table_form = BookTable()
+    #
+    # if book_table_form.validate_on_submit():
+    #     return redirect(url_for('home'))
+    new_table_form = NewTable(number_of_seats=4)
+    if new_table_form.validate_on_submit():
+        number_of_seats = new_table_form.number_of_seats.data
+        new_table = Table(number_of_seats=number_of_seats)
+        db.session.add(new_table)
+        db.session.commit()
+        return redirect(url_for('tables'))
+    return render_template("tables/tables.html", new_table_form=new_table_form)
 
-    if book_table_form.validate_on_submit():
-        return redirect(url_for('home'))
-    return render_template("tables/tables.html", form=book_table_form)
+

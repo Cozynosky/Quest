@@ -20,6 +20,11 @@ class BookTable(FlaskForm):
     book_button = SubmitField("Zarezerwuj stolik")
 
 
+class NewTable(FlaskForm):
+    number_of_seats = IntegerField("Ilość miejsc", validators=[DataRequired(message="To pole jest wymagane!")])
+    submit_button = SubmitField("Dodaj stolik")
+
+
 class Book(FlaskForm):
     # stock table
     number_in_stock = IntegerField("Liczba w magazynie", validators=[DataRequired(message="To pole jest wymagane!")])
