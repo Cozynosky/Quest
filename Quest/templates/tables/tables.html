@@ -1,4 +1,20 @@
 {% extends "base.html" %}
+{% block head %}
+{{ super() }}
+<style>
+    .delete_table i:hover{
+    color:firebrick;
+    }
+    hr {
+border: 0.5px solid #c49b63;
+    }
+
+
+
+
+
+</style>
+{% endblock %}
 {% block content %}
 <section class="home-slider owl-carousel">
 
@@ -18,18 +34,80 @@
     <p style="background-color:#c49b63; width:75%; height:40px; position: absolute; top: 730px;">
     </p>
 </div>
-    <div class="container">
-        {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-            <form method="POST" class="contact-form p-4" novalidate autocomplete="off" style="margin-top:30px;background-color:#120f0f; border-radius: 25px; border: 2px solid #c49b63">
-                {{ new_table_form.csrf_token }}
-                <div class="row">
-                    <div class="col-md-2">{{ new_table_form.number_of_seats.label(class_="control-label") }}</div>
-                    <div class="col-md-1">{{new_table_form.number_of_seats(placeholder="Liczba miejsc")}}</div>
+<section class="ftco-menu mb-5 pb-5">
+    <div class="container p-4" style="background-color:#120f0f; border-radius: 25px; border: 2px solid #c49b63;">
+        <div class="text-center">
+            <h2>Nasze stoliki</h2>
+            <hr>
+        </div>
+        <div class="row text-center">
+            <div class="col-12 book">
+                <form autocomplete="off" class="px-2" method="POST">
+                    {{ find_table_form.csrf_token }}
+                    <div class="row">
+                        <div class="col-xl-2 col-lg-3">
+                            <div class="form-group">
+                                {{ find_table_form.date.label(class_="control-label") }}
+                                {{find_table_form.date(class_ = "form-control")}}
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3">
+                            <div class="form-group">
+                                {{ find_table_form.number_of_seats.label(class_="control-label") }}
+                                {{find_table_form.number_of_seats(class_ = "form-control", placeholder="Ilość miejsc")}}
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3">
+                            <div class="form-group">
+                                {{ find_table_form.time.label(class_="control-label") }}
+                                {{find_table_form.time(class_ = "form-control", placeholder="Godzina przybycia")}}
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3">
+                            <div class="form-group" style="padding-top:40px">
+                                {{find_table_form.find_table_button(class_ = "btn btn-primary py-3 px-4", value="Znajdź
+                                stolik")}}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            {% for table in tables %}
+            <div class="col-xl-3 col-md-4 mb-4">
+                <div class="p-2 text-center" style="border:2px solid #c49b63;; border-radius: 25px; background-color: Gainsboro;">
+                    {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
+                    <a href="{{url_for('delete_table', table_id=table.id)}}" class="delete_table"><i class="fas fa-trash-alt fa-2x" style="position:absolute; right:35px; top:20px;"></i></a>
+                    {% endif %}
+                    <span style="color:black; font-size:4em;font-family: Helvetica, sans-serif;">{{table.number_of_seats}}</span>
+                    <span style="color:black">miejsc(a)</span>
                 </div>
-            </form>
+
+            </div>
+            {% endfor %}
+        </div>
+        {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
+        <div class="container">
+            <div class="row justify-content-left">
+                <form autocomplete="off" class="p-4 col" method="POST">
+                    {{ new_table_form.csrf_token }}
+                    <div class="row">
+                        <div class="" style="padding: 15px;">
+                            {{new_table_form.number_of_seats.label(class_="control-label")}}
+                        </div>
+                        <div class="">{{new_table_form.number_of_seats(class_ = "form-control input-sm",
+                            placeholder="Liczba miejsc")}}
+                        </div>
+                        <div>{{new_table_form.new_table_button(class_ = "btn btn-success p-3 mx-3", value="Dodaj nowy
+                            stolik")}}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         {% endif %}
     </div>
-<section class="ftco-section contact-section" style="margin:0px">
-
 </section>
 {% endblock %}

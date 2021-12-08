@@ -17,14 +17,18 @@
       <scope value="GLOBAL" />
       <destination value="FILE" />
       <format value="EXCEL" />
-      <charset value="UTF-8" />
+      <charset value="windows-1250" />
     </export-instructions>
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552">
+        <schema name="main" object-types="table, view, constraint, index, column, dataset trigger" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52">
@@ -56,12 +60,13 @@
     <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.stock" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.books_info" active-filter-id="" />
     <filter-actions connection-id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" dataset="public.menu" active-filter-id="" />
-    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.clients" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.workers" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.clients" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.users" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.books_for_sale" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.stock" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.order_items" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.tables" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.menu" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.alembic_version" active-filter-id="" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.orders" active-filter-id="EMPTY_FILTER" />

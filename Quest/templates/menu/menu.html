@@ -22,7 +22,7 @@
 </div>
 
 <section class="ftco-section">
-    <div class="container">
+    <div class="container p-4" style="background-color:#120f0f; border-radius: 25px; border: 2px solid #c49b63;">
         {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
         <a href="{{url_for('new_menu_item')}}" class="btn btn-success mb-4" role="button" aria-disabled="true">Dodaj do
             menu</a>
@@ -38,7 +38,7 @@
                     <div class="desc pl-3">
                         <div class="d-flex text align-items-center">
                             <h3><span>{{hot_drink.name}} </span></h3>
-                            <span class="price">{{hot_drink.price}} zł </span>
+                            <span class="price" >{{hot_drink.price}} zł </span>
                         </div>
                         <div class="d-block">
                             <p>{{hot_drink.description}} </p>

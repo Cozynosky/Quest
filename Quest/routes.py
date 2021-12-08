@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash
 
 from Quest import app, db, login_manager
 from Quest.books_genres import genres
-from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book, EditAccountData, EditPassword, NewTable
+from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book, EditAccountData, EditPassword, NewTable, FindTable
 from Quest.tabels import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem, Worker, Table
 
 
@@ -585,21 +585,51 @@ def events():
 # obsluga zakladki stoliki
 @app.route("/stoliki", methods=["GET", "POST"])
 def tables():
-
-    # if current_user.is_authenticated:
-    #     book_table_form = BookTable(name=current_user.first_name, last_name=current_user.last_name)
-    # else:
-    #     book_table_form = BookTable()
-    #
-    # if book_table_form.validate_on_submit():
-    #     return redirect(url_for('home'))
-    new_table_form = NewTable(number_of_seats=4)
-    if new_table_form.validate_on_submit():
+    all_tables = db.session.query(Table).all()
+    find_table_form = FindTable(date=datetime.today())
+    if find_table_form.validate_on_submit() and find_table_form.find_table_button.data:
+        date = find_table_form.date.data
+        number_of_seats = find_table_form.number_of_seats.data
+        time = find_table_form.time.data
+        return redirect(url_for('specified_tables', r_date=date, r_number_of_seats=number_of_seats, r_time=time))
+    new_table_form = NewTable()
+    if new_table_form.validate_on_submit() and new_table_form.new_table_button.data:
         number_of_seats = new_table_form.number_of_seats.data
         new_table = Table(number_of_seats=number_of_seats)
         db.session.add(new_table)
         db.session.commit()
         return redirect(url_for('tables'))
-    return render_template("tables/tables.html", new_table_form=new_table_form)
+    return render_template("tables/tables.html", find_table_form=find_table_form, new_table_form=new_table_form, tables=all_tables)
 
 
+# obsluga zakladki stoliki z wyborem
+@app.route("/stoliki/<string:r_date>/<int:r_number_of_seats>/<int:r_time>", methods=["GET", "POST"])
+def specified_tables(r_date, r_number_of_seats, r_time):
+    all_tables = db.session.query(Table).all()
+    find_table_form = FindTable(date=datetime.today())
+    if find_table_form.validate_on_submit() and find_table_form.find_table_button.data:
+        date = find_table_form.date.data
+        number_of_seats = find_table_form.number_of_seats.data
+        time = find_table_form.time.data
+        return redirect(url_for('tables'))
+    new_table_form = NewTable()
+    if new_table_form.validate_on_submit() and new_table_form.new_table_button.data:
+        number_of_seats = new_table_form.number_of_seats.data
+        new_table = Table(number_of_seats=number_of_seats)
+        db.session.add(new_table)
+        db.session.commit()
+        return redirect(url_for('tables'))
+    return render_template("tables/tables.html", find_table_form=find_table_form, new_table_form=new_table_form, tables=all_tables)
+
+
+# opcja usucol-lg-4niecia stolika
+@app.route("/stoliki/usun_<int:table_id>")
+def delete_table(table_id):
+    table_to_delete = Table.query.get(table_id)
+
+    for reservation in table_to_delete.reservations:
+        db.session.delete(reservation)
+
+    db.session.delete(table_to_delete)
+    db.session.commit()
+    return redirect(request.referrer)

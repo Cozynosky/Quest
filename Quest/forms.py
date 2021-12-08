@@ -14,7 +14,6 @@ class BookTable(FlaskForm):
     name = StringField("Imię", validators=[DataRequired(message="To pole jest wymagane!")])
     last_name = StringField("Nazwisko", validators=[DataRequired(message="To pole jest wymagane!")])
     phone = StringField("Telefon", validators=[DataRequired(message="To pole jest wymagane!")])
-    date = DateField("Data", validators=[DataRequired(message="To pole jest wymagane!")], format="%d-%m-%Y")
     time = DateTimeField("Godzina", validators=[DataRequired(message="To pole jest wymagane!")], format="%H:%M")
     message = TextAreaField("Wiadomość", validators=[DataRequired(message="To pole jest wymagane!")])
     book_button = SubmitField("Zarezerwuj stolik")
@@ -22,7 +21,14 @@ class BookTable(FlaskForm):
 
 class NewTable(FlaskForm):
     number_of_seats = IntegerField("Ilość miejsc", validators=[DataRequired(message="To pole jest wymagane!")])
-    submit_button = SubmitField("Dodaj stolik")
+    new_table_button = SubmitField("Dodaj stolik")
+
+
+class FindTable(FlaskForm):
+    date = DateField("Data", validators=[DataRequired(message="To pole jest wymagane!")])
+    number_of_seats = SelectField("Ilosć miejsc", choices=[(0, "Dowolna")] + [(seat, f"{seat}") for seat in range(1, 9)])
+    time = SelectField("Godzina", choices=[(0, "Dowolna")] + [(hour, f"{hour}:00") for hour in range(8, 21)])
+    find_table_button = SubmitField("Znajdź stolik")
 
 
 class Book(FlaskForm):
