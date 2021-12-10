@@ -1,0 +1,26 @@
+{% extends "account/account.html" %}
+{% block head %}
+{{ super() }}
+<style>
+    .res {
+        border: 1px solid #c49b63;
+        margin-top:5px;
+        padding: 10px;
+    }
+
+
+</style>
+{% endblock %}
+{% block account_page %}
+<h3 class="text-center mb-2" style="color:black">Rezerwacje stolików</h3>
+<hr>
+{% for res, cant_cancel in reservations %}
+<div class="overflow-auto res">
+    Rezerwacja nr: <span style="color:black; ">{{res.id}} - {{res.date.strftime("%d/%m/%Y  %H:%M")}}</span><br>
+    Stolik nr. {{res.table.id}} - {{res.table.number_of_seats}} osób/osoby<br>
+    {{res.first_name}} {{res.last_name}} {{res.phone}}<br>
+    {{res.message}}
+    <div class="text-right"><a href="{{url_for('cancel_table_booking', res_id=res.id)}}" class="btn btn-primary{% if cant_cancel %} disabled {% endif %}" style="border-radius:25px;">Anuluj rezerwacje</a></div>
+</div>
+{% endfor %}
+{% endblock %}

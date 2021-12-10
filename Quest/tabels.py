@@ -111,6 +111,10 @@ class TableReservations(db.Model):
     __tablename__ = "table_reservations"
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, nullable=False)
+    first_name = db.Column(db.String(250), nullable=False)
+    last_name = db.Column(db.String(250), nullable=False)
+    phone = db.Column(db.String(9), nullable=False)
+    message = db.Column(db.String(500), nullable=True)
     table_id = db.Column(db.Integer, db.ForeignKey('tables.id'))
     table = relationship("Table", back_populates="reservations")
     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'))

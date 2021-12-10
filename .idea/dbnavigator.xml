@@ -42,7 +42,9 @@
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" object-ref="schemas/main/tables/table_reservations" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="5814e6a6-9fb7-4e2a-aa59-993f44f9bc52" />
@@ -69,6 +71,7 @@
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.tables" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.menu" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.alembic_version" active-filter-id="" />
+    <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.table_reservations" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="cb3fc53e-37ce-4187-9ba9-7436beb4b552" dataset="main.orders" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">

@@ -12,12 +12,12 @@
 </style>
 {% endblock %}
 {% block account_page %}
-<h3 class="text-center mb-2" style="color:black">Twoja historia zakupów</h3>
+<h3 class="text-center mb-2" style="color:black">Historia zakupów</h3>
 <hr>
 {% for order in orders %}
 <div class="overflow-auto order">
     Zamówienie nr: <span style="color:black;">{{order.id}}</span> z dnia<span style="color:black; font-style: italic">
-    {{order.date_of_order.strftime("%m/%d/%Y")}}</span> <span style="float:right; color:grey">{{order.total_price}}zł / {{order.total_number_of_items}} produkt(y) </span><br>
+    {{order.date_of_order.strftime("%m/%d/%Y")}}</span> <span style="float:right; color:grey">{{order.total_price}}zł / {{order.total_number_of_items}} produkt(y) </span>
     <div class="text-right"><a href="{{url_for('account_order_details',order_id=order.id)}}" class="btn btn-primary" style="border-radius:25px; margin-top:10px">Szczegóły</a></div>
 </div>
 {% endfor %}

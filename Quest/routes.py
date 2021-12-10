@@ -1,6 +1,6 @@
+from datetime import timedelta, datetime
 from decimal import Decimal
 from functools import wraps
-from datetime import timedelta, datetime
 from os import environ
 
 from flask import render_template, redirect, url_for, request, session, flash
@@ -10,8 +10,9 @@ from werkzeug.security import generate_password_hash
 
 from Quest import app, db, login_manager
 from Quest.books_genres import genres
-from Quest.forms import BookTable, Contact, Login, Register, MenuPosition, Book, EditAccountData, EditPassword, NewTable, FindTable
-from Quest.tabels import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem, Worker, Table
+from Quest.forms import Contact, Login, Register, MenuPosition, Book, EditAccountData, EditPassword, NewTable, FindTable
+from Quest.tabels import User, Menu, Client, Stock, BookForSale, BookInfo, Order, OrderItem, Worker, Table, \
+    TableReservations
 
 
 # ---------------- flask login -----------------
@@ -51,6 +52,8 @@ def admin_and_user_only(f):
             return abort(403)
 
     return decorated_fun
+
+
 # -------------------------------------------------
 
 
@@ -69,8 +72,8 @@ def session_settings():
     # domyslne konto uzytkownika niezalogowanego
     if db.session.query(User).filter_by(login="default").first() is None:
         default = User(login="default", password=generate_password_hash("default"),
-                         first_name="default", last_name="default",
-                         email="default@default.default", privileges="User")
+                       first_name="default", last_name="default",
+                       email="default@default.default", privileges="User")
         default_client = Client()
         default.client = default_client
         default_worker = Worker()
@@ -273,7 +276,7 @@ def make_order():
                 else:
                     total_price += stock_item.book_for_sale.price * number_of
             else:
-                total_price += stock_item.menu_position.price
+                total_price += stock_item.menu_position.price * number_of
 
             total_items_number += number_of
             new_order_item = OrderItem(number_of_item=number_of, order=order, stock=stock_item)
@@ -567,6 +570,22 @@ def create_new_worker():
     return render_template("account/new_user.html", form=register_form, account_type="pracownika")
 
 
+# wyswietlenie rezerwacji stolikow
+@app.route("/konto/rezerwacje/<int:client_id>")
+def show_table_reservations(client_id):
+    client = Client.query.get(client_id)
+    today = datetime.today()
+    today = datetime(today.year, today.month, today.day, today.hour)
+    prepared_reservations = []
+    for res in client.table_reservations:
+        cant_cancel = True
+        if today < res.date:
+            cant_cancel = False
+        prepared_reservations.append((res, cant_cancel))
+
+    return render_template("account/table_reservations.html", reservations=prepared_reservations)
+
+
 # droga dla wylogwania
 @app.route("/wylogowanie")
 @login_required
@@ -585,45 +604,123 @@ def events():
 # obsluga zakladki stoliki
 @app.route("/stoliki", methods=["GET", "POST"])
 def tables():
-    all_tables = db.session.query(Table).all()
-    find_table_form = FindTable(date=datetime.today())
+    today = datetime.today()
+
+    return redirect(url_for('specified_tables', r_year=today.year, r_month=today.month, r_day=today.day, r_hour=0,
+                            r_number_of_seats=0))
+
+
+# obsluga zakladki stoliki z wyborem daty i godziny
+@app.route("/stoliki/<int:r_year>/<int:r_month>/<int:r_day>/<int:r_number_of_seats>/<int:r_hour>",
+           methods=["GET", "POST"])
+def specified_tables(r_year, r_month, r_day, r_number_of_seats, r_hour):
+    date = datetime(r_year, r_month, r_day)
+    today = datetime.today()
+    today_hour = today.hour
+    today = datetime(today.year, today.month, today.day)
+    seats = r_number_of_seats
+    prepared_tables = []
+
+    if request.method == "GET":
+
+        if seats == 0:
+            all_tables = db.session.query(Table).all()
+        else:
+            all_tables = db.session.query(Table).filter_by(number_of_seats=seats).all()
+
+        if r_hour != 0:
+            available_tables = []
+            for table in all_tables:
+                temp_date = datetime(date.year, date.month, date.day, r_hour)
+                table_free = True
+                for res in table.reservations:
+                    if res.date == temp_date:
+                        table_free = False
+                if table_free:
+                    available_tables.append(table)
+            all_tables = available_tables
+
+        if today > date:
+            flash("Nie obsługujemy rezerwacji wstecz :(", "error")
+
+        elif today == date:
+            if today_hour > 21:
+                flash("Pracujemy tylko w godzinach 8-21 :( Zapraszamy jutro!", "info")
+            elif r_hour != 0 and r_hour <= today_hour:
+                flash("Nie obsługujemy rezerwacji wstecz :(", "error")
+            else:
+                for table in all_tables:
+                    if len(table.reservations) == 0:
+                        if today_hour < 8:
+                            hours = [(hour, False) for hour in range(8, 21)]
+                        else:
+                            hours = [(hour, True) for hour in range(8, today_hour + 1)] + [(hour, False) for hour in
+                                                                                       range(today_hour + 1, 21)]
+                    else:
+                        if today_hour < 8:
+                            hours = []
+                            for hour in range(8, 21):
+                                temp_date = datetime(date.year, date.month, date.day, hour)
+                                table_taken = False
+                                for res in table.reservations:
+                                    if res.date == temp_date:
+                                        table_taken = True
+                                hours.append((hour, table_taken))
+                        else:
+                            hours = [(hour, True) for hour in range(8, today_hour + 1)]
+                            for hour in range(today_hour + 1, 21):
+                                temp_date = datetime(today.year, today.month, today.day, hour)
+                                table_taken = False
+                                for reservation in table.reservations:
+                                    if reservation.date == temp_date:
+                                        table_taken = True
+                                hours.append((hour, table_taken))
+                    prepared_tables.append((table, hours))
+
+                if not prepared_tables:
+                    flash("Nie znaleziono stolika", "error")
+
+        else:
+            for table in all_tables:
+                if len(table.reservations) == 0:
+                    hours = [(hour, False) for hour in range(8, 21)]
+                else:
+                    hours = []
+                    for hour in range(8, 21):
+                        temp_date = datetime(date.year, date.month, date.day, hour)
+                        table_taken = False
+                        for res in table.reservations:
+                            if res.date == temp_date:
+                                table_taken = True
+                        hours.append((hour, table_taken))
+                prepared_tables.append((table, hours))
+
+            if not prepared_tables:
+                flash("Nie znaleziono stolika", "error")
+
+    find_table_form = FindTable(date=date, number_of_seats=seats, time=r_hour)
     if find_table_form.validate_on_submit() and find_table_form.find_table_button.data:
         date = find_table_form.date.data
         number_of_seats = find_table_form.number_of_seats.data
-        time = find_table_form.time.data
-        return redirect(url_for('specified_tables', r_date=date, r_number_of_seats=number_of_seats, r_time=time))
+        hour = find_table_form.time.data
+        return redirect(url_for('specified_tables', r_year=date.year, r_month=date.month, r_day=date.day, r_hour=hour,
+                                r_number_of_seats=number_of_seats))
+
     new_table_form = NewTable()
     if new_table_form.validate_on_submit() and new_table_form.new_table_button.data:
         number_of_seats = new_table_form.number_of_seats.data
         new_table = Table(number_of_seats=number_of_seats)
         db.session.add(new_table)
         db.session.commit()
-        return redirect(url_for('tables'))
-    return render_template("tables/tables.html", find_table_form=find_table_form, new_table_form=new_table_form, tables=all_tables)
+        return redirect(request.referrer)
+
+    return render_template("tables/tables.html", find_table_form=find_table_form, new_table_form=new_table_form,
+                           tables=prepared_tables, r_date=date, r_hour=r_hour)
 
 
-# obsluga zakladki stoliki z wyborem
-@app.route("/stoliki/<string:r_date>/<int:r_number_of_seats>/<int:r_time>", methods=["GET", "POST"])
-def specified_tables(r_date, r_number_of_seats, r_time):
-    all_tables = db.session.query(Table).all()
-    find_table_form = FindTable(date=datetime.today())
-    if find_table_form.validate_on_submit() and find_table_form.find_table_button.data:
-        date = find_table_form.date.data
-        number_of_seats = find_table_form.number_of_seats.data
-        time = find_table_form.time.data
-        return redirect(url_for('tables'))
-    new_table_form = NewTable()
-    if new_table_form.validate_on_submit() and new_table_form.new_table_button.data:
-        number_of_seats = new_table_form.number_of_seats.data
-        new_table = Table(number_of_seats=number_of_seats)
-        db.session.add(new_table)
-        db.session.commit()
-        return redirect(url_for('tables'))
-    return render_template("tables/tables.html", find_table_form=find_table_form, new_table_form=new_table_form, tables=all_tables)
-
-
-# opcja usucol-lg-4niecia stolika
+# opcja usuniecia stolika
 @app.route("/stoliki/usun_<int:table_id>")
+@login_required
 def delete_table(table_id):
     table_to_delete = Table.query.get(table_id)
 
@@ -632,4 +729,39 @@ def delete_table(table_id):
 
     db.session.delete(table_to_delete)
     db.session.commit()
+    return redirect(request.referrer)
+
+
+# rezerwacja stolika
+@app.route("/stoliki/rezerwuj/<int:r_year>/<int:r_month>/<int:r_day>/<int:r_hour>/<int:table_id>", methods=["POST"])
+def book_table(r_year, r_month, r_day, r_hour, table_id):
+    date_obj = datetime(r_year, r_month, r_day, r_hour)
+    table = Table.query.get(table_id)
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    phone = request.form['phone']
+    message = request.form.get('message')
+
+    new_reservation = TableReservations(date=date_obj, first_name=first_name, last_name=last_name, phone=phone, message=message)
+
+    if current_user.is_authenticated:
+        new_reservation.client = current_user.client
+    else:
+        def_usr = db.session.query(User).filter_by(login="default").first()
+        new_reservation.client = def_usr.client
+
+    new_reservation.table = table
+    db.session.add(new_reservation)
+    db.session.commit()
+    flash(f"Zarezerwowano stolik nr: {table_id} dla {table.number_of_seats} osób, na godzinę {r_hour}:00", "success")
+    return redirect(request.referrer)
+
+
+@app.route("/stoliki/anuluj_rezerwacje/<int:res_id>")
+@login_required
+def cancel_table_booking(res_id):
+    res = TableReservations.query.get(res_id)
+    db.session.delete(res)
+    db.session.commit()
+
     return redirect(request.referrer)
