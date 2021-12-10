@@ -6,10 +6,8 @@
     color:firebrick;
     }
     hr {
-border: 0.5px solid #c49b63;
+    border: 0.5px solid #c49b63;
     }
-
-
 
 
 </style>
@@ -71,19 +69,38 @@ border: 0.5px solid #c49b63;
                     </div>
                 </form>
                 <hr>
+                {% with messages = get_flashed_messages(category_filter=["error"]) %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger text-center" role="alert" style="margin:0 auto;">
+                    {{ message}}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                {% with messages = get_flashed_messages(category_filter=["info"]) %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-info text-center" role="alert" style="margin: 0 auto;">
+                    {{ message}}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                {% with messages = get_flashed_messages(category_filter=["success"]) %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success text-center" role="alert" style="margin: 0 auto 20px;">
+                    {{ message}}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
             </div>
         </div>
         <div class="row">
-                            {% with messages = get_flashed_messages(category_filter=["error"]) %}
-                {% if messages %}
-                {% for message in messages %}
-            <div class="alert alert-danger text-center" style="margin:0 auto;" role="alert">
-                {{ message}}
-            </div>
-                {% endfor %}
-
-                {% endif %}
-                {% endwith %}
             {% for table, hours in tables %}
             <div class="col-xl-3 col-md-4 mb-4">
                 <div class="p-2 text-center"
@@ -100,12 +117,79 @@ border: 0.5px solid #c49b63;
                     <div class="row justify-content-center mt-2">
                         {% for hour,table_taken in hours %}
                         <div class=" mb-2 mx-1">
-                            <a class="btn btn-primary{% if table_taken %} disabled {% endif %}"
-                               href="{{url_for('book_table',r_hour=hour, table_id=table.id, r_date=date)}}"
-                               style="border-radius: 25%;">
+                            <a class="btn btn-primary {% if table_taken %} disabled {% endif %}"
+                               data-target="#confirm_reservation{{table.id}}-{{hour}}"
+                               data-toggle="modal" style="border-radius: 25%; color:black;"
+                               type="button">
                                 {{hour}}
                             </a>
+                            <!-- The Modal -->
+                            <div class="modal fade" id="confirm_reservation{{table.id}}-{{hour}}">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
 
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <p class="modal-title"
+                                               style="color:black; font-family: Helvetica, sans-serif; font-size: 2em">
+                                                Potwierdzenie rezerwacji</p>
+                                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+                                        </div>
+                                        <form autocomplete="off" method="POST" action="{{url_for('book_table',r_year=r_date.year, r_month=r_date.month, r_day=r_date.day, r_hour=hour, table_id=table.id)}}">
+                                        <!-- Modal body -->
+                                        <div class="modal-body"
+                                             style="font-family: Helvetica, sans-serif; font-size: 1.25em;">
+
+                                                <table>
+                                                    <tr>
+                                                        <td colspan="2">Rezerwujesz stolik nr: <span
+                                                                style="color:black">{{table.id}}</span>
+                                                            dla <span
+                                                                    style="color:black">{{table.number_of_seats}}</span>
+                                                            osób, na godzinę <span
+                                                                    style="color:black">{{hour}}:00</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="first_name{{table.id}}-{{hour}}">Imię:</label>
+                                                        </td>
+                                                        <td><input id="first_name{{table.id}}-{{hour}}"
+                                                                   name="first_name"
+                                                                   type="text"
+                                                                   value="{% if current_user.is_authenticated %} {{current_user.first_name}} {% endif %}"
+                                                                   placeholder="Twoje imię" required>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label
+                                                                for="last_name{{table.id}}-{{hour}}">Nazwisko:</label>
+                                                        </td>
+                                                        <td><input id="last_name{{table.id}}-{{hour}}" name="last_name"
+                                                                   type="text"
+                                                                   value="{% if current_user.is_authenticated %} {{current_user.last_name}} {% endif %}" placeholder="Twoje nazwisko" required>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="phone{{table.id}}-{{hour}}">Telefon:</label></td>
+                                                        <td><input type="tel" id="phone{{table.id}}-{{hour}}" name="phone" pattern="[0-9]{9}" placeholder="Numer telefonu" required></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label for="message{{table.id}}-{{hour}}">Wiadomość:</label></td>
+                                                        <td><textarea id="message{{table.id}}-{{hour}}" name="message" rows="4" cols="19" placeholder="Dodatkowe informacje"></textarea></td>
+                                                    </tr>
+                                                </table>
+                                        </div>
+
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+                                            <button class="btn btn-warning" data-dismiss="modal" type="button">Anuluj
+                                            </button>
+                                            <input type="submit" value="Rezerwuj" class="btn btn-success">
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         {% endfor %}
                     </div>
