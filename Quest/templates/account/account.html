@@ -35,7 +35,7 @@
                 <hr>
                 <a href="#" style="color:white"><p><i class="fas fa-book"></i>Wypożyczone książaki<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
                 <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-pen"></i>Rezerwacje stolików<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+                <a href="{{url_for('show_table_reservations', client_id=current_user.client.id)}}" style="color:white"><p><i class="fas fa-pen"></i>Rezerwacje stolików<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
                 <hr>
                 {% endif %}
                 {% if current_user.privileges == "Worker"%}
@@ -74,7 +74,7 @@
                 {% endif %}
                 <a href="{{url_for('logout')}}" style="color:white"><p><i class="fas fa-sign-out-alt"></i>Wyloguj sie<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
             </div>
-            <div class="col-xl-8 col-lg-7 p-5 m-3" style="background-color:Gainsboro; border-radius: 25px;">
+            <div class="col-xl-8 col-lg-7 p-5 m-3" style="background-color:Gainsboro; border-radius: 25px; max-height:700px; overflow:auto;">
                 {% block account_page %}
                 {% endblock %}
             </div>

@@ -276,7 +276,7 @@ def make_order():
                 else:
                     total_price += stock_item.book_for_sale.price * number_of
             else:
-                total_price += stock_item.menu_position.price
+                total_price += stock_item.menu_position.price * number_of
 
             total_items_number += number_of
             new_order_item = OrderItem(number_of_item=number_of, order=order, stock=stock_item)
@@ -570,6 +570,22 @@ def create_new_worker():
     return render_template("account/new_user.html", form=register_form, account_type="pracownika")
 
 
+# wyswietlenie rezerwacji stolikow
+@app.route("/konto/rezerwacje/<int:client_id>")
+def show_table_reservations(client_id):
+    client = Client.query.get(client_id)
+    today = datetime.today()
+    today = datetime(today.year, today.month, today.day, today.hour)
+    prepared_reservations = []
+    for res in client.table_reservations:
+        cant_cancel = True
+        if today < res.date:
+            cant_cancel = False
+        prepared_reservations.append((res, cant_cancel))
+
+    return render_template("account/table_reservations.html", reservations=prepared_reservations)
+
+
 # droga dla wylogwania
 @app.route("/wylogowanie")
 @login_required
@@ -628,24 +644,37 @@ def specified_tables(r_year, r_month, r_day, r_number_of_seats, r_hour):
             flash("Nie obsługujemy rezerwacji wstecz :(", "error")
 
         elif today == date:
-            if today_hour < 8 or today_hour > 21:
+            if today_hour in [21, 22, 23]:
                 flash("Pracujemy tylko w godzinach 8-21 :( Zapraszamy jutro!", "info")
             elif r_hour != 0 and r_hour <= today_hour:
                 flash("Nie obsługujemy rezerwacji wstecz :(", "error")
             else:
                 for table in all_tables:
                     if len(table.reservations) == 0:
-                        hours = [(hour, True) for hour in range(8, today_hour + 1)] + [(hour, False) for hour in
+                        if today_hour < 8:
+                            hours = [(hour, False) for hour in range(8, 21)]
+                        else:
+                            hours = [(hour, True) for hour in range(8, today_hour + 1)] + [(hour, False) for hour in
                                                                                        range(today_hour + 1, 21)]
                     else:
-                        hours = [(hour, True) for hour in range(8, today_hour + 1)]
-                        for hour in range(today_hour + 1, 21):
-                            temp_date = datetime(today.year, today.month, today.day, hour)
-                            table_taken = False
-                            for reservation in table.reservations:
-                                if reservation.date == temp_date:
-                                    table_taken = True
-                            hours.append((hour, table_taken))
+                        if today_hour < 8:
+                            hours = []
+                            for hour in range(8, 21):
+                                temp_date = datetime(date.year, date.month, date.day, hour)
+                                table_taken = False
+                                for res in table.reservations:
+                                    if res.date == temp_date:
+                                        table_taken = True
+                                hours.append((hour, table_taken))
+                        else:
+                            hours = [(hour, True) for hour in range(8, today_hour + 1)]
+                            for hour in range(today_hour + 1, 21):
+                                temp_date = datetime(today.year, today.month, today.day, hour)
+                                table_taken = False
+                                for reservation in table.reservations:
+                                    if reservation.date == temp_date:
+                                        table_taken = True
+                                hours.append((hour, table_taken))
                     prepared_tables.append((table, hours))
 
                 if not prepared_tables:
@@ -691,6 +720,7 @@ def specified_tables(r_year, r_month, r_day, r_number_of_seats, r_hour):
 
 # opcja usuniecia stolika
 @app.route("/stoliki/usun_<int:table_id>")
+@login_required
 def delete_table(table_id):
     table_to_delete = Table.query.get(table_id)
 
@@ -724,4 +754,14 @@ def book_table(r_year, r_month, r_day, r_hour, table_id):
     db.session.add(new_reservation)
     db.session.commit()
     flash(f"Zarezerwowano stolik nr: {table_id} dla {table.number_of_seats} osób, na godzinę {r_hour}:00", "success")
+    return redirect(request.referrer)
+
+
+@app.route("/stoliki/anuluj_rezerwacje/<int:res_id>")
+@login_required
+def cancel_table_booking(res_id):
+    res = TableReservations.query.get(res_id)
+    db.session.delete(res)
+    db.session.commit()
+
     return redirect(request.referrer)
