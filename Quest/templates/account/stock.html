@@ -33,40 +33,54 @@
         border-radius: 100%
     }
 }
+
 </style>
 {% endblock %}
 {% block account_page %}
 <h3 class="text-center mb-2" style="color:black">Stan magazynu</h3>
 <hr>
-<div class="my-3">
-    <a class="btn btn-success" href="{{url_for('new_book_for_sale', referrer='check_stock')}}" style="border-radius:25px;">Dodaj księgarnii</a>
-    <a class="btn btn-success" href="{{url_for('new_menu_item',referrer='check_stock')}}" style="border-radius:25px;">Dodaj do menu</a>
+<div class="my-3 py-3">
+    <a class="btn btn-success" href="{{url_for('new_book_for_sale', referrer='check_stock')}}"
+       style="border-radius:25px;">Dodaj księgarnii</a>
+    <a class="btn btn-success" href="{{url_for('new_menu_item',referrer='check_stock')}}" style="border-radius:25px;">Dodaj
+        do menu</a>
+    {% with messages = get_flashed_messages(category_filter=["info"]) %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-info text-center" role="alert" style="margin:0 auto;">
+        {{ message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 </div>
 {% if products != [] %}
 <div class="overflow-auto res">
     <table>
         <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nazwa</th>
-                <th scope="col">Typ produktu</th>
-                <th scope="col">Dostępna ilość</th>
-                <th scope="col"></th>
-            </tr>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nazwa</th>
+            <th scope="col">Typ produktu</th>
+            <th scope="col">Dostępna ilość</th>
+            <th scope="col"></th>
+        </tr>
         </thead>
         <tbody>
-            {% for product in products %}
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{% if product.article_type == 'menu_position' %} {{product.menu_position.name}} {% endif %}
-                {% if product.article_type == 'book_for_sale' %} {{product.book_info.title}} {% endif %}</td>
-                <td>{{ product.article_type }}</td>
-                <td>{{ product.number_in_stock }}</td>
-                <td>
-                    <a href="{{url_for('check_stock_details', stock_id=product.id)}}" class="btn btn-primary" style="border-radius: 25px; color:black">Szczegóły</a>
-                </td>
-            </tr>
-            {% endfor %}
+        {% for product in products %}
+        <tr>
+            <td>{{ product.id }}</td>
+            <td>{% if product.article_type == 'menu_position' %} {{product.menu_position.name}} {% endif %}
+                {% if product.article_type == 'book_for_sale' %} {{product.book_info.title}} {% endif %}
+            </td>
+            <td>{{ product.article_type }}</td>
+            <td>{{ product.number_in_stock }}</td>
+            <td>
+                <a class="btn btn-primary" href="{{url_for('check_stock_details', stock_id=product.id)}}"
+                   style="border-radius: 25px; color:black">Szczegóły</a>
+            </td>
+        </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>

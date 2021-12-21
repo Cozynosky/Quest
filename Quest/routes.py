@@ -700,6 +700,7 @@ def delete_menu_item(menu_id, referrer):
     db.session.delete(item_to_delete.stock)
     db.session.delete(item_to_delete)
     db.session.commit()
+    flash(f"Usunięto pozycję '{item_to_delete.stock.menu_position.name}'", "info")
     return redirect(url_for(referrer))
 
 
@@ -737,7 +738,7 @@ def new_book_for_sale(referrer):
         db.session.add(new_stock)
         db.session.commit()
 
-        return redirect(url_for('bookshop'))
+        return redirect(url_for(referrer))
     return render_template("bookshop/book_item.html", form=new_book_form)
 
 
@@ -804,4 +805,5 @@ def delete_book_for_sell(book_id, referrer):
     db.session.delete(book_to_delete.stock)
     db.session.delete(book_to_delete)
     db.session.commit()
+    flash(f"Usunięto książkę '{book_to_delete.stock.book_info.title}'", "info")
     return redirect(url_for(referrer))

@@ -24,9 +24,19 @@
 <section class="ftco-section">
     <div class="container p-4" style="background-color:#120f0f; border-radius: 25px; border: 2px solid #c49b63;">
         {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-        <a href="{{url_for('new_menu_item',referrer='menu')}}" class="btn btn-success mb-4" role="button" aria-disabled="true">Dodaj do
+        <a aria-disabled="true" class="btn btn-success mb-4" href="{{url_for('new_menu_item',referrer='menu')}}"
+           role="button">Dodaj do
             menu</a>
         {% endif %}
+        {% with messages = get_flashed_messages(category_filter=["info"]) %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-info text-center" role="alert" style="margin:0 auto;">
+            {{ message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <div class="text-center">
             <h1>Menu</h1>
         </div>
@@ -41,15 +51,18 @@
                     <div class="desc pl-3">
                         <div class="d-flex text align-items-center">
                             <h3><span>{{hot_drink.name}} </span></h3>
-                            <span class="price" >{{hot_drink.price}} zł </span>
+                            <span class="price">{{hot_drink.price}} zł </span>
                         </div>
                         <div class="d-block">
                             <p>{{hot_drink.description}} </p>
-                            <a href="{{url_for('add_to_cart', stock_id=hot_drink.stock.id)}}" class="btn btn-primary btn-outline-primary mt-2" role="button">Zamów</a>
+                            <a class="btn btn-primary btn-outline-primary mt-2"
+                               href="{{url_for('add_to_cart', stock_id=hot_drink.stock.id)}}" role="button">Zamów</a>
                             {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-                            <a href="{{url_for('edit_menu_item', menu_id=hot_drink.id, referrer='menu')}}" class="btn btn-warning mt-2"
+                            <a class="btn btn-warning mt-2"
+                               href="{{url_for('edit_menu_item', menu_id=hot_drink.id, referrer='menu')}}"
                                role="button"><i class="fas fa-pen"></i></a>
-                            <a href="{{url_for('delete_menu_item', menu_id=hot_drink.id, referrer='menu')}}" class="btn btn-danger mt-2"
+                            <a class="btn btn-danger mt-2"
+                               href="{{url_for('delete_menu_item', menu_id=hot_drink.id, referrer='menu')}}"
                                role="button"><i class="fas fa-trash-alt"></i></a>
                             {% endif %}
                         </div>
@@ -72,11 +85,14 @@
                         </div>
                         <div class="d-block">
                             <p>{{cold_drink.description}}</p>
-                            <a href="{{url_for('add_to_cart', stock_id=cold_drink.stock.id)}}" class="btn btn-primary btn-outline-primary mt-2" role="button">Zamów</a>
+                            <a class="btn btn-primary btn-outline-primary mt-2"
+                               href="{{url_for('add_to_cart', stock_id=cold_drink.stock.id)}}" role="button">Zamów</a>
                             {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-                            <a href="{{url_for('edit_menu_item', menu_id=cold_drink.id, referrer='menu')}}" class="btn btn-warning mt-2"
+                            <a class="btn btn-warning mt-2"
+                               href="{{url_for('edit_menu_item', menu_id=cold_drink.id, referrer='menu')}}"
                                role="button"><i class="fas fa-pen"></i></a>
-                            <a href="{{url_for('delete_menu_item', menu_id=cold_drink.id, referrer='menu')}}" class="btn btn-danger mt-2"
+                            <a class="btn btn-danger mt-2"
+                               href="{{url_for('delete_menu_item', menu_id=cold_drink.id, referrer='menu')}}"
                                role="button"><i class="fas fa-trash-alt"></i></a>
                             {% endif %}
                         </div>
@@ -98,11 +114,14 @@
                         </div>
                         <div class="d-block">
                             <p>{{dessert.description}}</p>
-                            <a href="{{url_for('add_to_cart', stock_id=dessert.stock.id)}}" class="btn btn-primary btn-outline-primary mt-2" role="button">Zamów</a>
+                            <a class="btn btn-primary btn-outline-primary mt-2"
+                               href="{{url_for('add_to_cart', stock_id=dessert.stock.id)}}" role="button">Zamów</a>
                             {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-                            <a href="{{url_for('edit_menu_item', menu_id=dessert.id, referrer='menu')}}" class="btn btn-warning mt-2"
+                            <a class="btn btn-warning mt-2"
+                               href="{{url_for('edit_menu_item', menu_id=dessert.id, referrer='menu')}}"
                                role="button"><i class="fas fa-pen"></i></a>
-                            <a href="{{url_for('delete_menu_item', menu_id=dessert.id, referrer='menu')}}" class="btn btn-danger mt-2"
+                            <a class="btn btn-danger mt-2"
+                               href="{{url_for('delete_menu_item', menu_id=dessert.id, referrer='menu')}}"
                                role="button"><i class="fas fa-trash-alt"></i></a>
                             {% endif %}
                         </div>
@@ -124,11 +143,14 @@
                         </div>
                         <div class="d-block">
                             <p>{{special_offer.description}}</p>
-                            <a href="{{url_for('add_to_cart', stock_id=special_offer.stock.id)}}" class="btn btn-primary btn-outline-primary mt-2" role="button">Zamów</a>
+                            <a class="btn btn-primary btn-outline-primary mt-2"
+                               href="{{url_for('add_to_cart', stock_id=special_offer.stock.id)}}" role="button">Zamów</a>
                             {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-                            <a href="{{url_for('edit_menu_item', menu_id=special_offer.id, referrer='menu')}}" class="btn btn-warning mt-2"
+                            <a class="btn btn-warning mt-2"
+                               href="{{url_for('edit_menu_item', menu_id=special_offer.id, referrer='menu')}}"
                                role="button"><i class="fas fa-pen"></i></a>
-                            <a href="{{url_for('delete_menu_item', menu_id=special_offer.id, referrer='menu')}}" class="btn btn-danger mt-2"
+                            <a class="btn btn-danger mt-2"
+                               href="{{url_for('delete_menu_item', menu_id=special_offer.id, referrer='menu')}}"
                                role="button"><i class="fas fa-trash-alt"></i></a>
                             {% endif %}
                         </div>
