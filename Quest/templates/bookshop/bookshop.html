@@ -26,9 +26,19 @@
 <section class="ftco-menu mb-5 pb-5">
     <div class="container p-4" style="background-color:#120f0f; border-radius: 25px; border: 2px solid #c49b63;">
         {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-        <a href="{{url_for('new_book_for_sale', referrer='bookshop')}}" class="btn btn-success mb-4" role="button" aria-disabled="true">Dodaj
+        <a aria-disabled="true" class="btn btn-success mb-4" href="{{url_for('new_book_for_sale', referrer='bookshop')}}"
+           role="button">Dodaj
             książkę</a>
         {% endif %}
+        {% with messages = get_flashed_messages(category_filter=["info"]) %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-info text-center" role="alert" style="margin:0 auto;">
+            {{ message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <div class="text-center">
             <h1>Księgarnia</h1>
         </div>
@@ -39,7 +49,7 @@
                     {% for book in books %}
                     <div class="col-md-3 text-center">
                         <div class="menu-wrap">
-                            <a href="{{url_for('show_book_for_sell', book_id=book.id)}}" class="menu-img img mb-4"
+                            <a class="menu-img img mb-4" href="{{url_for('show_book_for_sell', book_id=book.id)}}"
                                style="background-image: url({{book.stock.book_info.image_url}}); height:350px; width:220px; margin: auto"></a>
                             <div class="text">
                                 <h3><a href="{{url_for('show_book_for_sell', book_id=book.id)}}">{{book.stock.book_info.title}}</a>
@@ -55,12 +65,15 @@
                                     <span>{{book.stock.book_for_sale.price}} zł</span>
                                     {% endif %}
                                 </p>
-                                <p><a href="{{url_for('add_to_cart', stock_id=book.stock.id)}}" class="btn btn-primary btn-outline-primary">Dodaj do
+                                <p><a class="btn btn-primary btn-outline-primary"
+                                      href="{{url_for('add_to_cart', stock_id=book.stock.id)}}">Dodaj do
                                     koszyka</a></p>
                                 {% if current_user.is_authenticated and current_user.privileges == "Admin" %}
-                                <a href="{{url_for('edit_book_for_sell', book_id=book.id, referrer='bookshop')}}" class="btn btn-warning"
+                                <a class="btn btn-warning"
+                                   href="{{url_for('edit_book_for_sell', book_id=book.id, referrer='bookshop')}}"
                                    role="button"><i class="fas fa-pen"></i></a>
-                                <a href="{{url_for('delete_book_for_sell', book_id=book.id, referrer='bookshop')}}" class="btn btn-danger"
+                                <a class="btn btn-danger"
+                                   href="{{url_for('delete_book_for_sell', book_id=book.id, referrer='bookshop')}}"
                                    role="button"><i class="fas fa-trash-alt"></i></a>
                                 {% endif %}
                             </div>
