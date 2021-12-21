@@ -1,0 +1,74 @@
+{% extends "account/account.html" %}
+{% block head %}
+{{ super() }}
+<style>
+    .order {
+        border: 1px solid #c49b63;
+        margin-top:5px;
+        padding: 10px;
+    }
+    tr {
+        border-bottom: 1px solid lightgrey;
+        border-top: 1px solid lightgrey;
+    }
+    td, th {
+        padding: 10px;
+         text-align: center;
+         vertical-align: middle;
+    }
+    th {
+        border-bottom: 1px solid #c49b63;
+    }
+    table {
+        width:100%;
+    }
+
+    .menu_img {
+        min-width:100px;
+        min-height:95px;
+        max-width:100px;
+        max-height:95px;
+        width: auto;
+        height: auto;
+        border-radius: 100%
+    }
+}
+</style>
+{% endblock %}
+{% block account_page %}
+<h3 class="text-center mb-2" style="color:black">Stan magazynu</h3>
+<hr>
+<div class="my-3">
+    <a class="btn btn-success" href="{{url_for('new_book_for_sale', referrer='check_stock')}}" style="border-radius:25px;">Dodaj księgarnii</a>
+    <a class="btn btn-success" href="{{url_for('new_menu_item',referrer='check_stock')}}" style="border-radius:25px;">Dodaj do menu</a>
+</div>
+{% if products != [] %}
+<div class="overflow-auto res">
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Typ produktu</th>
+                <th scope="col">Dostępna ilość</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{% if product.article_type == 'menu_position' %} {{product.menu_position.name}} {% endif %}
+                {% if product.article_type == 'book_for_sale' %} {{product.book_info.title}} {% endif %}</td>
+                <td>{{ product.article_type }}</td>
+                <td>{{ product.number_in_stock }}</td>
+                <td>
+                    <a href="{{url_for('check_stock_details', stock_id=product.id)}}" class="btn btn-primary" style="border-radius: 25px; color:black">Szczegóły</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

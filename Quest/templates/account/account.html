@@ -31,10 +31,10 @@
                 <hr>
                 <a href="{{url_for('account_orders_story')}}" style="color:white"><p><i class="fas fa-history"></i>Historia zakupów<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
                 <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-calendar-alt"></i>Moje eventy<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
-                <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-book"></i>Wypożyczone książaki<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
-                <hr>
+<!--                <a href="#" style="color:white"><p><i class="fas fa-calendar-alt"></i>Moje eventy<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>-->
+<!--                <hr>-->
+<!--                <a href="#" style="color:white"><p><i class="fas fa-book"></i>Wypożyczone książaki<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>-->
+<!--                <hr>-->
                 <a href="{{url_for('show_table_reservations', client_id=current_user.client.id)}}" style="color:white"><p><i class="fas fa-pen"></i>Rezerwacje stolików<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
                 <hr>
                 {% endif %}
@@ -45,11 +45,11 @@
                 <hr>
                 <a href="{{url_for('create_new_client')}}" style="color:white"><p><i class="fas fa-user-plus"></i>Dodaj konto klienta<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
                 <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-users"></i>Lista klientów<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
-                <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-user-circle"></i>Zarezerwuj stolik<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
-                <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-warehouse"></i>Stan magazynu<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+<!--                <a href="#" style="color:white"><p><i class="fas fa-users"></i>Lista klientów<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>-->
+<!--                <hr>-->
+<!--                <a href="#" style="color:white"><p><i class="fas fa-user-circle"></i>Zarezerwuj stolik<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>-->
+<!--                <hr>-->
+                <a href="{{url_for('check_stock')}}" style="color:white"><p><i class="fas fa-warehouse"></i>Stan magazynu<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
                 <hr>
                 {% endif %}
                 {% if current_user.privileges == "Admin"%}
@@ -61,15 +61,15 @@
                 <hr>
                 <a href="{{url_for('create_new_client')}}" style="color:white"><p><i class="fas fa-user-plus"></i>Dodaj konto klienta<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
                 <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-users"></i>Lista użytkowników<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
-                <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-calendar-plus"></i>Dodaj event<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
-                <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-calendar-alt"></i>Lista eventów<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
-                <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-pencil-alt"></i>Zarezerwuj stolik<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
-                <hr>
-                <a href="#" style="color:white"><p><i class="fas fa-warehouse"></i>Stan magazynu<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
+<!--                <a href="#" style="color:white"><p><i class="fas fa-users"></i>Lista użytkowników<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>-->
+<!--                <hr>-->
+<!--                <a href="#" style="color:white"><p><i class="fas fa-calendar-plus"></i>Dodaj event<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>-->
+<!--                <hr>-->
+<!--                <a href="#" style="color:white"><p><i class="fas fa-calendar-alt"></i>Lista eventów<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>-->
+<!--                <hr>-->
+<!--                <a href="#" style="color:white"><p><i class="fas fa-pencil-alt"></i>Zarezerwuj stolik<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>-->
+<!--                <hr>-->
+                <a href="{{url_for('check_stock')}}" style="color:white"><p><i class="fas fa-warehouse"></i>Stan magazynu<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>
                 <hr>
                 {% endif %}
                 <a href="{{url_for('logout')}}" style="color:white"><p><i class="fas fa-sign-out-alt"></i>Wyloguj sie<span style="float:right;"><i class="fas fa-chevron-right"></i></span></p></a>

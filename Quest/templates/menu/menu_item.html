@@ -1,67 +1,70 @@
-{% import "bootstrap/wtf.html" as wtf %}
-{% extends "base.html" %}
-{% block content %}
-<section class="ftco-section contact-section">
-    <div class="container">
-        <div class="row p-5 justify-content-center">
-            <div class="col-md-8 ">
-                <h3 class="text-center mb-5">Formularz pozycji w menu</h3>
-                <form method="POST" class="contact-form p-4" novalidate style="background-color:#120f0f; border-radius: 25px;" autocomplete="off">
-                    {{ form.csrf_token }}
-                    <div class="row">
-                        <div class="form-group col-md-4">
-                            {{ form.category.label(class_="control-label") }}
-                            {{form.category(class_ = "form-control", style="option{background-color:'yellow'}")}}
-                            {% for error in form.category.errors: %}
-                            <p style="color:red">{{error}}</p>
-                            {% endfor %}
-                        </div>
-                                                <div class="form-group col-md-4">
-                            {{form.name.label(class_="control-label") }}
-                            {{form.name(class_ = "form-control", placeholder="Wpisz nazwę pozycji")}}
-                            {% for error in form.name.errors: %}
-                            <p style="color:red">{{error}}</p>
-                            {% endfor %}
-                        </div>
-                        <div class="form-group col-md-4">
-                            {{ form.price.label(class_="control-label") }}
-                            {{form.price(class_ = "form-control", placeholder="0,00")}}
-                            {% for error in form.price.errors: %}
-                            <p style="color:red">{{error}}</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            {{form.image_url.label(class_="control-label") }}
-                            {{form.image_url(class_ = "form-control", placeholder="Adres url obrazu")}}
-                            {% for error in form.image_url.errors: %}
-                            <p style="color:red">{{error}}</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-8">
-                            {{form.description.label(class_="control-label") }}
-                            {{form.description(class_ = "form-control", placeholder="Krótki opis pozycji")}}
-                            {% for error in form.description.errors: %}
-                            <p style="color:red">{{error}}</p>
-                            {% endfor %}
-                        </div>
-                        <div class="form-group col-md-4">
-                            {{form.number_in_stock.label(class_="control-label") }}
-                            {{form.number_in_stock(class_ = "form-control", placeholder="Liczba artykułu")}}
-                            {% for error in form.number_in_stock.errors: %}
-                            <p style="color:red">{{error}}</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="form-group text-center">
-                        {{form.submit_button(class_ = "btn btn-primary py-3 px-4", value="Zatwierdź")}}
-                    </div>
-                </form>
-            </div>
-        </div>
+{% extends "account/account.html" %}
+{% block head %}
+{{ super() }}
+<style>
+    table tr td{
+        padding-right: 10px;
+        padding-top: 5px;
+    }
+    input, select {
+        width:300px;
+        height: 30px;
+    }
+</style>
+{% endblock %}
+{% block account_page %}
+<h3 class="text-center mb-2" style="color:black">Pozycja w menu</h3>
+<hr>
+<form method="POST" class="contact-form p-4" novalidate autocomplete="off">
+    {{ form.csrf_token }}
+    <table>
+        <tbody>
+        <tr>
+            <td>{{ form.name.label(class_="control-label") }}</td>
+            <td>{{form.name(class_ = "", placeholder="Nazwa pozycji")}}</td>
+            <td>{% for error in form.name.errors: %}
+                <p style="color:red">{{error}}</p></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>{{form.category.label(class_="control-label")}}</td>
+            <td>{{form.category(class_ = "", placeholder="Kategoria")}}</td>
+            <td>{% for error in form.category.errors: %}
+                <p style="color:red">{{error}}</p></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>{{form.price.label(class_="control-label")}}</td>
+            <td>{{form.price(class_ = "", placeholder="00,00zł")}}</td>
+            <td>{% for error in form.price.errors: %}
+                <p style="color:red">{{error}}</p></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>{{form.image_url.label(class_="control-label")}}</td>
+            <td>{{form.image_url(class_ = "", placeholder="Adres url obrazu")}}</td>
+            <td>{% for error in form.image_url.errors: %}
+                <p style="color:red">{{error}}</p></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>{{form.description.label(class_="control-label")}}</td>
+            <td>{{form.description(class_ = "", placeholder="Opis")}}</td>
+            <td>{% for error in form.description.errors: %}
+                <p style="color:red">{{error}}</p></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>{{form.number_in_stock.label(class_="control-label")}}</td>
+            <td>{{form.number_in_stock(class_ = "", placeholder="Liczba w magazynie")}}</td>
+            <td>{% for error in form.number_in_stock.errors: %}
+                <p style="color:red">{{error}}</p></td>
+            {% endfor %}
+        </tr>
+    </table>
+
+    <div class="form-group text-center mt-3">
+        {{form.submit_button(class_ = "btn btn-primary", value="Zatwierdź", style="border-radius:25px;")}}
     </div>
-</section>
+</form>
 {% endblock %}
