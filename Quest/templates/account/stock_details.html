@@ -1,0 +1,96 @@
+{% extends "account/account.html" %}
+{% block head %}
+{{ super() }}
+<style>
+    table tr td{
+        padding-right: 10px;
+        padding-top: 5px;
+    }
+    img {
+        width:200px;
+    }
+</style>
+{% endblock %}
+{% block account_page %}
+<h3 class="text-center mb-2" style="color:black">Szczegóły artykułu</h3><hr>
+<table style="margin:24px;">
+    {% if article.article_type == 'menu_position' %}
+    <tr>
+        <td colspan="2" class="text-center"><img src="{{article.menu_position.image_url}}" style="border-radius:100%"/></td>
+    </tr>
+    <tr>
+        <td>Kategoria</td>
+        <td>{{menu_categories[article.menu_position.category]}}</td>
+    </tr>
+    <tr>
+        <td>Nazwa</td>
+        <td>{{article.menu_position.name}}</td>
+    </tr>
+    <tr>
+        <td>Opis</td>
+        <td>{{article.menu_position.description}}</td>
+    </tr>
+    <tr>
+        <td>Cena</td>
+        <td>{{article.menu_position.price}}zł</td>
+    </tr>
+    <tr>
+        <td>Ilość w magazynie</td>
+        <td>{{article.number_in_stock}}</td>
+    </tr>
+    {% endif %}
+    {% if article.article_type == 'book_for_sale' %}
+    <tr>
+        <td colspan="2" class="text-center"><img src="{{article.book_info.image_url}}"/></td>
+    </tr>
+    <tr>
+        <td>Nazwa</td>
+        <td>{{article.book_info.title}}</td>
+    </tr>
+    <tr>
+        <td>Autor</td>
+        <td>{{article.book_info.author}}</td>
+    </tr>
+    <tr>
+        <td>Wydawnictwo</td>
+        <td>{{article.book_info.publisher}}</td>
+    </tr>
+    <tr>
+        <td>Gatunek</td>
+        <td>{{genres[article.book_info.genre]}}</td>
+    </tr>
+    <tr>
+        <td>Data publikacji</td>
+        <td>{{article.book_info.publish_date}}</td>
+    </tr>
+    <tr>
+        <td>Opis</td>
+        <td>{{article.book_info.description}}</td>
+    </tr>
+    <tr>
+        <td>Cena</td>
+        <td>{{article.book_for_sale.price}}zł</td>
+    </tr>
+    {% if article.book_for_sale.new_price > 0 %}
+    <tr>
+        <td>Po zniżce</td>
+        <td>{{article.book_for_sale.new_price}}zł</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td>Liczba w magazynie</td>
+        <td>{{article.number_in_stock}}</td>
+    </tr>
+    {% endif %}
+</table>
+<div class="text-center">
+    {% if article.article_type == 'menu_position' %}
+    <a href="{{url_for('edit_menu_item', menu_id=article.menu_position.id, referrer='check_stock_details')}}" class="btn btn-primary" style="border-radius:25px">Edytuj dane</a>
+    <a href="{{url_for('delete_menu_item', menu_id=article.menu_position.id, referrer='check_stock')}}" class="btn btn-danger" style="border-radius:25px">Usuń</a>
+    {% endif %}
+    {% if article.article_type == 'book_for_sale' %}
+    <a href="{{url_for('edit_book_for_sell', book_id=article.book_for_sale.id, referrer='check_stock_details')}}" class="btn btn-primary" style="border-radius:25px">Edytuj dane</a>
+    <a href="{{url_for('delete_book_for_sell', book_id=article.book_for_sale.id, referrer='check_stock')}}" class="btn btn-danger" style="border-radius:25px">Usuń</a>
+    {% endif %}
+</div>
+{% endblock %}
