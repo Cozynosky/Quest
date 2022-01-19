@@ -671,7 +671,7 @@ def edit_menu_item(menu_id, referrer):
 
 
 @app.route("/menu/nowa_pozycja/<string:referrer>", methods=["GET", "POST"])
-@admin_only
+@admin_and_worker_only
 def new_menu_item(referrer):
     new_menu_position_form = MenuPosition()
     if new_menu_position_form.validate_on_submit():
@@ -694,7 +694,7 @@ def new_menu_item(referrer):
 
 
 @app.route("/menu/usun_pozycje/<int:menu_id>/<string:referrer>")
-@admin_only
+@admin_and_worker_only
 def delete_menu_item(menu_id, referrer):
     item_to_delete = Menu.query.get(menu_id)
     db.session.delete(item_to_delete.stock)
@@ -706,7 +706,7 @@ def delete_menu_item(menu_id, referrer):
 
 # obsluga dodania nowej pozycj
 @app.route("/ksiegarnia/nowa_pozycja/<string:referrer>", methods=["GET", "POST"])
-@admin_only
+@admin_and_worker_only
 def new_book_for_sale(referrer):
     new_book_form = Book()
     if new_book_form.validate_on_submit():
@@ -737,7 +737,6 @@ def new_book_for_sale(referrer):
         new_stock.book_for_sale = new_book_for_sale
         db.session.add(new_stock)
         db.session.commit()
-
         return redirect(url_for(referrer))
     return render_template("bookshop/book_item.html", form=new_book_form)
 
@@ -798,7 +797,7 @@ def edit_book_for_sell(book_id, referrer):
 
 # usuniecie ksiazki z bazy
 @app.route("/ksiegarnia/usuniecie_ksiazki/<int:book_id>/<string:referrer>")
-@admin_only
+@admin_and_worker_only
 def delete_book_for_sell(book_id, referrer):
     book_to_delete = BookForSale.query.get(book_id)
     db.session.delete(book_to_delete.stock.book_info)

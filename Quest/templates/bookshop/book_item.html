@@ -73,6 +73,20 @@
             {% endfor %}
         </tr>
         <tr>
+            <td>{{ form.price.label(class_="control-label") }}</td>
+            <td>{{form.price(class_ = "", placeholder="Cena")}}</td>
+            <td>{% for error in form.price.errors: %}
+                <p style="color:red">{{error}}</p></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>{{ form.discount.label(class_="control-label") }}</td>
+            <td>{{form.discount(class_ = "", placeholder="Cena")}}</td>
+            <td>{% for error in form.discount.errors: %}
+                <p style="color:red">{{error}}</p></td>
+            {% endfor %}
+        </tr>
+        <tr>
             <td>{{ form.description.label(class_="control-label") }}</td>
             <td>{{form.description(class_ = "", placeholder="Opis książki")}}</td>
             <td>{% for error in form.description.errors: %}
