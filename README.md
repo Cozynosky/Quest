@@ -1,5 +1,5 @@
 
-# Quest
+# Wprowadzenie / Introduction
 
 Strona Internetowa wyimaginowanej kawiarnii "Quest", 
 stworzona na potrzeby przedmiotu "Inzynieria oprogramowania".
