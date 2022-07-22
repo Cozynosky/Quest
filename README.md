@@ -46,6 +46,7 @@ slow loading so please be patient :)
 - SQLAlchemy 1.4.26
 - WTForms 3.0.0
 - Jinja2 3.0.2
+
 **Frontend**
 - HTML5
 - CSS3
